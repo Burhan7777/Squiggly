@@ -20,6 +20,7 @@ import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.main_screen.domain.model.Note
 import com.pzbapps.squiggly.trash_bin_feature.presentation.components.AlertBoxes.DeleteAllTrashNotes
+import com.pzbapps.squiggly.trash_bin_feature.presentation.components.AlertBoxes.RestoreAllTrashNotes
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,10 +42,11 @@ fun MainStructureTrashBinScreen(
 
     var showDialogToAccessLockedNotes = remember { mutableStateOf(false) }
     var showDeleteAllTrashNotesDialogBox = remember { mutableStateOf(false) }
+    var showRestoreAllTrashNotesDialogBox = remember { mutableStateOf(false) }
 
 
-    var listOfTrashNotes = remember { mutableStateOf<ArrayList<Int>>(arrayListOf()) }
-
+    var listOfTrashNotesId = remember { mutableStateOf<ArrayList<Int>>(arrayListOf()) }
+    var listOfTrashNotes = remember { mutableStateOf<ArrayList<Note>>(arrayListOf()) }
 
     viewModel.getAllNotes()
     var allNotes = mutableStateOf(mutableStateListOf<Note>())
@@ -52,7 +54,8 @@ fun MainStructureTrashBinScreen(
         allNotes.value = it.toMutableStateList()
         for (i in allNotes.value) {
             if (i.deletedNote) {
-                listOfTrashNotes.value.add(i.id)
+                listOfTrashNotesId.value.add(i.id)
+                listOfTrashNotes.value.add(i)
             }
         }
     }
@@ -249,20 +252,20 @@ fun MainStructureTrashBinScreen(
 
                 },
                 actions = {
-//                    IconButton(onClick = { /*TODO*/ }) {
-//                        Icon(
-//                            imageVector = Icons.Filled.Restore,
-//                            contentDescription = "restore all files",
-//                            tint = MaterialTheme.colors.onPrimary
-//                        )
-//                    }
-//                    IconButton(onClick = { showDeleteAllTrashNotesDialogBox.value = true }) {
-//                        Icon(
-//                            imageVector = Icons.Filled.Delete,
-//                            contentDescription = "delete all files",
-//                            tint = MaterialTheme.colors.onPrimary
-//                        )
-//                    }
+                    IconButton(onClick = {showRestoreAllTrashNotesDialogBox.value = true}) {
+                        Icon(
+                            imageVector = Icons.Filled.Restore,
+                            contentDescription = "restore all files",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    }
+                    IconButton(onClick = { showDeleteAllTrashNotesDialogBox.value = true }) {
+                        Icon(
+                            imageVector = Icons.Filled.Delete,
+                            contentDescription = "delete all files",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colors.primary
@@ -288,9 +291,14 @@ fun MainStructureTrashBinScreen(
                     showDialogToAccessLockedNotes.value = false
                 }
             }
+            if (showRestoreAllTrashNotesDialogBox.value) {
+                RestoreAllTrashNotes(listOfTrashNotes, viewModel, allNotes) {
+                    showRestoreAllTrashNotesDialogBox.value = false
+                }
+            }
             if (showDeleteAllTrashNotesDialogBox.value) {
                 DeleteAllTrashNotes(
-                    listOfIds = listOfTrashNotes,
+                    listOfIds = listOfTrashNotesId,
                     viewModel = viewModel,
                     allNotes
                 ) {

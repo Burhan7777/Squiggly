@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pzbapps.squiggly.common.presentation.FontFamily
@@ -21,14 +21,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun DeleteAllTrashNotes(
-    listOfIds: MutableState<ArrayList<Int>>,
+fun RestoreAllTrashNotes(
+    listOfTrashNotes: MutableState<ArrayList<Note>>,
     viewModel: MainActivityViewModel,
     allNotes: MutableState<SnapshotStateList<Note>>,
     onDismiss: () -> Unit
 ) {
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
+    var scope = rememberCoroutineScope()
     androidx.compose.material3.AlertDialog(onDismissRequest = {
         onDismiss()
     },
@@ -45,7 +44,7 @@ fun DeleteAllTrashNotes(
 
         title = {
             Text(
-                text = "Delete all  notes?",
+                text = "Restore all notes ",
                 fontFamily = FontFamily.fontFamilyBold,
                 fontSize = 20.sp,
                 color = MaterialTheme.colors.onPrimary
@@ -53,7 +52,7 @@ fun DeleteAllTrashNotes(
         },
         text = {
             Text(
-                text = "Are you sure you want to delete all trash notes permanently  ? ",
+                text = "Are you sure you want to restore all notes ? ",
                 fontFamily = FontFamily.fontFamilyRegular,
                 color = MaterialTheme.colors.onPrimary
             )
@@ -61,15 +60,12 @@ fun DeleteAllTrashNotes(
         confirmButton = {
             Button(
                 onClick = {
-
-                    scope.launch {
-                        for (i in listOfIds.value) {
-                            viewModel.deleteNoteById(i)
-                        }
-                        allNotes.value.clear()
-                        onDismiss()
+                    for (note in listOfTrashNotes.value) {
+                        var noteRestored = note.copy(deletedNote = false, timePutInTrash = 0L)
+                        viewModel.updateNote(noteRestored)
                     }
-
+                    allNotes.value.clear()
+                    onDismiss()
                 },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.onPrimary,
@@ -82,7 +78,7 @@ fun DeleteAllTrashNotes(
                     bottomEnd = CornerSize(15.dp),
                 )
             ) {
-                Text(text = "Delete Permanently", fontFamily = FontFamily.fontFamilyRegular)
+                Text(text = "Restore", fontFamily = FontFamily.fontFamilyRegular)
             }
         },
         dismissButton = {

@@ -20,4 +20,5 @@ BUGS AND FEATURES BEFORE LAUNCH
 17) screenshots bigger font and bold font: DONE:
 18) Main Screen should only show little bit of note if note is huge: CANCELLED
 19) Share the note:DONE
-20) Fix the bug of log in dialog box not cancelling on locked screen:
+20) Fix the bug of log in dialog box not cancelling on locked screen:DONE
+21) Add delete all and restore all to trash: DONE
