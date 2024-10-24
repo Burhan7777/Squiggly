@@ -1,8 +1,13 @@
 package com.pzbapps.squiggly.edit_note_feature.presentation.components
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -17,9 +22,16 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.lifecycleScope
@@ -33,12 +45,14 @@ import com.pzbapps.squiggly.common.domain.utils.Constant
 import com.pzbapps.squiggly.common.presentation.*
 import com.pzbapps.squiggly.common.presentation.components.AlertDialogBoxTrialEnded
 import com.pzbapps.squiggly.edit_note_feature.domain.usecase.checkIfUserHasCreatedPassword
+import com.pzbapps.squiggly.edit_note_feature.domain.utils.permissionHandlerNotification
 import com.pzbapps.squiggly.edit_note_feature.presentation.components.alertBoxes.AlertBoxShareNote
 import com.pzbapps.squiggly.edit_note_feature.presentation.components.alertBoxes.AlertDialogBoxDelete
 import com.pzbapps.squiggly.edit_note_feature.presentation.components.alertBoxes.AlertDialogBoxEnterPassword
 import com.pzbapps.squiggly.edit_note_feature.presentation.components.alertBoxes.AlertDialogBoxEnterPasswordToUnlock
 import com.pzbapps.squiggly.edit_note_feature.presentation.components.alertBoxes.AlertDialogBoxPassword
 import com.pzbapps.squiggly.main_screen.domain.model.Note
+import com.pzbapps.squiggly.reminder_feature.scheduleReminder
 import com.pzbapps.squiggly.settings_feature.screen.presentation.components.LoadingDialogBox
 import com.pzbapps.squiggly.settings_feature.screen.presentation.components.YouNeedToLoginFirst
 import kotlinx.coroutines.CoroutineScope
@@ -46,6 +60,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.util.Calendar
 import kotlin.collections.ArrayList
 
 
@@ -75,6 +91,8 @@ fun MainStructureEditNote(
     var isUnOrderedListActivated = remember { mutableStateOf(false) }
     var showFontSize = remember { mutableStateOf(false) }
     var fontSize = remember { mutableStateOf("20") }
+    var iconSize = remember { mutableStateOf(IntSize.Zero) }
+    var iconPosition = remember { mutableStateOf(Offset.Zero) }
 
     if (richStateText.value.annotatedString.text == "") fontSize.value = "20"
 
@@ -146,7 +164,27 @@ fun MainStructureEditNote(
 
     var showShareDialogBox = remember { mutableStateOf(false) }
 
+    var showMenu = remember { mutableStateOf(false) }
+
     var pinnedOrNot = remember { mutableStateOf(false) }
+    var menuPosition = remember { mutableStateOf(DpOffset.Zero) }
+    val density = LocalDensity.current
+
+
+    var notificationLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+
+        } else {
+            Toast.makeText(
+                activity,
+                "This permission is needed to show the notification of reminder",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
     LaunchedEffect(key1 = Unit) {
         viewModel.getNoteById(id)
         var noteFromDb = viewModel.getNoteById
@@ -562,58 +600,7 @@ fun MainStructureEditNote(
                 },
                 title = { Text(text = "") },
                 actions = {
-                    IconButton(onClick = {
-                        var analytics = com.google.firebase.ktx.Firebase.analytics
-                        var bundle = Bundle()
-                        bundle.putString(
-                            "save_button_pressed_edit_notes",
-                            "save_button_pressed_edit_notes"
-                        )
-                        analytics.logEvent("save_button_pressed_edit_notes", bundle)
 
-                        convertMutableStateIntoString(mutableListOfCheckboxTexts, converted)
-                        convertMutableStateIntoString(
-                            mutableListOfBulletPoints,
-                            convertedBulletPoints
-                        )
-                        viewModel.getNoteById(id)
-                        var noteFromDb = viewModel.getNoteById
-                        var archived = noteFromDb.value.archive
-                        var lockedOrNote = noteFromDb.value.locked
-                        var timeCreated = noteFromDb.value.timeStamp
-                        var pinned = noteFromDb.value.notePinned
-                        var note = Note(
-                            id,
-                            title,
-                            richStateText.value.toHtml(),
-                            archived,
-                            locked = lockedOrNote,
-                            listOfCheckedNotes = converted,
-                            listOfCheckedBoxes = mutableListOfCheckBoxes.value,
-                            notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
-                            listOfBulletPointNotes = convertedBulletPoints,
-                            timeStamp = timeCreated,
-                            timeModified = System.currentTimeMillis(),
-                            notePinned = pinned
-                        )
-                        viewModel.updateNote(note)
-                        scope.launch {
-                            delay(200)
-                            navController.navigateUp()
-                        }
-
-                        Toast.makeText(context, "Note has been updated", Toast.LENGTH_SHORT)
-                            .show()
-
-
-                    }) {
-                        Icon(imageVector = Icons.Filled.Check, contentDescription = "Save")
-                    }
-                    IconButton(onClick = {
-                        showShareDialogBox.value = true
-                    }) {
-                        Icon(imageVector = Icons.Filled.Share, contentDescription = "Share")
-                    }
                     if (screen == Constant.HOME || screen == Constant.LOCKED_NOTE) {
                         IconButton(onClick = {
                             var analytics = com.google.firebase.ktx.Firebase.analytics
@@ -622,7 +609,10 @@ fun MainStructureEditNote(
                                 "pinned_button_pressed_edit_notes",
                                 "pinned_button_pressed_edit_notes"
                             )
-                            analytics.logEvent("pinned_button_pressed_edit_notes", bundle)
+                            analytics.logEvent(
+                                "pinned_button_pressed_edit_notes",
+                                bundle
+                            )
                             pinOrUnpinNote(viewModel, id, scope, navController)
 
                         }) {
@@ -636,13 +626,17 @@ fun MainStructureEditNote(
                     if (screen == Constant.HOME || screen == Constant.LOCKED_NOTE) {
                         IconButton(onClick = {
                             if (screen == Constant.HOME) {
-                                var analytics = com.google.firebase.ktx.Firebase.analytics
+                                var analytics =
+                                    com.google.firebase.ktx.Firebase.analytics
                                 var bundle = Bundle()
                                 bundle.putString(
                                     "lock_button_pressed_edit_notes",
                                     "lock_button_pressed_edit_notes"
                                 )
-                                analytics.logEvent("lock_button_pressed_edit_notes", bundle)
+                                analytics.logEvent(
+                                    "lock_button_pressed_edit_notes",
+                                    bundle
+                                )
                                 val user = Firebase.auth.currentUser
                                 if (user != null) {
                                     val result = checkIfUserHasCreatedPassword()
@@ -666,13 +660,17 @@ fun MainStructureEditNote(
                                     showYouNeedToLoginFIrst.value = true
                                 }
                             } else if (screen == Constant.LOCKED_NOTE) {
-                                var analytics = com.google.firebase.ktx.Firebase.analytics
+                                var analytics =
+                                    com.google.firebase.ktx.Firebase.analytics
                                 var bundle = Bundle()
                                 bundle.putString(
                                     "unlock_button_pressed_edit_notes",
                                     "unlock_button_pressed_edit_notes"
                                 )
-                                analytics.logEvent("unlock_button_pressed_edit_notes", bundle)
+                                analytics.logEvent(
+                                    "unlock_button_pressed_edit_notes",
+                                    bundle
+                                )
                                 convertMutableStateIntoString(
                                     mutableListOfCheckboxTexts,
                                     converted
@@ -696,13 +694,17 @@ fun MainStructureEditNote(
                         IconButton(onClick = {
 
                             if (screen == Constant.HOME) {
-                                var analytics = com.google.firebase.ktx.Firebase.analytics
+                                var analytics =
+                                    com.google.firebase.ktx.Firebase.analytics
                                 var bundle = Bundle()
                                 bundle.putString(
                                     "archive_button_pressed_edit_notes",
                                     "archive_button_pressed_edit_notes"
                                 )
-                                analytics.logEvent("archive_button_pressed_edit_notes", bundle)
+                                analytics.logEvent(
+                                    "archive_button_pressed_edit_notes",
+                                    bundle
+                                )
 
                                 showMovingToArchiveLoadingBox.value = true
 
@@ -717,13 +719,17 @@ fun MainStructureEditNote(
 
 
                             } else if (screen == Constant.ARCHIVE) {
-                                var analytics = com.google.firebase.ktx.Firebase.analytics
+                                var analytics =
+                                    com.google.firebase.ktx.Firebase.analytics
                                 var bundle = Bundle()
                                 bundle.putString(
                                     "unarchive_button_pressed_edit_notes",
                                     "unarchive_button_pressed_edit_notes"
                                 )
-                                analytics.logEvent("unarchive_button_pressed_edit_notes", bundle)
+                                analytics.logEvent(
+                                    "unarchive_button_pressed_edit_notes",
+                                    bundle
+                                )
 
                                 showMovingFromArchiveLoadingBox.value = true
 
@@ -760,6 +766,134 @@ fun MainStructureEditNote(
                             imageVector = Icons.Filled.Delete,
                             contentDescription = "Delete"
                         )
+                    }
+                    IconButton(onClick = {
+                        var analytics = com.google.firebase.ktx.Firebase.analytics
+                        var bundle = Bundle()
+                        bundle.putString(
+                            "save_button_pressed_edit_notes",
+                            "save_button_pressed_edit_notes"
+                        )
+                        analytics.logEvent("save_button_pressed_edit_notes", bundle)
+
+                        convertMutableStateIntoString(
+                            mutableListOfCheckboxTexts,
+                            converted
+                        )
+                        convertMutableStateIntoString(
+                            mutableListOfBulletPoints,
+                            convertedBulletPoints
+                        )
+                        viewModel.getNoteById(id)
+                        var noteFromDb = viewModel.getNoteById
+                        var archived = noteFromDb.value.archive
+                        var lockedOrNote = noteFromDb.value.locked
+                        var timeCreated = noteFromDb.value.timeStamp
+                        var pinned = noteFromDb.value.notePinned
+                        var note = Note(
+                            id,
+                            title,
+                            richStateText.value.toHtml(),
+                            archived,
+                            locked = lockedOrNote,
+                            listOfCheckedNotes = converted,
+                            listOfCheckedBoxes = mutableListOfCheckBoxes.value,
+                            notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
+                            listOfBulletPointNotes = convertedBulletPoints,
+                            timeStamp = timeCreated,
+                            timeModified = System.currentTimeMillis(),
+                            notePinned = pinned
+                        )
+                        viewModel.updateNote(note)
+                        scope.launch {
+                            delay(200)
+                            navController.navigateUp()
+                        }
+
+                        Toast.makeText(
+                            context,
+                            "Note has been updated",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+
+
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.Check,
+                            contentDescription = "Save"
+                        )
+                    }
+                    IconButton(
+                        onClick = { showMenu.value = true },
+                        modifier = Modifier.onGloballyPositioned { coordinates ->
+                            // Capture icon size and position on the screen
+                            iconSize.value = coordinates.size
+                            iconPosition.value = coordinates.localToWindow(Offset.Zero)
+                        }) {
+                        Icon(
+                            imageVector = Icons.Filled.MoreVert,
+                            contentDescription = "Reminder",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    }
+                    DropdownMenu(
+                        modifier = Modifier.width(200.dp),
+                        expanded = showMenu.value,
+                        onDismissRequest = { showMenu.value = false },
+                        offset = with(density) {
+                            // Calculate the DpOffset for the DropdownMenu based on icon position and size
+                            DpOffset(
+                                x = iconPosition.value.x.toDp(),
+                                y = (iconPosition.value.y.toDp() + iconSize.value.height.toDp() - 90.dp)
+                            )
+                        }
+                    ) {
+                        DropdownMenuItem(onClick = {
+                            // Handle option 1 click
+                            showShareDialogBox.value = true
+                            showMenu.value = false
+                        }) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    imageVector = Icons.Filled.Share,
+                                    contentDescription = "Share the note",
+                                    tint = MaterialTheme.colors.onPrimary
+                                )
+                                Spacer(modifier = Modifier.width(5.dp))
+                                Text(
+                                    "Share the note",
+                                    fontFamily = FontFamily.fontFamilyRegular,
+                                    fontSize = 17.sp
+                                )
+                            }
+                        }
+                        DropdownMenuItem(
+                            onClick = {
+                                // Handle option 2 click
+                                addReminder(
+                                    activity,
+                                    note,
+                                    title,
+                                    showMenu,
+                                    notificationLauncher
+                                )
+
+                            }) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    imageVector = Icons.Filled.AlarmAdd,
+                                    contentDescription = "Reminder",
+                                    tint = MaterialTheme.colors.onPrimary
+                                )
+                                Spacer(modifier = Modifier.width(5.dp))
+                                Text(
+                                    "Reminder",
+                                    fontFamily = FontFamily.fontFamilyRegular,
+                                    fontSize = 17.sp
+                                )
+                            }
+                        }
                     }
                 }
             )
@@ -916,18 +1050,19 @@ fun convertMutableStateIntoString(
 @Composable
 fun RememberSaveableSnapshotStateList(): SnapshotStateList<MutableState<String>> {
     // Create a custom saver for SnapshotStateList<Mutable<String>>
-    val listSaver = Saver<SnapshotStateList<MutableState<String>>, List<List<String>>>(
-        save = { snapshotStateList ->
-            // Convert SnapshotStateList<Mutable<String>> to List<List<String>> for saving
-            snapshotStateList.map { state -> listOf(state.value) }
-        },
-        restore = { savedList ->
-            // Convert List<List<String>> back to SnapshotStateList<Mutable<String>> on restore
-            val restoredList = savedList.map { mutableStateOf(it.first()) }
-            SnapshotStateList<MutableState<String>>().apply {
-                addAll(restoredList)
-            }
-        })
+    val listSaver =
+        Saver<SnapshotStateList<MutableState<String>>, List<List<String>>>(
+            save = { snapshotStateList ->
+                // Convert SnapshotStateList<Mutable<String>> to List<List<String>> for saving
+                snapshotStateList.map { state -> listOf(state.value) }
+            },
+            restore = { savedList ->
+                // Convert List<List<String>> back to SnapshotStateList<Mutable<String>> on restore
+                val restoredList = savedList.map { mutableStateOf(it.first()) }
+                SnapshotStateList<MutableState<String>>().apply {
+                    addAll(restoredList)
+                }
+            })
     return rememberSaveable(saver = listSaver) {
         mutableStateListOf<MutableState<String>>() // Initial state
     }
@@ -1051,6 +1186,7 @@ fun pinOrUnpinNote(
         }
     }
 }
+
 
 
 

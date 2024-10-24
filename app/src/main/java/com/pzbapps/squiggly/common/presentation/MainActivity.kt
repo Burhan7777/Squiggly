@@ -1,10 +1,13 @@
 package com.pzbapps.squiggly.common.presentation
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -68,6 +71,18 @@ class MainActivity : ComponentActivity() {
         var showOtherPurposes = mutableStateOf(false)
         var versionCodeOtherPurposes = mutableStateOf("")
         var buttonNameOtherPurposes = mutableStateOf("")
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "Reminder Notifications"
+            val descriptionText = "Channel for Reminder notifications"
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel("reminder_channel", name, importance).apply {
+                description = descriptionText
+            }
+            val notificationManager: NotificationManager =
+                this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
 
 
         val conMgr = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager

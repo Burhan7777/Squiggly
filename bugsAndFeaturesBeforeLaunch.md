@@ -16,9 +16,12 @@ BUGS AND FEATURES BEFORE LAUNCH
 13) Add scanning of docs: DELAYED
 14) Remove Log In and shift it inside of app: DONE
 15) Rate app option: DONE
-16) 7 inch and 10 inch screenshots in playstore:
+16) 7 inch and 10 inch screenshots in playstore: DONE
 17) screenshots bigger font and bold font: DONE:
 18) Main Screen should only show little bit of note if note is huge: CANCELLED
 19) Share the note:DONE
 20) Fix the bug of log in dialog box not cancelling on locked screen:DONE
 21) Add delete all and restore all to trash: DONE
+22) Change URL of rate this app:DONE
+23) Test on all emulators before open testing:
+24) start crashlytics:DONE

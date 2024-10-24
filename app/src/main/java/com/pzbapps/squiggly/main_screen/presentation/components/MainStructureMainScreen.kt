@@ -192,7 +192,7 @@ fun MainStructureMainScreen(
                                 analytics.logEvent("rate_app_pressed", bundle)
                                 var intent = Intent(
                                     Intent.ACTION_VIEW,
-                                    Uri.parse("https://play.google.com/store/apps/details?id=com.pzbdownloaders.scribble")
+                                    Uri.parse("https://play.google.com/store/apps/details?id=com.pzbapps.squiggly")
                                 )
                                 activity.startActivity(intent)
                             } else if (selectedItem.value == 6) {

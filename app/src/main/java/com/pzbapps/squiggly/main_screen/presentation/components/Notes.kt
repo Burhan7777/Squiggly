@@ -226,7 +226,8 @@ fun Notes(
                                 fontSize = 15.sp,
                                 fontFamily = FontFamily.fontFamilyRegular,
                                 color = MaterialTheme.colors.onPrimary,
-                                textAlign = TextAlign.Center
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth()
                             )
                         }
                     }
