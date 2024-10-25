@@ -33,7 +33,8 @@ fun addReminder(
     viewModel: MainActivityViewModel,
     time: MutableLongState,
     systemTime: MutableLongState,
-    showRationaleDialogBox: MutableState<Boolean>
+    showRationaleDialogBox: MutableState<Boolean>,
+    timeInString:MutableState<String>
 ) {
 
 
@@ -47,7 +48,9 @@ fun addReminder(
             viewModel,
             time,
             systemTime,
-            showRationaleDialogBox
+            showRationaleDialogBox,
+            timeInString
+
         )
     } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.S) {
         addReminderForAndroid12(
@@ -57,7 +60,8 @@ fun addReminder(
             showMenu,
             viewModel,
             time,
-            systemTime
+            systemTime,
+            timeInString
         )
     } else {
         addReminderForAndroidBelow12(
@@ -67,7 +71,8 @@ fun addReminder(
             showMenu,
             viewModel,
             time,
-            systemTime
+            systemTime,
+            timeInString
         )
     }
 }
@@ -82,7 +87,8 @@ fun addReminderForAndroid13AndAbove(
     viewModel: MainActivityViewModel,
     time: MutableLongState,
     systemTime: MutableLongState,
-    showRationaleDialogBox: MutableState<Boolean>
+    showRationaleDialogBox: MutableState<Boolean>,
+    timeInString:MutableState<String>
 
 ) {
 
@@ -140,7 +146,8 @@ fun addReminderForAndroid13AndAbove(
                                 note,
                                 viewModel,
                                 time,
-                                systemTime
+                                systemTime,
+                                timeInString
                             )
                             Toast.makeText(
                                 activity,
@@ -180,7 +187,8 @@ fun addReminderForAndroid12(
     showMenu: MutableState<Boolean>,
     viewModel: MainActivityViewModel,
     time: MutableLongState,
-    systemTime: MutableLongState
+    systemTime: MutableLongState,
+    timeInString:MutableState<String>
 ) {
 
     //  resultAlarm = permissionHandlerAlarm(activity)
@@ -229,7 +237,8 @@ fun addReminderForAndroid12(
                             note,
                             viewModel,
                             time,
-                            systemTime
+                            systemTime,
+                            timeInString
                         )
                         Toast.makeText(
                             activity,
@@ -265,7 +274,8 @@ fun addReminderForAndroidBelow12(
     showMenu: MutableState<Boolean>,
     viewModel: MainActivityViewModel,
     time: MutableLongState,
-    systemTime: MutableLongState
+    systemTime: MutableLongState,
+    timeInString:MutableState<String>
 ) {
     val calendar = Calendar.getInstance()
     val datePickerDialog = DatePickerDialog(
@@ -302,7 +312,8 @@ fun addReminderForAndroidBelow12(
                         note,
                         viewModel,
                         time,
-                        systemTime
+                        systemTime,
+                        timeInString
                     )
                     Toast.makeText(
                         activity,
@@ -324,8 +335,4 @@ fun addReminderForAndroidBelow12(
 
     datePickerDialog.show()
     showMenu.value = false
-}
-
-fun cancelAlarm() {
-
 }

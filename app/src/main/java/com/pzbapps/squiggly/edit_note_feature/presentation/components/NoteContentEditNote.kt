@@ -92,11 +92,9 @@ fun NoteContent(
     showMenu: MutableState<Boolean>,
     notificationLauncher: ManagedActivityResultLauncher<String, Boolean>,
     time: MutableLongState,
-    systemTime: MutableLongState
+    systemTime: MutableLongState,
+    timeInString: MutableState<String>
 ) {
-
-    ///viewModel.getNoteBook()
-    //val listOfNoteBooks = viewModel.getNoteBooks.observeAsState().value
 
     var dialogOpen = remember {
         mutableStateOf(false)
@@ -112,10 +110,6 @@ fun NoteContent(
         formattedTime.value = formatDateTimeFromMillis(time.longValue)
     }
 
-//    LaunchedEffect(key1 = content) {
-//        richStateText.value.setHtml(content)
-//        println("RICHTEXT:${richStateText.value.annotatedString.text}")
-//    }
 
     LaunchedEffect(key1 = content) {
         // Set the content only once when the screen opens, or if content changes externally
@@ -136,16 +130,6 @@ fun NoteContent(
 
     var focusRequester = remember { FocusRequester() }
 
-
-    // richTextState1.setText(richTextState1.annotatedString.text)
-    // println(richTextState1.annotatedString.text)
-
-
-//    var notebooks: ArrayList<String> = ArrayList()
-//
-//    for (i in listOfNoteBooks?.indices ?: arrayListOf<GetNoteBook>().indices) {
-//        notebooks.add(listOfNoteBooks!![i]?.notebook ?: GetNoteBook().notebook)
-//    }
 
 
     if (screen != Constant.LOCKED_NOTE && screen != Constant.ARCHIVE) {
@@ -173,32 +157,7 @@ fun NoteContent(
                 )
             }
 
-            /*     TextField(
-                modifier = Modifier.wrapContentWidth(),
-                 value = "Notebook:$noteBook",
-                 onValueChange = { },
-                 placeholder = {
-                     Text(
-                         text = "Notebook",
-                         fontSize = 15.sp,
-                         fontFamily = FontFamily.fontFamilyRegular,
-                         color = MaterialTheme.colors.onPrimary,
-                         modifier = Modifier.alpha(0.5f)
-                     )
-                 },
-                 colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
-                     backgroundColor = MaterialTheme.colors.primary,
-                     focusedIndicatorColor = MaterialTheme.colors.primary,
-                     unfocusedIndicatorColor = MaterialTheme.colors.primary,
-                     cursorColor = MaterialTheme.colors.onPrimary
-                 ),
-                 textStyle = TextStyle(
-                     fontFamily = FontFamily.fontFamilyRegular,
-                     fontSize = 15.sp,
-                     fontStyle = FontStyle.Italic
-                 ),
-                 readOnly = true
-             )*/
+
             Icon(
                 imageVector = Icons.Filled.ArrowDropDown,
                 contentDescription = "Arrow DropDown",
@@ -287,7 +246,8 @@ fun NoteContent(
                                 viewModel,
                                 time,
                                 systemTime,
-                                mutableStateOf(false)
+                                mutableStateOf(false),
+                                timeInString
                             )
                         },
                     shape = RoundedCornerShape(20.dp),
@@ -313,7 +273,9 @@ fun NoteContent(
                             cancelReminder(activity, note.value.id)
                             val noteUpdate = note.value.copy(reminder = 0)
                             viewModel.updateNote(noteUpdate)
-                            time.value = 0
+                            timeInString.value = ""
+                            time.longValue = 0
+                            formattedTime.value = ""
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Clear,
@@ -402,7 +364,8 @@ fun NoteContent(
                                         viewModel,
                                         time,
                                         systemTime,
-                                        mutableStateOf(false)
+                                        mutableStateOf(false),
+                                        timeInString
                                     )
                                 },
                             shape = RoundedCornerShape(20.dp),
@@ -428,7 +391,9 @@ fun NoteContent(
                                     cancelReminder(activity, note.value.id)
                                     val noteUpdate = note.value.copy(reminder = 0)
                                     viewModel.updateNote(noteUpdate)
-                                    time.value = 0
+                                    timeInString.value = ""
+                                    time.longValue = 0
+                                    formattedTime.value = ""
                                 }) {
                                     Icon(
                                         imageVector = Icons.Filled.Clear,
@@ -451,16 +416,6 @@ fun NoteContent(
                 isNewCheckboxAdded.value = false// Move focus to the last added checkbox
             }
         }
-//        LaunchedEffect(focusRequesters, listOfNotes) {
-//            if (listOfNotes.isNotEmpty()) {
-//                // Delay focus request to ensure the UI is composed
-//                focusRequesters.firstOrNull()?.let { firstFocusRequester ->
-//                    // Add a small delay to ensure everything is composed
-//                   // kotlinx.coroutines.delay(100)
-//                    firstFocusRequester.requestFocus()
-//                }
-//            }
-//        }
     } else if (listOfBulletPointNotes.size > 0) {
         val focusRequesters = remember { mutableStateListOf(FocusRequester()) }
 
@@ -535,7 +490,8 @@ fun NoteContent(
                                         viewModel,
                                         time,
                                         systemTime,
-                                        mutableStateOf(false)
+                                        mutableStateOf(false),
+                                        timeInString
                                     )
                                 },
                             shape = RoundedCornerShape(20.dp),
@@ -561,7 +517,9 @@ fun NoteContent(
                                     cancelReminder(activity, note.value.id)
                                     val noteUpdate = note.value.copy(reminder = 0)
                                     viewModel.updateNote(noteUpdate)
-                                    time.value = 0
+                                    timeInString.value = ""
+                                    time.longValue = 0
+                                    formattedTime.value = ""
                                 }) {
                                     Icon(
                                         imageVector = Icons.Filled.Clear,
@@ -582,16 +540,6 @@ fun NoteContent(
                     ?.requestFocus()  // Move focus to the last added checkbox
             }
         }
-//        LaunchedEffect(focusRequesters, listOfBulletPointNotes) {
-//            if (listOfBulletPointNotes.isNotEmpty()) {
-//                // Delay focus request to ensure the UI is composed
-//                focusRequesters.firstOrNull()?.let { firstFocusRequester ->
-//                    // Add a small delay to ensure everything is composed
-//                    kotlinx.coroutines.delay(100)
-//                    firstFocusRequester.requestFocus()
-//                }
-//            }
-//        }
     }
 
 }

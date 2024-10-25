@@ -23,7 +23,8 @@ fun scheduleReminder(
     note: MutableState<Note>,
     viewModel: MainActivityViewModel,
     time: MutableLongState,
-    systemTime: MutableLongState
+    systemTime: MutableLongState,
+    timeInString: MutableState<String>
 ) {
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val intent = Intent(context, ReminderReceiver::class.java).apply {
@@ -50,8 +51,6 @@ fun scheduleReminder(
             )
             var note = note.value.copy(reminder = triggerTimeMillis)
             viewModel.updateNote(note)
-            viewModel.getNoteById(noteId)
-            var note1 = viewModel.getNoteById.value
             time.longValue = triggerTimeMillis
             viewModel.timeInString.value = formatDateTimeFromMillis(triggerTimeMillis)
             systemTime.longValue = System.currentTimeMillis()
@@ -64,8 +63,6 @@ fun scheduleReminder(
         )
         var note = note.value.copy(reminder = triggerTimeMillis)
         viewModel.updateNote(note)
-        viewModel.getNoteById(noteId)
-        var note1 = viewModel.getNoteById.value
         time.longValue = triggerTimeMillis
         viewModel.timeInString.value = formatDateTimeFromMillis(triggerTimeMillis)
         systemTime.longValue = System.currentTimeMillis()

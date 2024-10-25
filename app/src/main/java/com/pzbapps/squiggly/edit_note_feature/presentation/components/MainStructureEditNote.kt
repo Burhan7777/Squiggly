@@ -179,6 +179,8 @@ fun MainStructureEditNote(
 
     var showRationaleDialogBox = remember { mutableStateOf(false) }
 
+    var timeInString = remember { mutableStateOf("") }
+
 
     var notificationLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -891,7 +893,8 @@ fun MainStructureEditNote(
                                     viewModel,
                                     time,
                                     systemTime,
-                                    showRationaleDialogBox
+                                    showRationaleDialogBox,
+                                    timeInString,
                                 )
 
                             }) {
@@ -942,7 +945,8 @@ fun MainStructureEditNote(
                     showMenu,
                     notificationLauncher,
                     time,
-                    systemTime
+                    systemTime,
+                    timeInString
                 )
             }
             if (mutableListOfCheckboxTexts.size == 0 && mutableListOfBulletPoints.size == 0 && !hideFormattingTextBarWhenTitleIsInFocus.value) {
