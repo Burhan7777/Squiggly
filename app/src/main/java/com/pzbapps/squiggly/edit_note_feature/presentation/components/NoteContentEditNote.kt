@@ -1,5 +1,6 @@
 package com.pzbapps.squiggly.edit_note_feature.presentation.components
 
+import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -8,13 +9,19 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,6 +38,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -47,6 +55,12 @@ import com.pzbapps.squiggly.common.domain.utils.Constant
 import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
+import com.pzbapps.squiggly.main_screen.domain.model.Note
+import com.pzbapps.squiggly.reminder_feature.cancelReminder
+import kotlinx.coroutines.delay
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 @OptIn(
@@ -73,7 +87,12 @@ fun NoteContent(
     hideFormattingTextBar: MutableState<Boolean>,
     onChangeTitle: (String) -> Unit,
     onChangeContent: (String) -> Unit,
-    screen: String
+    screen: String,
+    note: MutableState<Note>,
+    showMenu: MutableState<Boolean>,
+    notificationLauncher: ManagedActivityResultLauncher<String, Boolean>,
+    time: MutableLongState,
+    systemTime: MutableLongState
 ) {
 
     ///viewModel.getNoteBook()
@@ -86,7 +105,12 @@ fun NoteContent(
     var notebookText = remember {
         mutableStateOf("")
     }
-
+    var formattedTime = remember { mutableStateOf("") }
+    LaunchedEffect(true) {
+        systemTime.longValue = System.currentTimeMillis()
+        time.longValue = note.value.reminder
+        formattedTime.value = formatDateTimeFromMillis(time.longValue)
+    }
 
 //    LaunchedEffect(key1 = content) {
 //        richStateText.value.setHtml(content)
@@ -247,6 +271,58 @@ fun NoteContent(
                 },
                 textStyle = TextStyle(fontFamily = FontFamily.fontFamilyRegular, fontSize = 18.sp)
             )
+            if (systemTime.longValue < time.longValue) {
+                Card(
+                    modifier = Modifier
+                        .wrapContentWidth()
+                        .wrapContentHeight()
+                        .padding(30.dp)
+                        .clickable {
+                            addReminder(
+                                activity,
+                                note,
+                                title,
+                                showMenu,
+                                notificationLauncher,
+                                viewModel,
+                                time,
+                                systemTime
+                            )
+                        },
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colors.primaryVariant,
+                        contentColor = MaterialTheme.colors.onPrimary
+                    )
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(10.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Alarm,
+                            contentDescription = "Alarm",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                        Spacer(modifier = Modifier.width(3.dp))
+
+                        Text(if (viewModel.timeInString.value == "") formattedTime.value else viewModel.timeInString.value)
+                        Spacer(modifier = Modifier.width(3.dp))
+                        IconButton(onClick = {
+                            cancelReminder(activity, note.value.id)
+                            val noteUpdate = note.value.copy(reminder = 0)
+                            viewModel.updateNote(noteUpdate)
+                            time.value = 0
+                        }) {
+                            Icon(
+                                imageVector = Icons.Filled.Clear,
+                                contentDescription = "Cancel the alarm",
+                                tint = MaterialTheme.colors.onPrimary
+                            )
+                        }
+                    }
+                }
+            }
         }
     } else if (listOfNotes.size > 0 && listOfBulletPointNotes.size == 0) {
         androidx.compose.material3.TextField(
@@ -567,5 +643,11 @@ fun AlertDialogBox(
             }
         },
     )
+}
+
+fun formatDateTimeFromMillis(millis: Long): String {
+    val dateFormat = SimpleDateFormat("dd-MM-yyyy, HH:mm", Locale.getDefault())
+    val date = Date(millis)
+    return dateFormat.format(date)
 }
 

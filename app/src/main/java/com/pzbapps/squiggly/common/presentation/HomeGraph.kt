@@ -1,6 +1,7 @@
 package com.pzbapps.squiggly.common.presentation
 
 import android.util.Log
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.MutableState
 import androidx.navigation.*
 import androidx.navigation.compose.composable
@@ -36,7 +37,8 @@ fun NavGraphBuilder.homeGraph(
     activity: MainActivity,
     result: String,
     selectedItem: MutableState<Int>,
-    selectedNote: MutableState<Int>
+    selectedNote: MutableState<Int>,
+    noteId: MutableIntState
 ) {
     navigation(
         startDestination = Screens.HomeScreen.route,
@@ -48,7 +50,7 @@ fun NavGraphBuilder.homeGraph(
             }
         }
         composable(Screens.HomeScreen.route) {
-            NotesScreen(navController, viewModel, activity, selectedItem, selectedNote)
+            NotesScreen(navController, viewModel, activity, selectedItem, selectedNote, noteId)
         }
         composable(
             Screens.AddNoteScreen.route
@@ -69,7 +71,8 @@ fun NavGraphBuilder.homeGraph(
                 viewModel = viewModel,
                 activity = activity,
                 id = it.arguments!!.getInt("id")!!,
-                screen = it.arguments!!.getString("screen")!!
+                screen = it.arguments!!.getString("screen")!!,
+                noteId
             )
         }
         composable(route = Screens.SettingsScreen.route) {

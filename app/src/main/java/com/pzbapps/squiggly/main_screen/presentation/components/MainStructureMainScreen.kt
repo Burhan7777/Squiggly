@@ -49,7 +49,7 @@ fun MainStructureMainScreen(
     activity: MainActivity,
     // notebookNavigation: ArrayList<String>,
     selectedItem: MutableState<Int>,
-    selectedNote: MutableState<Int>
+    selectedNote: MutableState<Int>,
 ) {
 
     var drawerState = androidx.compose.material3.rememberDrawerState(

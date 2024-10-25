@@ -159,6 +159,8 @@ class MainActivityViewModel @Inject constructor(
     var showLockedNotes =
         mutableStateOf(false)
 
+    var timeInString = mutableStateOf("")
+
     /*  var getListOfNotesToShow = mutableListOf<AddNote>()
           private set
   */
@@ -191,7 +193,8 @@ class MainActivityViewModel @Inject constructor(
     fun getAllNotesByDateModified() {
         viewModelScope.launch(Dispatchers.IO) {
             listOfNotesByDataModified.postValue(
-                noteRepository.getAllNotesByDateModified().toCollection(ArrayList()))
+                noteRepository.getAllNotesByDateModified().toCollection(ArrayList())
+            )
         }
     }
 

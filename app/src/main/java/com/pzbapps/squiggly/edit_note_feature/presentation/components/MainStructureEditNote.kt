@@ -36,6 +36,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
+import com.google.android.datatransport.cct.StringMerger
 import com.google.firebase.Firebase
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.auth.auth
@@ -72,7 +73,8 @@ fun MainStructureEditNote(
     viewModel: MainActivityViewModel,
     id: Int,
     activity: MainActivity,
-    screen: String
+    screen: String,
+    notesid: MutableIntState
 ) {
     var context = LocalContext.current
 
@@ -169,6 +171,10 @@ fun MainStructureEditNote(
     var pinnedOrNot = remember { mutableStateOf(false) }
     var menuPosition = remember { mutableStateOf(DpOffset.Zero) }
     val density = LocalDensity.current
+
+    var time = remember { mutableLongStateOf(0) }
+
+    var systemTime = remember { mutableLongStateOf(0) }
 
 
     var notificationLauncher = rememberLauncherForActivityResult(
@@ -438,6 +444,7 @@ fun MainStructureEditNote(
 
     var remember = rememberCoroutineScope()
     BackHandler {
+        notesid.intValue = -1
         var analytics = com.google.firebase.ktx.Firebase.analytics
         var bundle = Bundle()
         bundle.putString("back_handler_triggered_edit_notes", "back_handler_triggered_edit_notes")
@@ -553,6 +560,7 @@ fun MainStructureEditNote(
                 ),
                 navigationIcon = {
                     IconButton(onClick = {
+                        notesid.intValue = -1
                         var analytics = com.google.firebase.ktx.Firebase.analytics
                         var bundle = Bundle()
                         bundle.putString(
@@ -876,7 +884,10 @@ fun MainStructureEditNote(
                                     note,
                                     title,
                                     showMenu,
-                                    notificationLauncher
+                                    notificationLauncher,
+                                    viewModel,
+                                    time,
+                                    systemTime
                                 )
 
                             }) {
@@ -922,7 +933,12 @@ fun MainStructureEditNote(
                     hideFormattingTextBarWhenTitleIsInFocus,
                     { title = it },
                     { content.value = it },
-                    screen
+                    screen,
+                    note,
+                    showMenu,
+                    notificationLauncher,
+                    time,
+                    systemTime
                 )
             }
             if (mutableListOfCheckboxTexts.size == 0 && mutableListOfBulletPoints.size == 0 && !hideFormattingTextBarWhenTitleIsInFocus.value) {

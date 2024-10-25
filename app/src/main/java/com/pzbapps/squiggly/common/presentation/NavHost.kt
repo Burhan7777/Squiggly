@@ -1,6 +1,7 @@
 package com.pzbapps.squiggly.common.presentation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.MutableState
 import androidx.navigation.NavHostController
 import com.pzbapps.squiggly.login_and_signup_feature.authGraph
@@ -12,7 +13,8 @@ fun NavHost(
     activity: MainActivity,
     result: String,
     selectedItem: MutableState<Int>,
-    selectedNote: MutableState<Int>
+    selectedNote: MutableState<Int>,
+    noteId: MutableIntState
 ) {
     androidx.navigation.compose.NavHost(
         navController = navController,
@@ -26,7 +28,8 @@ fun NavHost(
             activity = activity,
             result,
             selectedItem,
-            selectedNote
+            selectedNote,
+            noteId
         )
     }
 }

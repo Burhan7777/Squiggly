@@ -14,7 +14,8 @@ fun EditNoteScreen(
     viewModel: MainActivityViewModel,
     activity: MainActivity,
     id: Int,
-    screen: String
+    screen: String,
+    notesId: MutableIntState
 ) {
 
     // viewModel.getNoteById(id)
@@ -30,6 +31,7 @@ fun EditNoteScreen(
         mutableStateOf("")
     }
 
+    notesId.intValue = -1
 
 //      Log.i("mutable", note.value.title)
 //  Log.i("mutable", note.value.content)
@@ -44,7 +46,8 @@ fun EditNoteScreen(
         viewModel = viewModel,
         id = id,
         activity,
-        screen
+        screen,
+        notesId
     )
 }
 

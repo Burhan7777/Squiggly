@@ -21,6 +21,7 @@ import com.pzbapps.squiggly.main_screen.data.repository.NoteRepository
 import com.pzbapps.squiggly.main_screen.domain.usecase.GetNotesUseCase
 import com.pzbapps.squiggly.notebook_main_screen.data.NotebookRepository
 import com.pzbapps.squiggly.notebook_main_screen.domain.GetNotebookNotesUseCase
+import com.pzbapps.squiggly.reminder_feature.ReminderRepository
 import com.pzbapps.squiggly.search_main_screen_feature.domain.usecase.GetArchiveSearchResultUseCase
 import com.pzbapps.squiggly.search_main_screen_feature.domain.usecase.GetSearchResultUseCase
 import com.pzbapps.squiggly.settings_feature.screen.data.SettingsRepository
@@ -77,6 +78,12 @@ class AppModule {
         }
     }
 
+    var migration_19_20 = object : Migration(19, 20) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE notes ADD COLUMN reminder INTEGER NOT NULL DEFAULT (0) ")
+        }
+    }
+
 
     @Provides
     @Singleton
@@ -87,7 +94,8 @@ class AppModule {
                 migration_15_16,
                 migration_16_17,
                 migration_17_18,
-                migration_18_19
+                migration_18_19,
+                migration_19_20
             )
             .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
             //.setJournalMode(RoomDatabase.JournalMode.WRITE_AHEAD_LOGGING)
@@ -167,4 +175,7 @@ class AppModule {
     fun settingsRepository(@ApplicationContext context: Context) =
         SettingsRepository(createDataBase(context))
 
+    @Provides
+    fun reminderRepository(editNoteRepository: EditNoteRepository) =
+        ReminderRepository(editNoteRepository)
 }

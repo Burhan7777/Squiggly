@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -49,10 +50,12 @@ class MainActivity : ComponentActivity() {
     lateinit var result: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
         viewModel.getAllNotebooks() // WE LOAD THE NOTEBOOKS IN THE START ONLY SO THAT TO SHOW THEM EVERYWHERE NEEDED.
         val sharedPreferences = getSharedPreferences("rememberUser", Context.MODE_PRIVATE)
         result = sharedPreferences.getString("LoggedInUser", "nothing")!!
+
 
         var titleUpdate = mutableStateOf("")
         var bodyUpdate = mutableStateOf("")
@@ -199,14 +202,19 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                     val navController = rememberNavController()
+                    val noteId = remember{ mutableIntStateOf(0) }
+                     noteId.value = intent.getIntExtra("noteId", -1)
                     NavHost(
                         navController = navController,
                         viewModel,
                         this@MainActivity,
                         result,
                         selectedIItem,
-                        selectedNote
+                        selectedNote,
+                        noteId
                     )
+
+
                 }
             }
         }

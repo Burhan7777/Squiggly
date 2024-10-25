@@ -22,5 +22,6 @@ data class Note(
     var timePutInTrash: Long = 0,
     var deletedNote: Boolean = false,
     var notePinned: Boolean = false,
-    var timeModified :Long = 0
+    var timeModified: Long = 0,
+    var reminder: Long = 0
 )
