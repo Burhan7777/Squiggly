@@ -48,6 +48,7 @@ import com.pzbapps.squiggly.common.presentation.components.AlertDialogBoxTrialEn
 import com.pzbapps.squiggly.edit_note_feature.domain.usecase.checkIfUserHasCreatedPassword
 import com.pzbapps.squiggly.edit_note_feature.domain.utils.permissionHandlerNotification
 import com.pzbapps.squiggly.edit_note_feature.presentation.components.alertBoxes.AlertBoxShareNote
+import com.pzbapps.squiggly.edit_note_feature.presentation.components.alertBoxes.AlertBoxShowRationale
 import com.pzbapps.squiggly.edit_note_feature.presentation.components.alertBoxes.AlertDialogBoxDelete
 import com.pzbapps.squiggly.edit_note_feature.presentation.components.alertBoxes.AlertDialogBoxEnterPassword
 import com.pzbapps.squiggly.edit_note_feature.presentation.components.alertBoxes.AlertDialogBoxEnterPasswordToUnlock
@@ -175,6 +176,8 @@ fun MainStructureEditNote(
     var time = remember { mutableLongStateOf(0) }
 
     var systemTime = remember { mutableLongStateOf(0) }
+
+    var showRationaleDialogBox = remember { mutableStateOf(false) }
 
 
     var notificationLauncher = rememberLauncherForActivityResult(
@@ -887,7 +890,8 @@ fun MainStructureEditNote(
                                     notificationLauncher,
                                     viewModel,
                                     time,
-                                    systemTime
+                                    systemTime,
+                                    showRationaleDialogBox
                                 )
 
                             }) {
@@ -1047,6 +1051,11 @@ fun MainStructureEditNote(
             convertedBulletPoints
         ) {
             showShareDialogBox.value = false
+        }
+    }
+    if (showRationaleDialogBox.value) {
+        AlertBoxShowRationale {
+            showRationaleDialogBox.value = false
         }
     }
 }

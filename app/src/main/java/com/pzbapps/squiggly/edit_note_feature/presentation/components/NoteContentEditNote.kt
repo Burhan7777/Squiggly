@@ -286,7 +286,8 @@ fun NoteContent(
                                 notificationLauncher,
                                 viewModel,
                                 time,
-                                systemTime
+                                systemTime,
+                                mutableStateOf(false)
                             )
                         },
                     shape = RoundedCornerShape(20.dp),

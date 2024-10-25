@@ -13,6 +13,8 @@ import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.MutableLongState
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.core.content.ContextCompat
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
@@ -30,7 +32,8 @@ fun addReminder(
     notificationLauncher: ManagedActivityResultLauncher<String, Boolean>,
     viewModel: MainActivityViewModel,
     time: MutableLongState,
-    systemTime: MutableLongState
+    systemTime: MutableLongState,
+    showRationaleDialogBox: MutableState<Boolean>
 ) {
 
 
@@ -43,7 +46,8 @@ fun addReminder(
             notificationLauncher,
             viewModel,
             time,
-            systemTime
+            systemTime,
+            showRationaleDialogBox
         )
     } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.S) {
         addReminderForAndroid12(
@@ -77,7 +81,8 @@ fun addReminderForAndroid13AndAbove(
     notificationLauncher: ManagedActivityResultLauncher<String, Boolean>,
     viewModel: MainActivityViewModel,
     time: MutableLongState,
-    systemTime: MutableLongState
+    systemTime: MutableLongState,
+    showRationaleDialogBox: MutableState<Boolean>
 
 ) {
 
@@ -87,6 +92,11 @@ fun addReminderForAndroid13AndAbove(
     if (!alarmManager.canScheduleExactAlarms()) {
         // You need to guide the user to the system settings to grant the permission
         // Here's how you can send the user to the system settings for your app:
+        Toast.makeText(
+            activity,
+            "Please provide permission manually to the app to set reminders",
+            Toast.LENGTH_LONG
+        ).show()
         val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
         activity.startActivity(intent)
     } else {
@@ -122,29 +132,28 @@ fun addReminderForAndroid13AndAbove(
 
                             // Pass the selected date and time back to the caller
                             //  onDateTimeSelected(calendar)
+                            scheduleReminder(
+                                activity,
+                                calendar,
+                                note.value.id,
+                                title,
+                                note,
+                                viewModel,
+                                time,
+                                systemTime
+                            )
+                            Toast.makeText(
+                                activity,
+                                "Reminder has been set",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         },
                         calendar.get(Calendar.HOUR_OF_DAY),
                         calendar.get(Calendar.MINUTE),
                         true
                     )
                     timePickerDialog.show() // Show the time picker dialog
-                    timePickerDialog.setOnDismissListener {
-                        scheduleReminder(
-                            activity,
-                            calendar,
-                            note.value.id,
-                            title,
-                            note,
-                            viewModel,
-                            time,
-                            systemTime
-                        )
-                        Toast.makeText(
-                            activity,
-                            "Reminder has been set",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+
 
                 },
                 calendar.get(Calendar.YEAR),
@@ -156,11 +165,7 @@ fun addReminderForAndroid13AndAbove(
 
             showMenu.value = false
         } else if (resultNotification == "Rationale shown") {
-            Toast.makeText(
-                activity,
-                "We need this permission to show the notification of reminder",
-                Toast.LENGTH_SHORT
-            ).show()
+            showRationaleDialogBox.value = true
         } else if (resultNotification == "false") {
             notificationLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
         }
@@ -216,29 +221,28 @@ fun addReminderForAndroid12(
 
                         // Pass the selected date and time back to the caller
                         //  onDateTimeSelected(calendar)
+                        scheduleReminder(
+                            activity,
+                            calendar,
+                            note.value.id,
+                            title,
+                            note,
+                            viewModel,
+                            time,
+                            systemTime
+                        )
+                        Toast.makeText(
+                            activity,
+                            "Reminder has been set",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     },
                     calendar.get(Calendar.HOUR_OF_DAY),
                     calendar.get(Calendar.MINUTE),
                     true
                 )
                 timePickerDialog.show() // Show the time picker dialog
-                timePickerDialog.setOnDismissListener {
-                    scheduleReminder(
-                        activity,
-                        calendar,
-                        note.value.id,
-                        title,
-                        note,
-                        viewModel,
-                        time,
-                        systemTime
-                    )
-                    Toast.makeText(
-                        activity,
-                        "Reminder has been set",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+
 
             },
             calendar.get(Calendar.YEAR),
@@ -290,29 +294,27 @@ fun addReminderForAndroidBelow12(
 
                     // Pass the selected date and time back to the caller
                     //  onDateTimeSelected(calendar)
+                    scheduleReminder(
+                        activity,
+                        calendar,
+                        note.value.id,
+                        title,
+                        note,
+                        viewModel,
+                        time,
+                        systemTime
+                    )
+                    Toast.makeText(
+                        activity,
+                        "Reminder has been set",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 },
                 calendar.get(Calendar.HOUR_OF_DAY),
                 calendar.get(Calendar.MINUTE),
                 true
-            )
-            timePickerDialog.show() // Show the time picker dialog
-            timePickerDialog.setOnDismissListener {
-                scheduleReminder(
-                    activity,
-                    calendar,
-                    note.value.id,
-                    title,
-                    note,
-                    viewModel,
-                    time,
-                    systemTime
-                )
-                Toast.makeText(
-                    activity,
-                    "Reminder has been set",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+            ) // Show the time picker dialog
+            timePickerDialog.show()
 
         },
         calendar.get(Calendar.YEAR),
@@ -324,6 +326,6 @@ fun addReminderForAndroidBelow12(
     showMenu.value = false
 }
 
-fun cancelAlarm(){
+fun cancelAlarm() {
 
 }
