@@ -57,7 +57,10 @@ import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.main_screen.domain.model.Note
 import com.pzbapps.squiggly.reminder_feature.cancelReminder
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -391,9 +394,7 @@ fun NoteContent(
                                     cancelReminder(activity, note.value.id)
                                     val noteUpdate = note.value.copy(reminder = 0)
                                     viewModel.updateNote(noteUpdate)
-                                    timeInString.value = ""
                                     time.longValue = 0
-                                    formattedTime.value = ""
                                 }) {
                                     Icon(
                                         imageVector = Icons.Filled.Clear,
@@ -710,4 +711,5 @@ fun formatDateTimeFromMillis(millis: Long): String {
     val date = Date(millis)
     return dateFormat.format(date)
 }
+
 
