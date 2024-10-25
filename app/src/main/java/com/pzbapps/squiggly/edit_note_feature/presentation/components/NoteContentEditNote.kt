@@ -385,8 +385,64 @@ fun NoteContent(
                         })
 
                 }
+                item {
+                    if (systemTime.longValue < time.longValue) {
+                        Card(
+                            modifier = Modifier
+                                .wrapContentWidth()
+                                .wrapContentHeight()
+                                .padding(30.dp)
+                                .clickable {
+                                    addReminder(
+                                        activity,
+                                        note,
+                                        title,
+                                        showMenu,
+                                        notificationLauncher,
+                                        viewModel,
+                                        time,
+                                        systemTime,
+                                        mutableStateOf(false)
+                                    )
+                                },
+                            shape = RoundedCornerShape(20.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colors.primaryVariant,
+                                contentColor = MaterialTheme.colors.onPrimary
+                            )
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.padding(10.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.Alarm,
+                                    contentDescription = "Alarm",
+                                    tint = MaterialTheme.colors.onPrimary
+                                )
+                                Spacer(modifier = Modifier.width(3.dp))
+
+                                Text(if (viewModel.timeInString.value == "") formattedTime.value else viewModel.timeInString.value)
+                                Spacer(modifier = Modifier.width(3.dp))
+                                IconButton(onClick = {
+                                    cancelReminder(activity, note.value.id)
+                                    val noteUpdate = note.value.copy(reminder = 0)
+                                    viewModel.updateNote(noteUpdate)
+                                    time.value = 0
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Clear,
+                                        contentDescription = "Cancel the alarm",
+                                        tint = MaterialTheme.colors.onPrimary
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
+
         LaunchedEffect(count.value) {
             if (listOfNotes.size > 1 && listOfNotes.last().value.isEmpty()) {
                 lazyListState.animateScrollToItem(listOfNotes.size - 1)
@@ -461,6 +517,61 @@ fun NoteContent(
                         }
                     )
 
+                }
+                item {
+                    if (systemTime.longValue < time.longValue) {
+                        Card(
+                            modifier = Modifier
+                                .wrapContentWidth()
+                                .wrapContentHeight()
+                                .padding(30.dp)
+                                .clickable {
+                                    addReminder(
+                                        activity,
+                                        note,
+                                        title,
+                                        showMenu,
+                                        notificationLauncher,
+                                        viewModel,
+                                        time,
+                                        systemTime,
+                                        mutableStateOf(false)
+                                    )
+                                },
+                            shape = RoundedCornerShape(20.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colors.primaryVariant,
+                                contentColor = MaterialTheme.colors.onPrimary
+                            )
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.padding(10.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.Alarm,
+                                    contentDescription = "Alarm",
+                                    tint = MaterialTheme.colors.onPrimary
+                                )
+                                Spacer(modifier = Modifier.width(3.dp))
+
+                                Text(if (viewModel.timeInString.value == "") formattedTime.value else viewModel.timeInString.value)
+                                Spacer(modifier = Modifier.width(3.dp))
+                                IconButton(onClick = {
+                                    cancelReminder(activity, note.value.id)
+                                    val noteUpdate = note.value.copy(reminder = 0)
+                                    viewModel.updateNote(noteUpdate)
+                                    time.value = 0
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Clear,
+                                        contentDescription = "Cancel the alarm",
+                                        tint = MaterialTheme.colors.onPrimary
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
