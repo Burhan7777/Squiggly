@@ -9,6 +9,9 @@ import androidx.compose.runtime.MutableLongState
 import androidx.compose.runtime.MutableState
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.main_screen.domain.model.Note
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -49,10 +52,9 @@ fun scheduleReminder(
                 triggerTimeMillis,
                 pendingIntent
             )
-            var note = note.value.copy(reminder = triggerTimeMillis)
-            viewModel.updateNote(note)
+            updateReminderInDB(viewModel,note,triggerTimeMillis)
             time.longValue = triggerTimeMillis
-            viewModel.timeInString.value = formatDateTimeFromMillis(triggerTimeMillis)
+            timeInString.value = formatDateTimeFromMillis(triggerTimeMillis)
             systemTime.longValue = System.currentTimeMillis()
         }
     } else {
@@ -61,10 +63,9 @@ fun scheduleReminder(
             triggerTimeMillis,
             pendingIntent
         )
-        var note = note.value.copy(reminder = triggerTimeMillis)
-        viewModel.updateNote(note)
+        updateReminderInDB(viewModel,note,triggerTimeMillis)
         time.longValue = triggerTimeMillis
-        viewModel.timeInString.value = formatDateTimeFromMillis(triggerTimeMillis)
+        timeInString.value = formatDateTimeFromMillis(triggerTimeMillis)
         systemTime.longValue = System.currentTimeMillis()
     }
 }
@@ -91,4 +92,22 @@ fun formatDateTimeFromMillis(millis: Long): String {
     val dateFormat = SimpleDateFormat("dd-MM-yyyy, HH:mm", Locale.getDefault())
     val date = Date(millis)
     return dateFormat.format(date)
+}
+
+fun updateReminderInDB(
+    viewModel: MainActivityViewModel,
+    note: MutableState<Note>,
+    triggerTimeMillis: Long
+) {
+    kotlinx.coroutines.GlobalScope.launch(Dispatchers.IO) {
+        var note1 = note.value.copy(reminder = triggerTimeMillis)
+        viewModel.updateNote(note1)
+        delay(200)
+        viewModel.getNoteById(note.value.id)
+        var noteReceived = viewModel.getNoteById.value
+        if (noteReceived.reminder != triggerTimeMillis) {
+            updateReminderInDB(viewModel, note, triggerTimeMillis)
+        }
+    }
+
 }

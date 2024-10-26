@@ -449,7 +449,6 @@ fun MainStructureEditNote(
 
     var remember = rememberCoroutineScope()
     BackHandler {
-        notesid.intValue = -1
         var analytics = com.google.firebase.ktx.Firebase.analytics
         var bundle = Bundle()
         bundle.putString("back_handler_triggered_edit_notes", "back_handler_triggered_edit_notes")
@@ -462,11 +461,13 @@ fun MainStructureEditNote(
             } else {
                 viewModel.getNoteById(note.value.id)
                 val noteFromDb = viewModel.getNoteById.value
+                 var reminder = noteFromDb.reminder
                 var note = noteFromDb.copy(
                     title = title,
                     content = richStateText.value.toHtml(),
                     timeModified = System.currentTimeMillis(),
                     notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
+                    reminder = reminder
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
@@ -522,11 +523,13 @@ fun MainStructureEditNote(
             if (richStateText.value.annotatedString.text != lastContent.value) {
                 viewModel.getNoteById(note.value.id)
                 val noteFromDb = viewModel.getNoteById.value
+                var reminder = noteFromDb.reminder
                 var note = noteFromDb.copy(
                     title = title,
                     content = richStateText.value.toHtml(),
                     timeModified = System.currentTimeMillis(),
                     notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
+                    reminder = reminder
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
@@ -585,6 +588,7 @@ fun MainStructureEditNote(
                         var lockedOrNote = noteFromDb.value.locked
                         var timeCreated = noteFromDb.value.timeStamp
                         var pinned = noteFromDb.value.notePinned
+                        var reminder = noteFromDb.value.reminder
                         var note = Note(
                             id,
                             title,
@@ -597,7 +601,8 @@ fun MainStructureEditNote(
                             listOfBulletPointNotes = convertedBulletPoints,
                             timeStamp = timeCreated,
                             timeModified = System.currentTimeMillis(),
-                            notePinned = pinned
+                            notePinned = pinned,
+                            reminder= reminder
                         )
                         viewModel.updateNote(note)
                         Toast.makeText(context, "Note has been updated", Toast.LENGTH_SHORT)
@@ -803,6 +808,7 @@ fun MainStructureEditNote(
                         var lockedOrNote = noteFromDb.value.locked
                         var timeCreated = noteFromDb.value.timeStamp
                         var pinned = noteFromDb.value.notePinned
+                        var reminder = noteFromDb.value.reminder
                         var note = Note(
                             id,
                             title,
@@ -815,7 +821,8 @@ fun MainStructureEditNote(
                             listOfBulletPointNotes = convertedBulletPoints,
                             timeStamp = timeCreated,
                             timeModified = System.currentTimeMillis(),
-                            notePinned = pinned
+                            notePinned = pinned,
+                            reminder = reminder
                         )
                         viewModel.updateNote(note)
                         scope.launch {

@@ -270,15 +270,12 @@ fun NoteContent(
                         )
                         Spacer(modifier = Modifier.width(3.dp))
 
-                        Text(if (viewModel.timeInString.value == "") formattedTime.value else viewModel.timeInString.value)
+                        Text(if (timeInString.value == "") formattedTime.value else timeInString.value)
                         Spacer(modifier = Modifier.width(3.dp))
                         IconButton(onClick = {
                             cancelReminder(activity, note.value.id)
-                            val noteUpdate = note.value.copy(reminder = 0)
-                            viewModel.updateNote(noteUpdate)
-                            timeInString.value = ""
+                            updateReminderInDB(viewModel, note)
                             time.longValue = 0
-                            formattedTime.value = ""
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Clear,
@@ -388,12 +385,11 @@ fun NoteContent(
                                 )
                                 Spacer(modifier = Modifier.width(3.dp))
 
-                                Text(if (viewModel.timeInString.value == "") formattedTime.value else viewModel.timeInString.value)
+                                Text(if (timeInString.value == "") formattedTime.value else timeInString.value)
                                 Spacer(modifier = Modifier.width(3.dp))
                                 IconButton(onClick = {
                                     cancelReminder(activity, note.value.id)
-                                    val noteUpdate = note.value.copy(reminder = 0)
-                                    viewModel.updateNote(noteUpdate)
+                                    updateReminderInDB(viewModel, note)
                                     time.longValue = 0
                                 }) {
                                     Icon(
@@ -512,15 +508,12 @@ fun NoteContent(
                                 )
                                 Spacer(modifier = Modifier.width(3.dp))
 
-                                Text(if (viewModel.timeInString.value == "") formattedTime.value else viewModel.timeInString.value)
+                                Text(if (timeInString.value == "") formattedTime.value else timeInString.value)
                                 Spacer(modifier = Modifier.width(3.dp))
                                 IconButton(onClick = {
                                     cancelReminder(activity, note.value.id)
-                                    val noteUpdate = note.value.copy(reminder = 0)
-                                    viewModel.updateNote(noteUpdate)
-                                    timeInString.value = ""
+                                    updateReminderInDB(viewModel, note)
                                     time.longValue = 0
-                                    formattedTime.value = ""
                                 }) {
                                     Icon(
                                         imageVector = Icons.Filled.Clear,
@@ -710,6 +703,20 @@ fun formatDateTimeFromMillis(millis: Long): String {
     val dateFormat = SimpleDateFormat("dd-MM-yyyy, HH:mm", Locale.getDefault())
     val date = Date(millis)
     return dateFormat.format(date)
+}
+
+fun updateReminderInDB(viewModel: MainActivityViewModel, note: MutableState<Note>) {
+    GlobalScope.launch(Dispatchers.IO) {
+        val noteUpdate = note.value.copy(reminder = 0)
+        viewModel.updateNote(noteUpdate)
+        delay(200)
+        viewModel.getNoteById(note.value.id)
+        var noteReceived = viewModel.getNoteById.value
+        if (noteReceived.reminder.toInt() != 0) {
+            updateReminderInDB(viewModel, note)
+        }
+    }
+
 }
 
 
