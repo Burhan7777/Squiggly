@@ -33,6 +33,7 @@ fun scheduleReminder(
     val intent = Intent(context, ReminderReceiver::class.java).apply {
         putExtra("noteId", noteId)
         putExtra("noteTitle", noteTitle)
+        .addFlags(Intent.FLAG_RECEIVER_FOREGROUND)
     }
 
 

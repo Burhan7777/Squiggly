@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.os.PowerManager
 import androidx.core.app.NotificationCompat
 import com.pzbapps.squiggly.R
 import com.pzbapps.squiggly.common.presentation.MainActivity
@@ -29,11 +30,26 @@ class ReminderReceiver : BroadcastReceiver() {
             reminderRepository.resetReminder(noteId!!)
         }
 
+        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+        val wakeLock = powerManager.newWakeLock(
+            PowerManager.PARTIAL_WAKE_LOCK,
+            "MyApp::AlarmWakeLockTag"
+        )
+        wakeLock.acquire(10 * 60 * 1000L /* 10 minutes */)
+        try {
+            notification(context, noteId!!)
+
+        } finally {
+            wakeLock.release()
+        }
+    }
+
+    fun notification(context: Context, noteId: Int) {
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         val openNoteIntent = Intent(context, MainActivity::class.java).apply {
-            putExtra("noteId", noteId) // Pass the note ID to the activity
+            putExtra("noteId", noteId)
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
 
@@ -46,7 +62,7 @@ class ReminderReceiver : BroadcastReceiver() {
 
         val notification = NotificationCompat.Builder(context, "reminder_channel")
             .setSmallIcon(R.drawable.ic_launcher)
-            .setContentTitle("Reminder: $noteTitle")
+            .setContentTitle("Reminder:Hello there !!!")
             .setContentText("You have a reminder for this note.")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent)
