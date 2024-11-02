@@ -17,8 +17,8 @@ android {
         applicationId "com.pzbapps.squiggly"
         minSdk 23
         targetSdk 34
-        versionCode 2
-        versionName "1.0.0- Beta"
+        versionCode 3
+        versionName "2.0.0- Beta"
         ndk {
             // On Apple silicon, you can omit x86_64.
             abiFilters "arm64-v8a"
@@ -164,6 +164,9 @@ dependencies {
 
     // ML TEXT RECOGNITION
     implementation("com.google.mlkit:text-recognition:16.0.1")
+
+    // IMAGE PICKER
+    implementation 'com.github.dhaval2404:imagepicker:2.1'
 
 
 }

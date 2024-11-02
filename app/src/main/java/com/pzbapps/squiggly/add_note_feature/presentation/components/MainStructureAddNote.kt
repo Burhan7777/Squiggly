@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.ColorLens
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -275,6 +276,21 @@ fun MainStructureAddNote(
                     }
                 },
                 actions = {
+//                    IconButton(onClick = {
+//                        var analytics = Firebase.analytics
+//                        var bundle = Bundle()
+//                        bundle.putString(
+//                            "color_button_pressed_add_note_screen",
+//                            "color_button_pressed_add_note_screen"
+//                        )
+//                        analytics.logEvent("color_button_pressed_add_note_screen", bundle)
+//                    }) {
+//                        Icon(
+//                            imageVector = Icons.Filled.ColorLens,
+//                            contentDescription = "Choose color",
+//                            tint = MaterialTheme.colors.onPrimary
+//                        )
+//                    }
                     IconButton(onClick = {
                         var analytics = Firebase.analytics
                         var bundle = Bundle()
@@ -292,13 +308,7 @@ fun MainStructureAddNote(
                         )
                     }
                     IconButton(onClick = {
-                        var analytics = Firebase.analytics
-                        var bundle = Bundle()
-                        bundle.putString(
-                            "save_pressed_in_add_note_screen",
-                            "save_pressed_in_add_note_screen"
-                        )
-                        analytics.logEvent("save_pressed_in_add_note_screen", bundle)
+
                         if (title.value.isNotEmpty() || richTextState.value.annotatedString.text.isNotEmpty()) {
                             var note2 = Note(
                                 id = generatedNoteId.value.toInt(),

@@ -216,7 +216,7 @@ class MainActivityViewModel @Inject constructor(
             getNoteById.value = editNoteRepository.getNotesById(id)
             //getNoteByIdLivData.postValue(editNoteRepository.getNotesById(id))
             _getNoteByIdFlow.value = editNoteRepository.getNotesById(id)
-            // getNoteByIdLivData2.postValue(editNoteRepository.getNotesById(id))
+             getNoteByIdLivData2.postValue(editNoteRepository.getNotesById(id))
         }
     }
 

@@ -22,8 +22,8 @@ THINGS TO TEST BEFORE LAUNCH
 19) trash to locked screen:  
 20) main screen to trash:  
 21) trash to main screen: 
-22) restore all trash: CANCELLED
-23) delete all trash: CANCELLED
+22) restore all trash:
+23) delete all trash: 
 24) Delete notebook:  
 25) delete notebook and save notes:  
 26) Pinned or unpinned note:  
@@ -34,3 +34,4 @@ THINGS TO TEST BEFORE LAUNCH
 31) Forgot password: 
 32) Change theme: 
 33) Search : 
+34) Reminder:

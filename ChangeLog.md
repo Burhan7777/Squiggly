@@ -1,6 +1,10 @@
 -------------------------- CHANGE LOG------------------------
 
 
+v 2.0.0-beta
+-------------------------------
+1) Reminder for notes
+
 v.1.0.0 - beta
 --------------------------------
 1) Locked notes can be unlocked from notebooks.

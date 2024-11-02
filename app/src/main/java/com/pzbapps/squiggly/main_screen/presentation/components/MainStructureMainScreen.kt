@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -37,6 +38,7 @@ import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.common.presentation.Screens
 import com.pzbapps.squiggly.edit_note_feature.domain.usecase.checkIfUserHasCreatedPassword
+import com.pzbapps.squiggly.main_screen.domain.usecase.cameraPermissionHandle
 import com.pzbapps.squiggly.settings_feature.screen.presentation.components.YouNeedToLoginFirst
 import kotlinx.coroutines.launch
 
@@ -344,6 +346,7 @@ fun MainStructureMainScreen(
 //                                    launcher.launch(android.Manifest.permission.CAMERA)
 //                                }
 //                            }
+//
 //                        ) {
 //                            Icon(
 //                                imageVector = Icons.Filled.Scanner,
@@ -410,7 +413,7 @@ fun MainStructureMainScreen(
                     }
                 }
                 if (startCamera.value) {
-                      CameraScreen(navHostController)
+                    CameraScreen(navHostController)
                 }
                 if (showYouNeedToLoginFirst.value) {
                     YouNeedToLoginFirst(navHostController) {

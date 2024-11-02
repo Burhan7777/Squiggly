@@ -23,5 +23,8 @@ BUGS AND FEATURES BEFORE LAUNCH
 20) Fix the bug of log in dialog box not cancelling on locked screen:DONE
 21) Add delete all and restore all to trash: DONE
 22) Change URL of rate this app:DONE
-23) Test on all emulators before open testing:
+23) Test on all emulators before open testing: DONE
 24) start crashlytics:DONE
+25) Bullet points appear only first if two are created: DELAYED
+26) Reminder:
+27) Check events again in debug view: DONE

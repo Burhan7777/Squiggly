@@ -99,15 +99,22 @@ fun MainStructureEditNote(
 
     if (richStateText.value.annotatedString.text == "") fontSize.value = "20"
 
-    var note = mutableStateOf(Note())
+    var note = remember { mutableStateOf(Note()) }
 
     var scope = rememberCoroutineScope()
+
     viewModel.getNoteById(id)
+    //LaunchedEffect(true) {
+
+
     scope.launch {
-        activity.lifecycleScope.launch {
-            note.value = viewModel.getNoteByIdFlow.first { it != null } ?: Note()
-        }.join()
+        note.value = viewModel.getNoteByIdFlow.first { it != null }!!
     }
+//        viewModel.getNoteByIdLivData2.observe(activity){
+//            note.value = it
+//        }
+    //  }
+
     var title by rememberSaveable {
         mutableStateOf("")
     }
@@ -120,6 +127,7 @@ fun MainStructureEditNote(
     var mutableListOfCheckboxTexts = RememberSaveableSnapshotStateList()
 
     var converted = rememberSaveable { ArrayList<String>() }
+
 // This is the list of checkbox notes which we saved in checkboxes
     var mutableListOfCheckBoxes =
         rememberSaveable { mutableStateOf<ArrayList<Boolean>>(arrayListOf()) }// This is the llst of checkboxes
@@ -291,7 +299,7 @@ fun MainStructureEditNote(
 
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    // Observe the lifecycle to detect when the app goes into the background
+// Observe the lifecycle to detect when the app goes into the background
     if (content.value.isNotEmpty()) {
         DisposableEffect(lifecycleOwner) {
             val observer = LifecycleEventObserver { _, event ->
@@ -320,7 +328,7 @@ fun MainStructureEditNote(
         }
     }
 
-    // Observe the lifecycle to detect when the app goes into the background
+// Observe the lifecycle to detect when the app goes into the background
     if (mutableListOfCheckboxTexts.size > 0) {
         DisposableEffect(lifecycleOwner) {
             val observer = LifecycleEventObserver { _, event ->
@@ -461,7 +469,7 @@ fun MainStructureEditNote(
             } else {
                 viewModel.getNoteById(note.value.id)
                 val noteFromDb = viewModel.getNoteById.value
-                 var reminder = noteFromDb.reminder
+                var reminder = noteFromDb.reminder
                 var note = noteFromDb.copy(
                     title = title,
                     content = richStateText.value.toHtml(),
@@ -602,7 +610,7 @@ fun MainStructureEditNote(
                             timeStamp = timeCreated,
                             timeModified = System.currentTimeMillis(),
                             notePinned = pinned,
-                            reminder= reminder
+                            reminder = reminder
                         )
                         viewModel.updateNote(note)
                         Toast.makeText(context, "Note has been updated", Toast.LENGTH_SHORT)
