@@ -26,5 +26,5 @@ BUGS AND FEATURES BEFORE LAUNCH
 23) Test on all emulators before open testing: DONE
 24) start crashlytics:DONE
 25) Bullet points appear only first if two are created: DELAYED
-26) Reminder:
+26) Reminder: DONE
 27) Check events again in debug view: DONE

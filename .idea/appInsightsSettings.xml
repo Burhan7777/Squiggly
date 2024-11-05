@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.pzbapps.squiggly" />
+                  <option name="mobileSdkAppId" value="1:48757666456:android:d296fa5009642d6a7816ed" />
+                  <option name="projectId" value="scribble-74f28" />
+                  <option name="projectNumber" value="48757666456" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

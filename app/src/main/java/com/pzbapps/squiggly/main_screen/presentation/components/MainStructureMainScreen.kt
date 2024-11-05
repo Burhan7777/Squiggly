@@ -1,10 +1,12 @@
 package com.pzbapps.squiggly.main_screen.presentation.components
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -27,10 +29,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions
+import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions.RESULT_FORMAT_JPEG
+import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions.RESULT_FORMAT_PDF
+import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions.SCANNER_MODE_FULL
+import com.google.mlkit.vision.documentscanner.GmsDocumentScanning
+import com.google.mlkit.vision.documentscanner.GmsDocumentScanningResult
 import com.pzbapps.squiggly.common.domain.utils.CheckInternet
 import com.pzbapps.squiggly.common.domain.utils.NavigationItems
 import com.pzbapps.squiggly.common.presentation.FontFamily
@@ -39,6 +46,10 @@ import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.common.presentation.Screens
 import com.pzbapps.squiggly.edit_note_feature.domain.usecase.checkIfUserHasCreatedPassword
 import com.pzbapps.squiggly.main_screen.domain.usecase.cameraPermissionHandle
+import com.pzbapps.squiggly.main_screen.textrecognition.SelectScriptDialogBox
+import com.pzbapps.squiggly.main_screen.textrecognition.ShowRecognizedText
+import com.pzbapps.squiggly.main_screen.textrecognition.TextRecognition
+import com.pzbapps.squiggly.settings_feature.screen.presentation.components.LoadingDialogBox
 import com.pzbapps.squiggly.settings_feature.screen.presentation.components.YouNeedToLoginFirst
 import kotlinx.coroutines.launch
 
@@ -68,20 +79,40 @@ fun MainStructureMainScreen(
 
     var showYouNeedToLoginFirst = remember { mutableStateOf(false) }
 
+    var recognizedText = remember { mutableStateOf(StringBuilder()) }
 
-    var launcher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (isGranted) {
-            startCamera.value = true
-        } else {
-            Toast.makeText(
-                activity,
-                "This permission is needed to scan the document",
-                Toast.LENGTH_SHORT
-            ).show()
+    var recognizeText = remember { mutableStateOf(false) }
+
+    var showProgressBarOfExtractingText = remember { mutableStateOf(false) }
+
+    var showSelectScriptDialogBox = remember { mutableStateOf(false) }
+
+    var showTextRecognitionDialogBox = remember { mutableStateOf(false) }
+
+    var selectedScript = remember { mutableStateOf("") }
+
+    val options = GmsDocumentScannerOptions.Builder()
+        .setScannerMode(SCANNER_MODE_FULL)
+        .setResultFormats(RESULT_FORMAT_JPEG)
+        .setGalleryImportAllowed(true).build()
+
+    val scanner = GmsDocumentScanning.getClient(options)
+
+    var resultFromActivity: MutableState<GmsDocumentScanningResult?> =
+        remember { mutableStateOf(null) }
+
+    val result = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartIntentSenderForResult(),
+        onResult = {
+
+            if (it.resultCode == RESULT_OK) {
+                resultFromActivity.value =
+                    GmsDocumentScanningResult.fromActivityResultIntent(it.data)
+                recognizeText.value = true
+            }
+
         }
-    }
+    )
 
 
 
@@ -331,29 +362,18 @@ fun MainStructureMainScreen(
                                 tint = MaterialTheme.colors.onPrimary
                             )
                         }
-//                        IconButton(
-//                            onClick = {
-//                                var result = cameraPermissionHandle(activity)
-//                                if (result == "true") {
-//                                    startCamera.value = true
-//                                } else if (result == "Rationale shown") {
-//                                    Toast.makeText(
-//                                        activity,
-//                                        "We need this permission to scan the document",
-//                                        Toast.LENGTH_SHORT
-//                                    ).show()
-//                                } else if (result == "false") {
-//                                    launcher.launch(android.Manifest.permission.CAMERA)
-//                                }
-//                            }
-//
-//                        ) {
-//                            Icon(
-//                                imageVector = Icons.Filled.Scanner,
-//                                contentDescription = "Scanner",
-//                                tint = MaterialTheme.colors.onPrimary
-//                            )
-//                        }
+                        IconButton(
+                            onClick = {
+                                showSelectScriptDialogBox.value = true
+                            }
+
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Scanner,
+                                contentDescription = "Scanner",
+                                tint = MaterialTheme.colors.onPrimary
+                            )
+                        }
                     }
                 }
             },
@@ -419,6 +439,32 @@ fun MainStructureMainScreen(
                     YouNeedToLoginFirst(navHostController) {
                         showYouNeedToLoginFirst.value = false
                     }
+                }
+                if (recognizeText.value) {
+                    TextRecognition(
+                        resultFromActivity,
+                        showTextRecognitionDialogBox,
+                        recognizedText,
+                        showProgressBarOfExtractingText,
+                        selectedScript
+                    )
+                }
+                if (showSelectScriptDialogBox.value) {
+                    SelectScriptDialogBox(scanner, result, activity, selectedScript) {
+                        showSelectScriptDialogBox.value = false
+                    }
+                }
+                if (showTextRecognitionDialogBox.value) {
+                    ShowRecognizedText(
+                        mutableStateOf(recognizedText.value.toString()),
+                        recognizedText,
+                        viewModel
+                    ) {
+                        showTextRecognitionDialogBox.value = false
+                    }
+                }
+                if (showProgressBarOfExtractingText.value) {
+                    LoadingDialogBox(mutableStateOf("Extracting text"))
                 }
                 Notes(viewModel, activity, navHostController, viewModel.showGridOrLinearNotes)
             }
