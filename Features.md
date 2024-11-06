@@ -34,7 +34,7 @@ FEATURES THAT NEED TO BE ADDED (81/84) // MAIN - (47/47)
 31) Text formatting features(Main): DONE
 32) Buy App Bar should not be visible to users who bought app: CANCELLED
 33) Export to PDF and other documents: DONE
-34) Reminder for notes: DELAYED
+34) Reminder for notes: DONE
 35) Pomodoro for checkboxes: DELAYED
 36) Change drop down menu in add note to text view like in edit note: DONE
 37) Remove 30 days trial stuff(Main): DONE

@@ -60,10 +60,13 @@ import com.pzbapps.squiggly.settings_feature.screen.presentation.components.YouN
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.util.Calendar
+import java.util.Stack
 import kotlin.collections.ArrayList
 
 
@@ -259,6 +262,27 @@ fun MainStructureEditNote(
         }
         notebook = note.value.notebook
 
+    }
+
+    val undoStack = remember { Stack<String>() }
+    val redoStack = remember { Stack<String>() }
+
+    // Track the current content as a snapshot
+    var currentContent = remember { mutableStateOf("") }
+
+    LaunchedEffect(richStateText.value) {
+        snapshotFlow { richStateText.value.annotatedString.text }
+            .debounce(300) // To avoid frequent updates, only take new state every 300ms
+            .filter { it != currentContent.value } // Only proceed if content has changed
+            .collect { newContent ->
+                // Store the current content before updating
+                if (currentContent.value.isNotEmpty()) {
+                    undoStack.push(currentContent.value)
+                    redoStack.clear() // Clear redo stack on new change
+                }
+                // Update the tracked content
+                currentContent.value = newContent
+            }
     }
 
 //    if (note.value != null) {
@@ -987,7 +1011,10 @@ fun MainStructureEditNote(
                         isItalicActivated = isItalicActivated,
                         isOrderedListActivated = isOrderedListActivated,
                         isUnOrderedListActivated = isUnOrderedListActivated,
-                        mutableStateOf(false)
+                        mutableStateOf(false),
+                        undoStack = undoStack,
+                        redoStack = redoStack,
+                        currentContent = currentContent
                     )
                 }
             }

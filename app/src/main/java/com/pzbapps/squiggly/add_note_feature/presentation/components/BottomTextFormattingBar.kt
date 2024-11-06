@@ -28,8 +28,10 @@ import androidx.compose.material.icons.filled.FormatListBulleted
 import androidx.compose.material.icons.filled.FormatListNumbered
 import androidx.compose.material.icons.filled.FormatSize
 import androidx.compose.material.icons.filled.FormatUnderlined
+import androidx.compose.material.icons.filled.Redo
 import androidx.compose.material.icons.filled.TextDecrease
 import androidx.compose.material.icons.filled.TextIncrease
+import androidx.compose.material.icons.filled.Undo
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -45,6 +47,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mohamedrejeb.richeditor.model.RichTextState
+import java.util.Stack
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -57,7 +60,10 @@ fun BottomTextFormattingBar(
     isItalicActivated: MutableState<Boolean>,
     isOrderedListActivated: MutableState<Boolean>,
     isUnOrderedListActivated: MutableState<Boolean>,
-    isToggleSpanActivated: MutableState<Boolean>
+    isToggleSpanActivated: MutableState<Boolean>,
+    undoStack: Stack<String>,
+    redoStack: Stack<String>,
+    currentContent: MutableState<String>
 ) {
     Column(modifier = Modifier.imePadding()) {
 
@@ -112,6 +118,34 @@ fun BottomTextFormattingBar(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.horizontalScroll(rememberScrollState())
         ) {
+            IconButton(onClick = {
+                if (undoStack.isNotEmpty()) {
+                    redoStack.push(currentContent.value) // Save the current state to redo stack
+                    currentContent.value = undoStack.pop() // Get the last content from undo stack
+                    richTextState.value.setHtml(currentContent.value) // Set editor content
+                }
+            }) {
+                Icon(
+                    imageVector = Icons.Filled.Undo,
+                    contentDescription = "Undo",
+                    tint = MaterialTheme.colors.onPrimary
+                )
+            }
+
+            IconButton(onClick = {
+                if (redoStack.isNotEmpty()) {
+                    undoStack.push(currentContent.value) // Save the current state to undo stack
+                    currentContent.value = redoStack.pop() // Get the last content from redo stack
+                    richTextState.value.setHtml(currentContent.value) // Set editor content
+                }
+            }) {
+                Icon(
+                    imageVector = Icons.Filled.Redo,
+                    contentDescription = "Undo",
+                    tint = MaterialTheme.colors.onPrimary
+                )
+            }
+
             IconButton(
                 onClick = {
                     richTextState.value.toggleSpanStyle(SpanStyle(fontWeight = FontWeight.Bold))

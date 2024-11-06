@@ -3,8 +3,7 @@
 
 v 3.0.0-beta
 -------------------------------
-1) Delete option for backups
-2) Scan documents
+1) Scan documents
 
 v 2.0.0-beta
 -------------------------------

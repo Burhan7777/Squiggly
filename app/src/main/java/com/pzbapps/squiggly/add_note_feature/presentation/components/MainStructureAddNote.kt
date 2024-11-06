@@ -15,11 +15,13 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,8 +42,11 @@ import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.common.presentation.components.AlertDialogBoxTrialEnded
 import com.pzbapps.squiggly.main_screen.domain.model.Note
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import java.util.Stack
 
 @OptIn(
     ExperimentalMaterial3Api::class
@@ -96,6 +101,27 @@ fun MainStructureAddNote(
     if (richTextState.value.annotatedString.text == "") fontSize.value = "20"
 
     richTextState.value.config.codeSpanBackgroundColor = Color.White
+
+    val undoStack = remember { Stack<String>() }
+    val redoStack = remember { Stack<String>() }
+
+    // Track the current content as a snapshot
+    var currentContent = remember { mutableStateOf("") }
+
+    LaunchedEffect(richTextState.value) {
+        snapshotFlow { richTextState.value.annotatedString.text }
+            .debounce(300) // To avoid frequent updates, only take new state every 300ms
+            .filter { it != currentContent.value } // Only proceed if content has changed
+            .collect { newContent ->
+                // Store the current content before updating
+                if (currentContent.value.isNotEmpty()) {
+                    undoStack.push(currentContent.value)
+                    redoStack.clear() // Clear redo stack on new change
+                }
+                // Update the tracked content
+                currentContent.value = newContent
+            }
+    }
 
 
 //    DisposableEffect(Unit) {
@@ -405,7 +431,10 @@ fun MainStructureAddNote(
                         isItalicActivated = isItalicActivated,
                         isOrderedListActivated = isOrderedListActivated,
                         isUnOrderedListActivated = isUnOrderedListActivated,
-                        isToggleSpanActivated = isToggleSpanActivated
+                        isToggleSpanActivated = isToggleSpanActivated,
+                        undoStack = undoStack,
+                        redoStack = redoStack,
+                        currentContent = currentContent
                     )
                 }
             }
