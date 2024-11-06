@@ -39,6 +39,7 @@ fun Notes(
 
     val fontFamilyExtraLight = Font(R.font.lufgaextralight).toFontFamily()
 
+
 //    viewModel.getNotesToShow()
 //    val listOfNotes: SnapshotStateList<AddNote>? =
 //        viewModel.getListOfNotesToShow.observeAsState().value
@@ -114,8 +115,8 @@ fun Notes(
                     )
                 }
             }
-            items(listOfPinnedNotes) { note ->
-                SingleItemNoteList(note = note, navHostController = navHostController)
+            items(listOfPinnedNotes,  key = { it.id }) { note ->
+                SingleItemNoteList(note = note, navHostController = navHostController, scope)
             }
             item(span = StaggeredGridItemSpan.FullLine) {
                 Text(
@@ -153,9 +154,9 @@ fun Notes(
                 }
             }
             items(
-                items = listOfNotesFromDB ?: emptyList()
+                items = listOfNotesFromDB ?: emptyList(),  key = { it.id }
             ) { note ->
-                SingleItemNoteList(note = note, navHostController)
+                SingleItemNoteList(note = note, navHostController, scope)
             }
         }
     } else {
@@ -194,8 +195,8 @@ fun Notes(
                     )
                 }
             }
-            items(listOfPinnedNotes) { note ->
-                SingleItemNoteList(note = note, navHostController = navHostController)
+            items(listOfPinnedNotes, key = { it.id }) { note ->
+                SingleItemNoteList(note = note, navHostController = navHostController, scope)
             }
             item {
                 Text(
@@ -234,9 +235,9 @@ fun Notes(
                 }
             }
             items(
-                listOfNotesFromDB ?: emptyList()
+                listOfNotesFromDB ?: emptyList(),  key = { it.id }
             ) { note ->
-                SingleItemNoteList(note = note, navHostController)
+                SingleItemNoteList(note = note, navHostController, scope)
             }
 
 

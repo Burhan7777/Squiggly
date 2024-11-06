@@ -65,7 +65,7 @@ FEATURES THAT NEED TO BE ADDED (81/84) // MAIN - (47/47)
 62) Long notes just like in keep in grid mode(Main): DELAYED
 63) Auto backup option(Main): DONE
 64) Discard changes in edit screen: DELAYED
-65) Undo and redo functionality: DELAYED
+65) Undo and redo functionality: DONE
 66) Empty note is not to be saved(Main): DONE
 67) Trash delete all notes(Main): DONE
 68) Long click select note in Trash: DELAYED

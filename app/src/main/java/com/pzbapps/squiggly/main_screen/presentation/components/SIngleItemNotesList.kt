@@ -15,6 +15,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -30,14 +33,36 @@ import com.pzbapps.squiggly.common.domain.utils.Constant
 import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.common.presentation.Screens
 import com.pzbapps.squiggly.main_screen.domain.model.Note
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SingleItemNoteList(note: Note, navHostController: NavHostController) {
+fun SingleItemNoteList(note: Note, navHostController: NavHostController, scope: CoroutineScope) {
 
-    val scope = rememberCoroutineScope()
     var richTextState = rememberRichTextState()
-    var contentText = richTextState.setHtml(note.content).annotatedString.text
+    var contentText = remember { mutableStateOf("") }
+
+  //  LaunchedEffect(note.content) {
+    //    scope.launch(Dispatchers.Default) {
+            // Truncate the HTML content to a reasonable preview length
+            val truncatedHtml = if (note.content.length > 300) {
+                note.content.take(300) + "..."
+            } else {
+                note.content
+            }
+
+            // Set the truncated HTML to richTextState for a preview
+            val previewText = richTextState.setHtml(truncatedHtml).annotatedString.text
+
+            // Update the contentText on the main thread with the preview text
+          //  withContext(Dispatchers.Main) {
+                contentText.value = previewText
+           // }
+      //  }
+   // }
     if (!note.archive && !note.locked && !note.deletedNote && note.listOfCheckedNotes.size == 0 && note.listOfBulletPointNotes.size == 0) {
         Card(
             modifier = Modifier
@@ -85,11 +110,12 @@ fun SingleItemNoteList(note: Note, navHostController: NavHostController) {
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = contentText,
+                text = contentText.value,
                 modifier = Modifier.padding(10.dp),
                 fontSize = 15.sp,
                 overflow = TextOverflow.Ellipsis,
-                fontFamily = FontFamily.fontFamilyLight
+                fontFamily = FontFamily.fontFamilyLight,
+                maxLines = 4
             )
         }
     } else if (note.listOfCheckedNotes.size > 0 && !note.deletedNote && !note.archive && !note.locked && note.listOfBulletPointNotes.size == 0) {
@@ -294,7 +320,7 @@ fun SingleItemNoteList(note: Note, navHostController: NavHostController) {
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Image(
-                                    painterResource(id =com.pzbapps.squiggly. R.drawable.bullet_point),
+                                    painterResource(id = com.pzbapps.squiggly.R.drawable.bullet_point),
                                     contentDescription = "Bullet Point",
                                     colorFilter = ColorFilter.tint(androidx.compose.material.MaterialTheme.colors.onPrimary)
                                 )

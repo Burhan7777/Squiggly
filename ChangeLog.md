@@ -3,7 +3,9 @@
 
 v 3.0.0-beta
 -------------------------------
-1) Scan documents
+1) Scan documents.
+2) Redo and undo in notes.
+3) Better scrolling.
 
 v 2.0.0-beta
 -------------------------------

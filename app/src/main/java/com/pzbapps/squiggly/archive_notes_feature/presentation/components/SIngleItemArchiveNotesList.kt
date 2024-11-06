@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -40,7 +42,23 @@ fun SingleItemArchiveNoteList(
 
     if (note.archive && note.listOfCheckedNotes.size == 0 && note.listOfBulletPointNotes.size == 0 && !note.deletedNote && !note.locked) {
         var richTextState = rememberRichTextState()
-        var text = richTextState.setHtml(note.content).annotatedString.text
+        var contentText = remember { mutableStateOf("") }
+
+        //  LaunchedEffect(note.content) {
+        //    scope.launch(Dispatchers.Default) {
+        // Truncate the HTML content to a reasonable preview length
+        val truncatedHtml = if (note.content.length > 300) {
+            note.content.take(300) + "..."
+        } else {
+            note.content
+        }
+
+        // Set the truncated HTML to richTextState for a preview
+        val previewText = richTextState.setHtml(truncatedHtml).annotatedString.text
+
+        // Update the contentText on the main thread with the preview text
+        //  withContext(Dispatchers.Main) {
+        contentText.value = previewText
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -86,7 +104,7 @@ fun SingleItemArchiveNoteList(
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = text,
+                text = contentText.value,
                 modifier = Modifier.padding(10.dp),
                 fontSize = 15.sp,
                 overflow = TextOverflow.Ellipsis,

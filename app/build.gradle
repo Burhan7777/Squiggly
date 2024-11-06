@@ -17,8 +17,8 @@ android {
         applicationId "com.pzbapps.squiggly"
         minSdk 23
         targetSdk 34
-        versionCode 4
-        versionName "2.0.0- Beta"
+        versionCode 5
+        versionName "3.0.0- Beta"
         ndk {
             // On Apple silicon, you can omit x86_64.
             abiFilters "arm64-v8a"

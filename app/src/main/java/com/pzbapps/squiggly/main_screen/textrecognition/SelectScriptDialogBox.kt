@@ -146,7 +146,7 @@ fun ScriptCardView(
     ) {
         Text(
             text = text,
-            color = MaterialTheme.colorScheme.onPrimary,
+            color = androidx.compose.material.MaterialTheme.colors.onPrimary,
             fontSize = 15.sp,
             modifier = Modifier.padding(10.dp)
         )

@@ -148,7 +148,7 @@ fun ShowRecognizedText(
                     bottomStart = CornerSize(15.dp),
                     bottomEnd = CornerSize(15.dp),
                 ),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.onPrimary),
+                border = BorderStroke(1.dp,  androidx.compose.material.MaterialTheme.colors.onPrimary),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = androidx.compose.material.MaterialTheme.colors.onSecondary,
                     contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary
