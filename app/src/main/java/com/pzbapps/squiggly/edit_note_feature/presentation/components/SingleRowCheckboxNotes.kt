@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import com.pzbapps.squiggly.common.presentation.FontFamily
+import com.pzbapps.squiggly.common.presentation.ShowShortToast
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -44,7 +45,7 @@ fun SingleRowCheckBoxNotes(
     count: MutableState<Int>,
     focusRequester: FocusRequester,
     focusRequesters: SnapshotStateList<FocusRequester>,
-    isNewCheckboxCreated:MutableState<Boolean>,
+    isNewCheckboxCreated: MutableState<Boolean>,
     onDelete: () -> Unit
 
 ) {
@@ -63,8 +64,12 @@ fun SingleRowCheckBoxNotes(
     // println("TEXT:$listOfCheckboxes")
 
     var checkBox = rememberSaveable { mutableStateOf(false) }
-    for (i in listOfCheckboxes.value) {
-        checkBox.value = listOfCheckboxes.value[index]
+    try {
+        for (i in listOfCheckboxes.value) {
+            checkBox.value = listOfCheckboxes.value[index]
+        }
+    } catch (exception: IndexOutOfBoundsException) {
+ShowShortToast("Some error with the note")
     }
 //    for(i in listOfCheckboxes)
 //    LaunchedEffect(key1 = i) {
