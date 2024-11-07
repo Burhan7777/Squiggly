@@ -44,6 +44,7 @@ import com.pzbapps.squiggly.main_screen.domain.model.Note
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.util.Stack
@@ -109,8 +110,9 @@ fun MainStructureAddNote(
     var currentContent = remember { mutableStateOf("") }
 
     LaunchedEffect(richTextState.value) {
-        snapshotFlow { richTextState.value.annotatedString.text }
-            .debounce(300) // To avoid frequent updates, only take new state every 300ms
+        snapshotFlow { richTextState.value.annotatedString }
+            .debounce(200)
+            .map { richTextState.value.toHtml() }// To avoid frequent updates, only take new state every 300ms
             .filter { it != currentContent.value } // Only proceed if content has changed
             .collect { newContent ->
                 // Store the current content before updating

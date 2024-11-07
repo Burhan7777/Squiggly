@@ -63,6 +63,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.util.Calendar
@@ -271,8 +272,9 @@ fun MainStructureEditNote(
     var currentContent = remember { mutableStateOf("") }
 
     LaunchedEffect(richStateText.value) {
-        snapshotFlow { richStateText.value.annotatedString.text }
-            .debounce(300) // To avoid frequent updates, only take new state every 300ms
+        snapshotFlow { richStateText.value.annotatedString }
+            .debounce(200)
+            .map { richStateText.value.toHtml() }// To avoid frequent updates, only take new state every 300ms
             .filter { it != currentContent.value } // Only proceed if content has changed
             .collect { newContent ->
                 // Store the current content before updating
