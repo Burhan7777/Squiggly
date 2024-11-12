@@ -115,7 +115,7 @@ fun Notes(
                     )
                 }
             }
-            items(listOfPinnedNotes,  key = { it.id }) { note ->
+            items(listOfPinnedNotes) { note ->
                 SingleItemNoteList(note = note, navHostController = navHostController, scope)
             }
             item(span = StaggeredGridItemSpan.FullLine) {
@@ -154,7 +154,7 @@ fun Notes(
                 }
             }
             items(
-                items = listOfNotesFromDB ?: emptyList(),  key = { it.id }
+                items = listOfNotesFromDB ?: emptyList()
             ) { note ->
                 SingleItemNoteList(note = note, navHostController, scope)
             }
@@ -195,7 +195,7 @@ fun Notes(
                     )
                 }
             }
-            items(listOfPinnedNotes, key = { it.id }) { note ->
+            items(listOfPinnedNotes) { note ->
                 SingleItemNoteList(note = note, navHostController = navHostController, scope)
             }
             item {
@@ -235,7 +235,7 @@ fun Notes(
                 }
             }
             items(
-                listOfNotesFromDB ?: emptyList(),  key = { it.id }
+                listOfNotesFromDB ?: emptyList()
             ) { note ->
                 SingleItemNoteList(note = note, navHostController, scope)
             }
