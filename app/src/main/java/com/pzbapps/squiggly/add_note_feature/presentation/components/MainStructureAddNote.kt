@@ -37,6 +37,7 @@ import androidx.navigation.NavHostController
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import com.mohamedrejeb.richeditor.model.RichTextState
+import com.pzbapps.squiggly.add_note_feature.presentation.components.BottomSheet.AddNoteBottomSheet
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.common.presentation.components.AlertDialogBoxTrialEnded
@@ -98,6 +99,7 @@ fun MainStructureAddNote(
     var isToggleSpanActivated = remember { mutableStateOf(false) }
     var showFontSize = remember { mutableStateOf(false) }
     var fontSize = remember { mutableStateOf("20") }
+    val showBottomSheet = remember { mutableStateOf(false) }
 
     if (richTextState.value.annotatedString.text == "") fontSize.value = "20"
 
@@ -304,21 +306,22 @@ fun MainStructureAddNote(
                     }
                 },
                 actions = {
-//                    IconButton(onClick = {
-//                        var analytics = Firebase.analytics
-//                        var bundle = Bundle()
-//                        bundle.putString(
-//                            "color_button_pressed_add_note_screen",
-//                            "color_button_pressed_add_note_screen"
-//                        )
-//                        analytics.logEvent("color_button_pressed_add_note_screen", bundle)
-//                    }) {
-//                        Icon(
-//                            imageVector = Icons.Filled.ColorLens,
-//                            contentDescription = "Choose color",
-//                            tint = MaterialTheme.colors.onPrimary
-//                        )
-//                    }
+                    IconButton(onClick = {
+                        var analytics = Firebase.analytics
+                        var bundle = Bundle()
+                        bundle.putString(
+                            "color_button_pressed_add_note_screen",
+                            "color_button_pressed_add_note_screen"
+                        )
+                        analytics.logEvent("color_button_pressed_add_note_screen", bundle)
+                        showBottomSheet.value = true
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.ColorLens,
+                            contentDescription = "Choose color",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    }
                     IconButton(onClick = {
                         var analytics = Firebase.analytics
                         var bundle = Bundle()
@@ -439,6 +442,9 @@ fun MainStructureAddNote(
                         currentContent = currentContent
                     )
                 }
+            }
+            if (showBottomSheet.value) {
+                AddNoteBottomSheet(showBottomSheet = showBottomSheet)
             }
         }
     }

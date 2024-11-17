@@ -11,3 +11,8 @@ val white = Color(0xFFFFFFFF)
 val gradient1 = Color(0xFF536DFE)
 val gradient2 = Color(0xFF6A3DE8)
 val googleColor = Color(0xFFdb4a39)
+
+val green1 = Color(0xFF1F4529)
+val green2 = Color(0xFF47663B)
+val green3 = Color(0xFF62825D)
+val green4 = Color(0xFFC2FFC7)

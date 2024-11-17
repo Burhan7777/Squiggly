@@ -166,5 +166,9 @@ dependencies {
     // DOCUMENT SCANNER ML KIT
     implementation("com.google.android.gms:play-services-mlkit-document-scanner:16.0.0-beta1")
 
+    //COLOR PICKER
+  //  implementation ('com.godaddy.android.colorpicker:compose-color-picker:0.7.0')
+   // implementation ('com.godaddy.android.colorpicker:compose-color-picker-android:0.7.0')
+
 
 }
