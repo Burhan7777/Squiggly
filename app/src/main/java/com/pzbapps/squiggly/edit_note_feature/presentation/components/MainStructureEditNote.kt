@@ -977,6 +977,8 @@ fun MainStructureEditNote(
                                     "color_button_pressed_add_note_screen"
                                 )
                                 analytics.logEvent("color_button_pressed_add_note_screen", bundle)
+                                showBottomSheet.value = true
+                                showMenu.value = false
                             }) {
 
                                 Row(verticalAlignment = Alignment.CenterVertically) {

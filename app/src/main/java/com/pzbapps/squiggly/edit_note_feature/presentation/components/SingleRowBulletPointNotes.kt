@@ -43,6 +43,7 @@ fun SingleRoaBulletPointNotes(
     countBullet: MutableState<Int>,
     focusRequester: FocusRequester,
     focusRequesters: SnapshotStateList<FocusRequester>,
+    backgroundColor: MutableState<Int>,
     //isNewCheckBoxAdded: MutableState<Boolean>,
     onDelete: () -> Unit
 
@@ -78,7 +79,7 @@ fun SingleRoaBulletPointNotes(
                     coroutine.launch {
                         // Delay for one frame to ensure the new item is created before requesting focus
                         kotlinx.coroutines.delay(100)
-                     //   isNewCheckBoxAdded.value = true
+                        //   isNewCheckBoxAdded.value = true
                         if (index < focusRequesters.size - 1) {
                             focusRequesters[index + 1].requestFocus()
                         }
@@ -86,12 +87,12 @@ fun SingleRoaBulletPointNotes(
                 }
             ),
             colors = androidx.compose.material3.TextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colors.primary,
-                unfocusedContainerColor = MaterialTheme.colors.primary,
+                focusedContainerColor = Color(backgroundColor.value),
+                unfocusedContainerColor = Color(backgroundColor.value),
                 focusedTextColor = MaterialTheme.colors.onPrimary,
                 unfocusedTextColor = MaterialTheme.colors.onPrimary,
-                unfocusedIndicatorColor = MaterialTheme.colors.primary,
-                focusedIndicatorColor = MaterialTheme.colors.primary,
+                unfocusedIndicatorColor = Color(backgroundColor.value),
+                focusedIndicatorColor = Color(backgroundColor.value),
                 cursorColor = MaterialTheme.colors.onPrimary,
                 selectionColors = TextSelectionColors(
                     handleColor = MaterialTheme.colors.onPrimary,
