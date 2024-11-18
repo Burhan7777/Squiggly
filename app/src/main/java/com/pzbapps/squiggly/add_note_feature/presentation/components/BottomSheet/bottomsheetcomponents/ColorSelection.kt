@@ -12,10 +12,10 @@ import com.pzbapps.squiggly.add_note_feature.domain.usecase.listOfColors
 import com.pzbapps.squiggly.add_note_feature.presentation.components.BottomSheet.SingleRowColorList
 
 @Composable
-fun ColorSelection(backgroundColor: MutableState<Color>) {
+fun ColorSelection(backgroundColor: MutableState<Color>, backgroundColorInInt: MutableState<Int>) {
     LazyVerticalGrid(columns = GridCells.Fixed(count = 4)) {
         items(listOfColors) { colorList ->
-            SingleRowColorList(colorList,backgroundColor)
+            SingleRowColorList(colorList, backgroundColor,backgroundColorInInt)
         }
     }
 }

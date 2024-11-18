@@ -314,22 +314,16 @@ fun MainStructureAddNote(
                     }
                 },
                 actions = {
-                    IconButton(onClick = {
-                        var analytics = Firebase.analytics
-                        var bundle = Bundle()
-                        bundle.putString(
-                            "color_button_pressed_add_note_screen",
-                            "color_button_pressed_add_note_screen"
-                        )
-                        analytics.logEvent("color_button_pressed_add_note_screen", bundle)
-                        showBottomSheet.value = true
-                    }) {
-                        Icon(
-                            imageVector = Icons.Filled.ColorLens,
-                            contentDescription = "Choose color",
-                            tint = MaterialTheme.colors.onPrimary
-                        )
-                    }
+//                    IconButton(onClick = {
+//
+//                        showBottomSheet.value = true
+//                    }) {
+//                        Icon(
+//                            imageVector = Icons.Filled.ColorLens,
+//                            contentDescription = "Choose color",
+//                            tint = MaterialTheme.colors.onPrimary
+//                        )
+//                    }
                     IconButton(onClick = {
                         var analytics = Firebase.analytics
                         var bundle = Bundle()
@@ -450,7 +444,8 @@ fun MainStructureAddNote(
                         isToggleSpanActivated = isToggleSpanActivated,
                         undoStack = undoStack,
                         redoStack = redoStack,
-                        currentContent = currentContent
+                        currentContent = currentContent,
+                        showBottomSheet = showBottomSheet
                     )
                 }
             }

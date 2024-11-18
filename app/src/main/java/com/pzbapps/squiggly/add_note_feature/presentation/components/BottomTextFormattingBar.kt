@@ -1,5 +1,6 @@
 package com.pzbapps.squiggly.add_note_feature.presentation.components
 
+import android.os.Bundle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
@@ -28,6 +29,7 @@ import androidx.compose.material.icons.filled.FormatListBulleted
 import androidx.compose.material.icons.filled.FormatListNumbered
 import androidx.compose.material.icons.filled.FormatSize
 import androidx.compose.material.icons.filled.FormatUnderlined
+import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Redo
 import androidx.compose.material.icons.filled.TextDecrease
 import androidx.compose.material.icons.filled.TextIncrease
@@ -46,6 +48,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import com.mohamedrejeb.richeditor.model.RichTextState
 import java.util.Stack
 
@@ -63,7 +67,8 @@ fun BottomTextFormattingBar(
     isToggleSpanActivated: MutableState<Boolean>,
     undoStack: Stack<String>,
     redoStack: Stack<String>,
-    currentContent: MutableState<String>
+    currentContent: MutableState<String>,
+    showBottomSheet: MutableState<Boolean>
 ) {
     Column(modifier = Modifier.imePadding()) {
 
@@ -118,6 +123,22 @@ fun BottomTextFormattingBar(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.horizontalScroll(rememberScrollState())
         ) {
+            IconButton(onClick = {
+                var analytics = Firebase.analytics
+                var bundle = Bundle()
+                bundle.putString(
+                    "color_button_pressed_add_note_screen",
+                    "color_button_pressed_add_note_screen"
+                )
+                analytics.logEvent("color_button_pressed_add_note_screen", bundle)
+                showBottomSheet.value = true
+            }) {
+                Icon(
+                    imageVector = Icons.Default.Palette,
+                    contentDescription = "background Color",
+                    tint = MaterialTheme.colors.onPrimary
+                )
+            }
             IconButton(onClick = {
                 if (undoStack.isNotEmpty()) {
                     redoStack.push(currentContent.value) // Save the current state to redo stack

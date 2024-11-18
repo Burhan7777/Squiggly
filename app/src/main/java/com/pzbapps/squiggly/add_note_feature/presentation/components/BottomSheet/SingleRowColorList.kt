@@ -26,7 +26,11 @@ import androidx.core.graphics.toColor
 import com.pzbapps.squiggly.add_note_feature.domain.usecase.ColorList
 
 @Composable
-fun SingleRowColorList(colorList: ColorList, backgroundColor: MutableState<Color>) {
+fun SingleRowColorList(
+    colorList: ColorList,
+    backgroundColor: MutableState<Color>,
+    backgroundColorInInt: MutableState<Int>
+) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -45,6 +49,7 @@ fun SingleRowColorList(colorList: ColorList, backgroundColor: MutableState<Color
                 )
                 .clickable {
                     backgroundColor.value = Color(colorList.rgb)
+                    backgroundColorInInt.value = colorList.rgb
                 }
 
         ) {

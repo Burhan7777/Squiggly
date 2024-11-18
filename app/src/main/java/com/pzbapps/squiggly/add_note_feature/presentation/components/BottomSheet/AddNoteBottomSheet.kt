@@ -24,7 +24,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun AddNoteBottomSheet(
     showBottomSheet: MutableState<Boolean>,
-    backgroundColor: MutableState<Color>
+    backgroundColor: MutableState<Color> = mutableStateOf(Color.Black),
+    backgroundColorInInt: MutableState<Int> = mutableIntStateOf(0)
 ) {
     if (showBottomSheet.value) {
 
@@ -51,7 +52,7 @@ fun AddNoteBottomSheet(
 
             when (selectedTabIndex) {
                 0 -> {
-                    ColorSelection(backgroundColor)
+                    ColorSelection(backgroundColor,backgroundColorInInt)
                 }
 
                 1 -> {

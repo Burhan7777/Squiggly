@@ -42,6 +42,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.auth.auth
 import com.mohamedrejeb.richeditor.model.rememberRichTextState
+import com.pzbapps.squiggly.add_note_feature.presentation.components.BottomSheet.AddNoteBottomSheet
 import com.pzbapps.squiggly.add_note_feature.presentation.components.BottomTextFormattingBar
 import com.pzbapps.squiggly.common.domain.utils.Constant
 import com.pzbapps.squiggly.common.presentation.*
@@ -101,6 +102,8 @@ fun MainStructureEditNote(
     var fontSize = remember { mutableStateOf("20") }
     var iconSize = remember { mutableStateOf(IntSize.Zero) }
     var iconPosition = remember { mutableStateOf(Offset.Zero) }
+
+    val showBottomSheet = remember { mutableStateOf(false) }
 
     if (richStateText.value.annotatedString.text == "") fontSize.value = "20"
 
@@ -1033,7 +1036,8 @@ fun MainStructureEditNote(
                         mutableStateOf(false),
                         undoStack = undoStack,
                         redoStack = redoStack,
-                        currentContent = currentContent
+                        currentContent = currentContent,
+                        showBottomSheet = showBottomSheet
                     )
                 }
             }
@@ -1122,6 +1126,9 @@ fun MainStructureEditNote(
         AlertBoxShowRationale {
             showRationaleDialogBox.value = false
         }
+    }
+    if (showBottomSheet.value) {
+        AddNoteBottomSheet(showBottomSheet, backgroundColorInInt =  backgroundColor)
     }
 }
 
