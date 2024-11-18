@@ -907,7 +907,7 @@ fun MainStructureEditNote(
                         )
                     }
                     DropdownMenu(
-                        modifier = Modifier.width(200.dp),
+                        modifier = Modifier.wrapContentWidth(),
                         expanded = showMenu.value,
                         onDismissRequest = { showMenu.value = false },
                         offset = with(density) {
@@ -966,6 +966,32 @@ fun MainStructureEditNote(
                                     fontFamily = FontFamily.fontFamilyRegular,
                                     fontSize = 17.sp
                                 )
+                            }
+                        }
+                        if (mutableListOfCheckboxTexts.size > 0 || mutableListOfBulletPoints.size > 0) {
+                            DropdownMenuItem(onClick = {
+                                var analytics = com.google.firebase.ktx.Firebase.analytics
+                                var bundle = Bundle()
+                                bundle.putString(
+                                    "color_button_pressed_add_note_screen",
+                                    "color_button_pressed_add_note_screen"
+                                )
+                                analytics.logEvent("color_button_pressed_add_note_screen", bundle)
+                            }) {
+
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Palette,
+                                        contentDescription = "Background color",
+                                        tint = MaterialTheme.colors.onPrimary
+                                    )
+                                    Spacer(modifier = Modifier.width(5.dp))
+                                    Text(
+                                        "Background",
+                                        fontFamily = FontFamily.fontFamilyRegular,
+                                        fontSize = 17.sp
+                                    )
+                                }
                             }
                         }
                     }
@@ -1128,7 +1154,7 @@ fun MainStructureEditNote(
         }
     }
     if (showBottomSheet.value) {
-        AddNoteBottomSheet(showBottomSheet, backgroundColorInInt =  backgroundColor)
+        AddNoteBottomSheet(showBottomSheet, backgroundColorInInt = backgroundColor)
     }
 }
 

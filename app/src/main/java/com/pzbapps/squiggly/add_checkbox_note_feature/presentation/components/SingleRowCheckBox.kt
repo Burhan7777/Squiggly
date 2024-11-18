@@ -1,5 +1,6 @@
 package com.pzbapps.squiggly.add_checkbox_note_feature.presentation.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
@@ -41,6 +42,7 @@ fun SingleRowCheckBox(
     index: Int,
     count: MutableState<Int>,
     focusRequester: FocusRequester,
+    backgroundColor: MutableState<Color>,
     onDelete: () -> Unit
 ) {
     var checkBox = rememberSaveable { mutableStateOf(false) }
@@ -60,13 +62,13 @@ fun SingleRowCheckBox(
 
     Row(
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Checkbox(
             checked = checkBox.value,
             onCheckedChange = {
                 checkBox.value = it
-               // mutableListOfCheckBoxes[index] = it
+                // mutableListOfCheckBoxes[index] = it
             },
             colors = androidx.compose.material3.CheckboxDefaults.colors(
                 checkedColor = MaterialTheme.colors.onPrimary,
@@ -88,12 +90,12 @@ fun SingleRowCheckBox(
                 }
             ),
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colors.primary,
-                unfocusedContainerColor = MaterialTheme.colors.primary,
+                focusedContainerColor = backgroundColor.value,
+                unfocusedContainerColor = backgroundColor.value,
                 focusedTextColor = MaterialTheme.colors.onPrimary,
                 unfocusedTextColor = MaterialTheme.colors.onPrimary,
-                unfocusedIndicatorColor = MaterialTheme.colors.primary,
-                focusedIndicatorColor = MaterialTheme.colors.primary,
+                unfocusedIndicatorColor = backgroundColor.value,
+                focusedIndicatorColor = backgroundColor.value,
                 cursorColor = MaterialTheme.colors.onPrimary,
                 selectionColors = TextSelectionColors(
                     handleColor = MaterialTheme.colors.onPrimary,

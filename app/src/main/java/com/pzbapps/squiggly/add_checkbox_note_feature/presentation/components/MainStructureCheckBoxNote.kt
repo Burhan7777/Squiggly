@@ -1,5 +1,6 @@
 package com.pzbapps.squiggly.add_checkbox_note_feature.presentation.components
 
+import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -26,12 +28,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
+import com.pzbapps.squiggly.add_note_feature.presentation.components.BottomSheet.AddNoteBottomSheet
 import com.pzbapps.squiggly.add_note_feature.presentation.components.DiscardNoteAlertBox
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
@@ -56,6 +62,8 @@ fun MainStructureCheckBoxNote(
     var context = LocalContext.current
     var generatedNoteId = rememberSaveable { mutableStateOf<Long>(0) }
 
+    val showBottomSheet = remember { mutableStateOf(false) }
+
 //    var mutableListOfCheckboxTexts = remember {
 //        mutableStateListOf<MutableState<String>>()
 //    }
@@ -76,6 +84,9 @@ fun MainStructureCheckBoxNote(
         mutableStateOf(0)
 
     }
+
+    val backgroundColor1 = MaterialTheme.colors.primary
+    val backgroundColor = remember { mutableStateOf(backgroundColor1) }
 
     var showTrialEndedDialogBox = remember {
         mutableStateOf(
@@ -99,6 +110,7 @@ fun MainStructureCheckBoxNote(
                 timeModified = System.currentTimeMillis(),
                 notebook = notebookState.value,
                 timeStamp = System.currentTimeMillis(),
+                color = backgroundColor.value.toArgb()
 //            listOfCheckedNotes = mutableListConverted,
 //            listOfCheckedBoxes = mutableListOfCheckBoxes,
 
@@ -138,6 +150,7 @@ fun MainStructureCheckBoxNote(
                 notebook = notebookState.value,
                 listOfCheckedNotes = mutableListConverted,
                 listOfCheckedBoxes = mutableListOfCheckBoxes,
+                color = backgroundColor.value.toArgb()
             )
             viewModel.updateNote(note1)
         }
@@ -176,6 +189,7 @@ fun MainStructureCheckBoxNote(
                         notebook = notebookState.value,
                         listOfCheckedNotes = mutableListConverted,
                         listOfCheckedBoxes = mutableListOfCheckBoxes,
+                        color = backgroundColor.value.toArgb()
                     )
                     viewModel.updateNote(note1)
                 }
@@ -195,7 +209,7 @@ fun MainStructureCheckBoxNote(
                 modifier = Modifier
                     .fillMaxWidth(),
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colors.primary
+                    containerColor = backgroundColor.value
                 ),
                 title = { Text(text = "") },
                 navigationIcon = {
@@ -212,7 +226,8 @@ fun MainStructureCheckBoxNote(
                                 listOfCheckedNotes = mutableListConverted,
                                 listOfCheckedBoxes = mutableListOfCheckBoxes,
                                 timeStamp = System.currentTimeMillis(),
-                                timeModified = System.currentTimeMillis()
+                                timeModified = System.currentTimeMillis(),
+                                color = backgroundColor.value.toArgb()
                             )
                             viewModel.updateNote(note)
                             navController.navigateUp()
@@ -231,6 +246,22 @@ fun MainStructureCheckBoxNote(
                     }
                 },
                 actions = {
+                    IconButton(onClick = {
+                        var analytics = Firebase.analytics
+                        var bundle = Bundle()
+                        bundle.putString(
+                            "color_button_pressed_add_note_screen",
+                            "color_button_pressed_add_note_screen"
+                        )
+                        analytics.logEvent("color_button_pressed_add_note_screen", bundle)
+                        showBottomSheet.value = true
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.Palette,
+                            contentDescription = "Background Color",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    }
                     IconButton(onClick = {
                         showDiscardNoteAlertBox.value = true
                     }) {
@@ -254,7 +285,8 @@ fun MainStructureCheckBoxNote(
                                 listOfCheckedNotes = mutableListConverted,
                                 listOfCheckedBoxes = mutableListOfCheckBoxes,
                                 timeStamp = System.currentTimeMillis(),
-                                timeModified = System.currentTimeMillis()
+                                timeModified = System.currentTimeMillis(),
+                                color = backgroundColor.value.toArgb()
                             )
                             viewModel.updateNote(note)
                             navController.navigateUp()
@@ -299,6 +331,9 @@ fun MainStructureCheckBoxNote(
                     showDiscardNoteAlertBox.value = false
                 }
             }
+            if (showBottomSheet.value) {
+                AddNoteBottomSheet(showBottomSheet, backgroundColor)
+            }
             CheckboxNote(
                 viewModel,
                 navController,
@@ -307,7 +342,8 @@ fun MainStructureCheckBoxNote(
                 listOfCheckedNotes,
                 mutableListOfCheckBoxes,
                 count,
-                mutableListConverted
+                mutableListConverted,
+                backgroundColor
             )
         }
     }

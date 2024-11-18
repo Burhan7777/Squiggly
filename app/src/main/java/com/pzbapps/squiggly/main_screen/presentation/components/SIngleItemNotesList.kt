@@ -152,9 +152,9 @@ fun SingleItemNoteList(note: Note, navHostController: NavHostController, scope: 
             ),
             elevation = CardDefaults.cardElevation(15.dp),
             colors = CardDefaults.cardColors(
-                containerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                containerColor = Color(note.color),
                 contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
-                disabledContainerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                disabledContainerColor = Color(note.color),
                 disabledContentColor = androidx.compose.material.MaterialTheme.colors.onPrimary
             )
         ) {
@@ -271,9 +271,9 @@ fun SingleItemNoteList(note: Note, navHostController: NavHostController, scope: 
             ),
             elevation = CardDefaults.cardElevation(15.dp),
             colors = CardDefaults.cardColors(
-                containerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                containerColor = Color(note.color),
                 contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
-                disabledContainerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                disabledContainerColor = Color(note.color),
                 disabledContentColor = androidx.compose.material.MaterialTheme.colors.onPrimary
             )
         ) {

@@ -303,9 +303,9 @@ fun NoteContent(
                 )
             },
             colors = androidx.compose.material3.TextFieldDefaults.textFieldColors(
-                containerColor = MaterialTheme.colors.primary,
-                focusedIndicatorColor = MaterialTheme.colors.primary,
-                unfocusedIndicatorColor = MaterialTheme.colors.primary,
+                containerColor = Color(backgroundColor.value),
+                focusedIndicatorColor = Color(backgroundColor.value),
+                unfocusedIndicatorColor = Color(backgroundColor.value),
                 cursorColor = MaterialTheme.colors.onPrimary,
                 focusedTextColor = MaterialTheme.colors.onPrimary,
                 unfocusedTextColor = MaterialTheme.colors.onPrimary
@@ -339,6 +339,7 @@ fun NoteContent(
                         focusRequester,
                         focusRequesters,
                         isNewCheckboxAdded,
+                        backgroundColor,
                         onDelete = {
                             try {
                                 focusRequesters.removeAt(index)

@@ -46,6 +46,7 @@ fun SingleRowCheckBoxNotes(
     focusRequester: FocusRequester,
     focusRequesters: SnapshotStateList<FocusRequester>,
     isNewCheckboxCreated: MutableState<Boolean>,
+    backgroundColor:MutableState<Int>,
     onDelete: () -> Unit
 
 ) {
@@ -130,12 +131,12 @@ ShowShortToast("Some error with the note")
                 }
             ),
             colors = androidx.compose.material3.TextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colors.primary,
-                unfocusedContainerColor = MaterialTheme.colors.primary,
+                focusedContainerColor = Color(backgroundColor.value),
+                unfocusedContainerColor = Color(backgroundColor.value),
                 focusedTextColor = MaterialTheme.colors.onPrimary,
                 unfocusedTextColor = MaterialTheme.colors.onPrimary,
-                unfocusedIndicatorColor = MaterialTheme.colors.primary,
-                focusedIndicatorColor = MaterialTheme.colors.primary,
+                unfocusedIndicatorColor = Color(backgroundColor.value),
+                focusedIndicatorColor = Color(backgroundColor.value),
                 cursorColor = MaterialTheme.colors.onPrimary,
                 selectionColors = TextSelectionColors(
                     handleColor = MaterialTheme.colors.onPrimary,
