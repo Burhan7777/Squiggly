@@ -343,8 +343,9 @@ fun MainStructureEditNote(
                             content = richStateText.value.toHtml(),
                             timeModified = System.currentTimeMillis(),
                             notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
+                            color = backgroundColor.value
 
-                            )
+                        )
                         viewModel.updateNote(note!!)
                     }
                 }
@@ -378,7 +379,8 @@ fun MainStructureEditNote(
                             notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
 //                listOfBulletPointNotes = convertedBulletPoints,
                             listOfCheckedNotes = converted,
-                            listOfCheckedBoxes = mutableListOfCheckBoxes.value
+                            listOfCheckedBoxes = mutableListOfCheckBoxes.value,
+                            color = backgroundColor.value
 
                         )
                         viewModel.updateNote(note!!)
@@ -411,7 +413,8 @@ fun MainStructureEditNote(
                             // content = richStateText.value.toHtml(),
                             timeModified = System.currentTimeMillis(),
                             notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
-                            listOfBulletPointNotes = convertedBulletPoints
+                            listOfBulletPointNotes = convertedBulletPoints,
+                            color = backgroundColor.value
 
 
                         )
@@ -456,6 +459,7 @@ fun MainStructureEditNote(
                 notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
                 listOfCheckedNotes = converted,
                 listOfCheckedBoxes = mutableListOfCheckBoxes.value,
+                color = backgroundColor.value
             )
             viewModel.updateNote(note1)
         }
@@ -479,7 +483,8 @@ fun MainStructureEditNote(
                 timeModified = System.currentTimeMillis(),
                 //timeStamp = System.currentTimeMillis(),
                 notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
-                listOfBulletPointNotes = convertedBulletPoints
+                listOfBulletPointNotes = convertedBulletPoints,
+                color = backgroundColor.value
             )
             viewModel.updateNote(note1)
         }
@@ -567,7 +572,8 @@ fun MainStructureEditNote(
                     content = richStateText.value.toHtml(),
                     timeModified = System.currentTimeMillis(),
                     notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
-                    reminder = reminder
+                    reminder = reminder,
+                    color = backgroundColor.value
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
@@ -640,7 +646,8 @@ fun MainStructureEditNote(
                             timeStamp = timeCreated,
                             timeModified = System.currentTimeMillis(),
                             notePinned = pinned,
-                            reminder = reminder
+                            reminder = reminder,
+                            color = backgroundColor.value
                         )
                         viewModel.updateNote(note)
                         Toast.makeText(context, "Note has been updated", Toast.LENGTH_SHORT)
@@ -860,7 +867,8 @@ fun MainStructureEditNote(
                             timeStamp = timeCreated,
                             timeModified = System.currentTimeMillis(),
                             notePinned = pinned,
-                            reminder = reminder
+                            reminder = reminder,
+                            color = backgroundColor.value
                         )
                         viewModel.updateNote(note)
                         scope.launch {
@@ -964,9 +972,11 @@ fun MainStructureEditNote(
 
         },
     ) { paddingValues ->
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .background(Color(backgroundColor.value))) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(backgroundColor.value))
+        ) {
             Column(modifier = Modifier.padding(paddingValues)) {
                 NoteContent(
                     selectedNotebook,
