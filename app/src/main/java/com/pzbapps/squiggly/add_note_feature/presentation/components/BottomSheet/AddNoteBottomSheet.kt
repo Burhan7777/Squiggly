@@ -22,7 +22,10 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddNoteBottomSheet(showBottomSheet: MutableState<Boolean>) {
+fun AddNoteBottomSheet(
+    showBottomSheet: MutableState<Boolean>,
+    backgroundColor: MutableState<Color>
+) {
     if (showBottomSheet.value) {
 
         //  val sheetState = rememberModalBottomSheetState(initialValue = SheetValue.Hidden)
@@ -48,7 +51,7 @@ fun AddNoteBottomSheet(showBottomSheet: MutableState<Boolean>) {
 
             when (selectedTabIndex) {
                 0 -> {
-                    ColorSelection()
+                    ColorSelection(backgroundColor)
                 }
 
                 1 -> {

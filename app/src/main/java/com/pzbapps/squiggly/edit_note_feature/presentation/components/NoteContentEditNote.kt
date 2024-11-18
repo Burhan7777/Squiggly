@@ -96,7 +96,8 @@ fun NoteContent(
     notificationLauncher: ManagedActivityResultLauncher<String, Boolean>,
     time: MutableLongState,
     systemTime: MutableLongState,
-    timeInString: MutableState<String>
+    timeInString: MutableState<String>,
+    backgroundColor: MutableState<Int>
 ) {
 
     var dialogOpen = remember {
@@ -138,7 +139,8 @@ fun NoteContent(
     if (screen != Constant.LOCKED_NOTE && screen != Constant.ARCHIVE) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(0.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.background(Color(backgroundColor.value))
         ) {
             if (noteBook.isNotEmpty()) {
                 Text(
@@ -186,9 +188,9 @@ fun NoteContent(
                 )
             },
             colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
-                backgroundColor = MaterialTheme.colors.primary,
-                focusedIndicatorColor = MaterialTheme.colors.primary,
-                unfocusedIndicatorColor = MaterialTheme.colors.primary,
+                backgroundColor = Color(backgroundColor.value),
+                focusedIndicatorColor = Color(backgroundColor.value),
+                unfocusedIndicatorColor = Color(backgroundColor.value),
                 cursorColor = MaterialTheme.colors.onPrimary
             ),
             textStyle = TextStyle(fontFamily = FontFamily.fontFamilyBold, fontSize = 20.sp),
@@ -212,11 +214,11 @@ fun NoteContent(
             RichTextEditor(
                 state = richStateText.value,
                 colors = RichTextEditorDefaults.richTextEditorColors(
-                    containerColor = MaterialTheme.colors.primary,
+                    containerColor = Color(backgroundColor.value),
                     cursorColor = MaterialTheme.colors.onPrimary,
                     textColor = MaterialTheme.colors.onPrimary,
-                    focusedIndicatorColor = MaterialTheme.colors.primary,
-                    unfocusedIndicatorColor = MaterialTheme.colors.primary,
+                    focusedIndicatorColor = Color(backgroundColor.value),
+                    unfocusedIndicatorColor = Color(backgroundColor.value),
                     selectionColors = TextSelectionColors(
                         handleColor = MaterialTheme.colors.onPrimary,
                         backgroundColor = Color.Gray

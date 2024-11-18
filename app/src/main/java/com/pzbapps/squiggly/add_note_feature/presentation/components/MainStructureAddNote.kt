@@ -25,6 +25,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -100,6 +101,8 @@ fun MainStructureAddNote(
     var showFontSize = remember { mutableStateOf(false) }
     var fontSize = remember { mutableStateOf("20") }
     val showBottomSheet = remember { mutableStateOf(false) }
+    val backgroundColor1 = MaterialTheme.colors.primary
+    val backgroundColor = remember { mutableStateOf<Color>(backgroundColor1) }
 
     if (richTextState.value.annotatedString.text == "") fontSize.value = "20"
 
@@ -177,6 +180,7 @@ fun MainStructureAddNote(
                 content = richTextState.value.toHtml(),
                 timeModified = System.currentTimeMillis(),
                 notebook = notebookState.value,
+                color = backgroundColor.value.toArgb(),
                 timeStamp = System.currentTimeMillis()
             )
             viewModel.insertNote(note)
@@ -198,6 +202,7 @@ fun MainStructureAddNote(
                     content = richTextState.value.toHtml(),
                     timeModified = System.currentTimeMillis(),
                     notebook = notebookState.value,
+                    color = backgroundColor.value.toArgb(),
                     timeStamp = System.currentTimeMillis()
                 )
                 viewModel.updateNote(updatedNote)
@@ -225,6 +230,7 @@ fun MainStructureAddNote(
                     content = richTextState.value.toHtml(),
                     timeModified = System.currentTimeMillis(),
                     notebook = notebookState.value,
+                    color = backgroundColor.value.toArgb(),
                     timeStamp = System.currentTimeMillis()
                 )
                 viewModel.updateNote(updatedNote)
@@ -250,6 +256,7 @@ fun MainStructureAddNote(
                 content = richTextState.value.toHtml(),
                 timeModified = System.currentTimeMillis(),
                 notebook = notebookState.value,
+                color = backgroundColor.value.toArgb(),
                 timeStamp = System.currentTimeMillis()
             )
             viewModel.updateNote(updatedNote)
@@ -266,7 +273,7 @@ fun MainStructureAddNote(
                 modifier = Modifier
                     .fillMaxWidth(),
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colors.primary
+                    containerColor = backgroundColor.value
                 ),
                 title = { Text(text = "") },
                 navigationIcon = {
@@ -288,7 +295,8 @@ fun MainStructureAddNote(
                                 timeStamp = System.currentTimeMillis(),
                                 deletedNote = false,
                                 locked = false,
-                                timeModified = System.currentTimeMillis()
+                                timeModified = System.currentTimeMillis(),
+                                color = backgroundColor.value.toArgb()
 
                             )
                             viewModel.updateNote(note2)
@@ -348,6 +356,7 @@ fun MainStructureAddNote(
                                 archive = false,
                                 notebook = notebookState.value,
                                 timeStamp = System.currentTimeMillis(),
+                                color = backgroundColor.value.toArgb(),
                                 deletedNote = false,
                                 locked = false,
                                 timeModified = System.currentTimeMillis()
@@ -387,6 +396,7 @@ fun MainStructureAddNote(
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .background(backgroundColor.value)
         ) {
             Column(modifier = Modifier.padding(it)) {
                 if (showDiscardNoteAlertBox.value) {
@@ -409,7 +419,8 @@ fun MainStructureAddNote(
                     boldText,
                     richTextState.value,
                     hideTextFomattingBarWhenTitleIsInFocus,
-                    showSavedText
+                    showSavedText,
+                    backgroundColor
 //                notebook,
 //                notebookFromDB)
                 )
@@ -444,7 +455,7 @@ fun MainStructureAddNote(
                 }
             }
             if (showBottomSheet.value) {
-                AddNoteBottomSheet(showBottomSheet = showBottomSheet)
+                AddNoteBottomSheet(showBottomSheet = showBottomSheet, backgroundColor)
             }
         }
     }

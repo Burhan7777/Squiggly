@@ -3,6 +3,7 @@ package com.pzbapps.squiggly.main_screen.presentation.components
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +23,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -45,24 +47,24 @@ fun SingleItemNoteList(note: Note, navHostController: NavHostController, scope: 
     var richTextState = rememberRichTextState()
     var contentText = remember { mutableStateOf("") }
 
-  //  LaunchedEffect(note.content) {
+    //  LaunchedEffect(note.content) {
     //    scope.launch(Dispatchers.Default) {
-            // Truncate the HTML content to a reasonable preview length
-            val truncatedHtml = if (note.content.length > 300) {
-                note.content.take(300) + "..."
-            } else {
-                note.content
-            }
+    // Truncate the HTML content to a reasonable preview length
+    val truncatedHtml = if (note.content.length > 300) {
+        note.content.take(300) + "..."
+    } else {
+        note.content
+    }
 
-            // Set the truncated HTML to richTextState for a preview
-            val previewText = richTextState.setHtml(truncatedHtml).annotatedString.text
+    // Set the truncated HTML to richTextState for a preview
+    val previewText = richTextState.setHtml(truncatedHtml).annotatedString.text
 
-            // Update the contentText on the main thread with the preview text
-          //  withContext(Dispatchers.Main) {
-                contentText.value = previewText
-           // }
-      //  }
-   // }
+    // Update the contentText on the main thread with the preview text
+    //  withContext(Dispatchers.Main) {
+    contentText.value = previewText
+    // }
+    //  }
+    // }
     if (!note.archive && !note.locked && !note.deletedNote && note.listOfCheckedNotes.size == 0 && note.listOfBulletPointNotes.size == 0) {
         Card(
             modifier = Modifier
@@ -95,9 +97,9 @@ fun SingleItemNoteList(note: Note, navHostController: NavHostController, scope: 
             ),
             elevation = CardDefaults.cardElevation(15.dp),
             colors = CardDefaults.cardColors(
-                containerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                containerColor = Color(note.color),
                 contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
-                disabledContainerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                disabledContainerColor = Color(note.color),
                 disabledContentColor = androidx.compose.material.MaterialTheme.colors.onPrimary
             )
         ) {

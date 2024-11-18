@@ -23,6 +23,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -194,6 +195,9 @@ fun MainStructureEditNote(
     var timeInString = remember { mutableStateOf("") }
 
 
+    val backgroundColor = remember { mutableStateOf<Int>(0) }
+
+
     var notificationLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
@@ -212,7 +216,7 @@ fun MainStructureEditNote(
         viewModel.getNoteById(id)
         var noteFromDb = viewModel.getNoteById
         pinnedOrNot.value = noteFromDb.value.notePinned
-
+        backgroundColor.value = noteFromDb.value.color
     }
 
 
@@ -598,7 +602,7 @@ fun MainStructureEditNote(
                 modifier = Modifier
                     .fillMaxWidth(),
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colors.primary
+                    containerColor = Color(backgroundColor.value)
                 ),
                 navigationIcon = {
                     IconButton(onClick = {
@@ -960,7 +964,9 @@ fun MainStructureEditNote(
 
         },
     ) { paddingValues ->
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .background(Color(backgroundColor.value))) {
             Column(modifier = Modifier.padding(paddingValues)) {
                 NoteContent(
                     selectedNotebook,
@@ -987,7 +993,8 @@ fun MainStructureEditNote(
                     notificationLauncher,
                     time,
                     systemTime,
-                    timeInString
+                    timeInString,
+                    backgroundColor
                 )
             }
             if (mutableListOfCheckboxTexts.size == 0 && mutableListOfBulletPoints.size == 0 && !hideFormattingTextBarWhenTitleIsInFocus.value) {
