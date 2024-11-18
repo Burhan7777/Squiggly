@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -36,7 +37,8 @@ fun BulletPointNote(
     title: MutableState<String>,
     mutableListOfBulletPointsNotes: SnapshotStateList<MutableState<String>>,
     count: MutableState<Int>,
-    mutableListConverted: ArrayList<String>
+    mutableListConverted: ArrayList<String>,
+    backgroundColor: MutableState<Color>
 ) {
 
     var dialogOpen = remember {
@@ -75,12 +77,13 @@ fun BulletPointNote(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(androidx.compose.material.MaterialTheme.colors.primary)
+            .background(backgroundColor.value)
     ) {
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(0.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.background(backgroundColor.value)
         ) {
             if (notebook.isNotEmpty()) {
                 Text(
@@ -134,9 +137,9 @@ fun BulletPointNote(
                 )
             },
             colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = MaterialTheme.colors.primary,
-                focusedIndicatorColor = MaterialTheme.colors.primary,
-                unfocusedIndicatorColor = MaterialTheme.colors.primary,
+                backgroundColor = backgroundColor.value,
+                focusedIndicatorColor = backgroundColor.value,
+                unfocusedIndicatorColor = backgroundColor.value,
                 cursorColor = MaterialTheme.colors.onPrimary,
                 textColor = androidx.compose.material.MaterialTheme.colors.onPrimary
             ),
@@ -165,6 +168,7 @@ fun BulletPointNote(
                         indexed,
                         count,
                         focusRequester,
+                        backgroundColor,
                         onDelete = {
                             try {
                                 focusRequesters.removeAt(indexed)

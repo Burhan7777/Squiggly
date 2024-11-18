@@ -1,5 +1,6 @@
 package com.pzbapps.squiggly.add_bullet_points_note_feature.presentation.components
 
+import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -29,12 +31,16 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
+import com.pzbapps.squiggly.add_note_feature.presentation.components.BottomSheet.AddNoteBottomSheet
 import com.pzbapps.squiggly.add_note_feature.presentation.components.DiscardNoteAlertBox
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
@@ -78,6 +84,11 @@ fun MainStructureBulletPointsNotes(
 
     }
 
+    val backgroundColor1 = MaterialTheme.colors.primary
+    val backgroundColor = remember { mutableStateOf(backgroundColor1) }
+
+    val showBottomSheet = remember { mutableStateOf(false) }
+
     LaunchedEffect(key1 = true) {
         if (mutableListOfBulletPointsNotes.isEmpty()) {
             mutableListOfBulletPointsNotes.add(mutableStateOf(""))
@@ -99,6 +110,7 @@ fun MainStructureBulletPointsNotes(
                 timeModified = System.currentTimeMillis(),
                 notebook = notebookState.value,
                 timeStamp = System.currentTimeMillis(),
+                color = backgroundColor.value.toArgb()
 //            listOfCheckedNotes = mutableListConverted,
 //            listOfCheckedBoxes = mutableListOfCheckBoxes,
 
@@ -136,7 +148,8 @@ fun MainStructureBulletPointsNotes(
             timeModified = System.currentTimeMillis(),
             timeStamp = System.currentTimeMillis(),
             notebook = notebookState.value,
-            listOfBulletPointNotes = mutableListConverted
+            listOfBulletPointNotes = mutableListConverted,
+            color = backgroundColor.value.toArgb()
         )
         viewModel.updateNote(note1)
     }
@@ -168,7 +181,8 @@ fun MainStructureBulletPointsNotes(
                         timeModified = System.currentTimeMillis(),
                         timeStamp = System.currentTimeMillis(),
                         notebook = notebookState.value,
-                        listOfBulletPointNotes = mutableListConverted
+                        listOfBulletPointNotes = mutableListConverted,
+                        color = backgroundColor.value.toArgb()
                     )
                     viewModel.updateNote(note1)
                 }
@@ -192,7 +206,7 @@ fun MainStructureBulletPointsNotes(
                 modifier = Modifier
                     .fillMaxWidth(),
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colors.primary
+                    containerColor = backgroundColor.value
                 ),
                 title = { Text(text = "") },
                 navigationIcon = {
@@ -233,6 +247,22 @@ fun MainStructureBulletPointsNotes(
                     }
                 },
                 actions = {
+                    IconButton(onClick = {
+                        var analytics = Firebase.analytics
+                        var bundle = Bundle()
+                        bundle.putString(
+                            "color_button_pressed_add_note_screen",
+                            "color_button_pressed_add_note_screen"
+                        )
+                        analytics.logEvent("color_button_pressed_add_note_screen", bundle)
+                        showBottomSheet.value = true
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.Palette,
+                            contentDescription = "Background Color",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    }
                     IconButton(onClick = {
                         showDiscardNoteAlertBox.value = true
                     }) {
@@ -305,6 +335,9 @@ fun MainStructureBulletPointsNotes(
                     showDiscardNoteAlertBox.value = false
                 }
             }
+            if (showBottomSheet.value) {
+                AddNoteBottomSheet(showBottomSheet, backgroundColor)
+            }
             BulletPointNote(
                 viewModel,
                 navController,
@@ -312,7 +345,8 @@ fun MainStructureBulletPointsNotes(
                 title,
                 mutableListOfBulletPointsNotes,
                 count,
-                mutableListConverted
+                mutableListConverted,
+                backgroundColor
             )
         }
     }
