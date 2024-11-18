@@ -19,6 +19,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -84,9 +85,9 @@ fun SingleItemLockedNoteList(note: Note, navHostController: NavHostController) {
             ),
             elevation = CardDefaults.cardElevation(15.dp),
             colors = CardDefaults.cardColors(
-                containerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                containerColor = Color(note.color),
                 contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
-                disabledContainerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                disabledContainerColor = Color(note.color),
                 disabledContentColor = androidx.compose.material.MaterialTheme.colors.onPrimary
             )
         ) {
@@ -138,9 +139,9 @@ fun SingleItemLockedNoteList(note: Note, navHostController: NavHostController) {
             ),
             elevation = CardDefaults.cardElevation(15.dp),
             colors = CardDefaults.cardColors(
-                containerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                containerColor = Color(note.color),
                 contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
-                disabledContainerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                disabledContainerColor = Color(note.color),
                 disabledContentColor = androidx.compose.material.MaterialTheme.colors.onPrimary
             )
         ) {
@@ -256,9 +257,9 @@ fun SingleItemLockedNoteList(note: Note, navHostController: NavHostController) {
             ),
             elevation = CardDefaults.cardElevation(15.dp),
             colors = CardDefaults.cardColors(
-                containerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                containerColor = Color(note.color),
                 contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
-                disabledContainerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                disabledContainerColor = Color(note.color),
                 disabledContentColor = androidx.compose.material.MaterialTheme.colors.onPrimary
             )
         ) {
