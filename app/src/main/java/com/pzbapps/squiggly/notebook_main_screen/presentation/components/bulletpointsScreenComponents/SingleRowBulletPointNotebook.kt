@@ -40,6 +40,7 @@ fun SingleRowBulletPointNotebook(
     index: Int,
     count: MutableState<Int>,
     focusRequester: FocusRequester,
+    backgroundColor: MutableState<Color>,
     onDelete: () -> Unit
 ) {
 
@@ -71,12 +72,12 @@ fun SingleRowBulletPointNotebook(
                 }
             ),
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colors.primary,
-                unfocusedContainerColor = MaterialTheme.colors.primary,
+                focusedContainerColor = backgroundColor.value,
+                unfocusedContainerColor = backgroundColor.value,
                 focusedTextColor = MaterialTheme.colors.onPrimary,
                 unfocusedTextColor = MaterialTheme.colors.onPrimary,
-                unfocusedIndicatorColor = MaterialTheme.colors.primary,
-                focusedIndicatorColor = MaterialTheme.colors.primary,
+                unfocusedIndicatorColor = backgroundColor.value,
+                focusedIndicatorColor = backgroundColor.value,
                 cursorColor = MaterialTheme.colors.onPrimary,
                 selectionColors = TextSelectionColors(
                     handleColor = MaterialTheme.colors.onPrimary,
@@ -96,7 +97,8 @@ fun SingleRowBulletPointNotebook(
             trailingIcon = {
                 IconButton(onClick = {
                     onDelete()
-                    mutableListOfBulletPointsNotes.removeAt(index) }) {
+                    mutableListOfBulletPointsNotes.removeAt(index)
+                }) {
                     Icon(
                         imageVector = Icons.Filled.Clear,
                         contentDescription = "Clear checkbox",
