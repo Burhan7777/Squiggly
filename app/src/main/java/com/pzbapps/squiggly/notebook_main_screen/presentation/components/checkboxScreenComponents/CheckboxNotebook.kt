@@ -13,6 +13,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
@@ -31,7 +32,8 @@ fun CheckboxNotebook(
     mutableListOfCheckBoxTexts: SnapshotStateList<MutableState<String>>,
     mutableListOfCheckBoxes: ArrayList<Boolean>,
     count: MutableState<Int>,
-    mutableListConverted: ArrayList<String>
+    mutableListConverted: ArrayList<String>,
+    backgroundColor: MutableState<Color>
 ) {
 
     var dialogOpen = remember {
@@ -63,7 +65,7 @@ fun CheckboxNotebook(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(androidx.compose.material.MaterialTheme.colors.primary)
+            .background(backgroundColor.value)
     ) {
 
         androidx.compose.material.TextField(
@@ -79,9 +81,9 @@ fun CheckboxNotebook(
                 )
             },
             colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = MaterialTheme.colors.primary,
-                focusedIndicatorColor = MaterialTheme.colors.primary,
-                unfocusedIndicatorColor = MaterialTheme.colors.primary,
+                backgroundColor = backgroundColor.value,
+                focusedIndicatorColor = backgroundColor.value,
+                unfocusedIndicatorColor = backgroundColor.value,
                 cursorColor = MaterialTheme.colors.onPrimary,
                 textColor = androidx.compose.material.MaterialTheme.colors.onPrimary
             ),
@@ -112,6 +114,7 @@ fun CheckboxNotebook(
                         indexed,
                         count,
                         focusRequester,
+                        backgroundColor,
                         onDelete = {
                             try {
                                 focusRequesters.removeAt(indexed)
@@ -126,7 +129,8 @@ fun CheckboxNotebook(
             LaunchedEffect(count.value) {
                 if (mutableListOfCheckBoxTexts.size > 1) {
                     lazyListState.animateScrollToItem(mutableListOfCheckBoxTexts.size - 1)
-                    focusRequesters.lastOrNull()?.requestFocus()  // Move focus to the last added checkbox
+                    focusRequesters.lastOrNull()
+                        ?.requestFocus()  // Move focus to the last added checkbox
                 }
             }
             LaunchedEffect(focusRequesters, mutableListOfCheckBoxTexts) {
