@@ -13,14 +13,17 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -31,14 +34,19 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavHostController
 import com.mohamedrejeb.richeditor.model.RichTextState
+import com.pzbapps.squiggly.add_note_feature.presentation.components.BottomSheet.AddNoteBottomSheet
 import com.pzbapps.squiggly.add_note_feature.presentation.components.DiscardNoteAlertBox
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.common.presentation.components.AlertDialogBoxTrialEnded
 import com.pzbapps.squiggly.main_screen.domain.model.Note
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import java.util.Stack
 
 @OptIn(
     ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class,
@@ -89,7 +97,33 @@ fun MainStructureAddNoteInNotebook(
     var showFontSize = remember { mutableStateOf(false) }
     var fontSize = remember { mutableStateOf("20") }
 
+    val showBottomSheet = remember { mutableStateOf(false) }
+    val backgroundColor1 = MaterialTheme.colors.primary
+    val backgroundColor = remember { mutableStateOf(backgroundColor1) }
+
     if (richTextState.value.annotatedString.text == "") fontSize.value = "20"
+
+    val undoStack = remember { Stack<String>() }
+    val redoStack = remember { Stack<String>() }
+
+    // Track the current content as a snapshot
+    var currentContent = remember { mutableStateOf("") }
+
+    LaunchedEffect(richTextState.value) {
+        snapshotFlow { richTextState.value.annotatedString }
+            .debounce(200)
+            .map { richTextState.value.toHtml() }// To avoid frequent updates, only take new state every 300ms
+            .filter { it != currentContent.value } // Only proceed if content has changed
+            .collect { newContent ->
+                // Store the current content before updating
+                if (currentContent.value.isNotEmpty()) {
+                    undoStack.push(currentContent.value)
+                    redoStack.clear() // Clear redo stack on new change
+                }
+                // Update the tracked content
+                currentContent.value = newContent
+            }
+    }
 
 
 //    DisposableEffect(Unit) {
@@ -145,6 +179,7 @@ fun MainStructureAddNoteInNotebook(
                 timeModified = System.currentTimeMillis(),
                 notebook = notebookName,
                 timeStamp = System.currentTimeMillis(),
+                color = backgroundColor.value.toArgb()
             )
             viewModel.insertNote(note)
         }
@@ -166,6 +201,7 @@ fun MainStructureAddNoteInNotebook(
                     timeModified = System.currentTimeMillis(),
                     notebook = notebookName,
                     timeStamp = System.currentTimeMillis(),
+                    color = backgroundColor.value.toArgb()
                 )
                 viewModel.updateNote(updatedNote)
                 delay(5000L)
@@ -192,6 +228,7 @@ fun MainStructureAddNoteInNotebook(
                     timeModified = System.currentTimeMillis(),
                     notebook = notebookName,
                     timeStamp = System.currentTimeMillis(),
+                    color = backgroundColor.value.toArgb()
                 )
                 viewModel.updateNote(updatedNote)
             }
@@ -213,6 +250,7 @@ fun MainStructureAddNoteInNotebook(
                 timeModified = System.currentTimeMillis(),
                 notebook = notebookName,
                 timeStamp = System.currentTimeMillis(),
+                color = backgroundColor.value.toArgb()
             )
             viewModel.updateNote(updatedNote)
             navController.navigateUp()
@@ -229,7 +267,7 @@ fun MainStructureAddNoteInNotebook(
                 modifier = Modifier
                     .fillMaxWidth(),
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colors.primary
+                    containerColor = backgroundColor.value
                 ),
                 title = { Text(text = "") },
                 navigationIcon = {
@@ -241,7 +279,8 @@ fun MainStructureAddNoteInNotebook(
                                 content = richTextState.value.toHtml(),
                                 timeModified = System.currentTimeMillis(),
                                 notebook = notebookName,
-                                timeStamp = System.currentTimeMillis()
+                                timeStamp = System.currentTimeMillis(),
+                                color = backgroundColor.value.toArgb()
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
@@ -251,9 +290,10 @@ fun MainStructureAddNoteInNotebook(
                             Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT)
                                 .show()
                             navController.navigateUp()
-                        }else{
+                        } else {
                             viewModel.deleteNoteById(generatedNoteId.value.toInt())
-                            Toast.makeText(context, "Empty note discarded", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Empty note discarded", Toast.LENGTH_SHORT)
+                                .show()
                             navController.navigateUp()
                         }
                     }) {
@@ -278,7 +318,8 @@ fun MainStructureAddNoteInNotebook(
                                 content = richTextState.value.toHtml(),
                                 timeModified = System.currentTimeMillis(),
                                 notebook = notebookName,
-                                timeStamp = System.currentTimeMillis()
+                                timeStamp = System.currentTimeMillis(),
+                                color = backgroundColor.value.toArgb()
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
@@ -288,9 +329,10 @@ fun MainStructureAddNoteInNotebook(
                             Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT)
                                 .show()
                             navController.navigateUp()
-                        }else{
+                        } else {
                             viewModel.deleteNoteById(generatedNoteId.value.toInt())
-                            Toast.makeText(context, "Empty note discarded", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Empty note discarded", Toast.LENGTH_SHORT)
+                                .show()
                             navController.navigateUp()
                         }
                     }) {
@@ -314,7 +356,11 @@ fun MainStructureAddNoteInNotebook(
 //        }
 
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(backgroundColor.value)
+        ) {
             Column(modifier = Modifier.padding(it)) {
                 if (showDiscardNoteAlertBox.value) {
                     DiscardNoteAlertBox(
@@ -326,6 +372,9 @@ fun MainStructureAddNoteInNotebook(
                         showDiscardNoteAlertBox.value = false
                     }
                 }
+                if (showBottomSheet.value) {
+                    AddNoteBottomSheet(showBottomSheet, backgroundColor)
+                }
                 NoteContentNoteInNotebook(
                     title,
                     content,
@@ -335,7 +384,8 @@ fun MainStructureAddNoteInNotebook(
                     textFieldValue,
                     boldText,
                     richTextState.value,
-                    hideFormattingTextBarWhenTitleIsInFocus
+                    hideFormattingTextBarWhenTitleIsInFocus,
+                    backgroundColor
 //                notebook,
 //                notebookFromDB)
                 )
@@ -361,7 +411,11 @@ fun MainStructureAddNoteInNotebook(
                         isUnderlineActivated = isUnderlineActivated,
                         isItalicActivated = isItalicActivated,
                         isOrderedListActivated = isOrderedListActivated,
-                        isUnOrderedListActivated = isUnOrderedListActivated
+                        isUnOrderedListActivated = isUnOrderedListActivated,
+                        undoStack = undoStack,
+                        redoStack = redoStack,
+                        currentContent = currentContent,
+                        showBottomSheet = showBottomSheet
                     )
                 }
             }

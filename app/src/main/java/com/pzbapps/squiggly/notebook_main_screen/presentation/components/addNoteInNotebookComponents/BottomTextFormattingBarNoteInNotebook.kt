@@ -1,5 +1,6 @@
 package com.pzbapps.squiggly.notebook_main_screen.presentation.components.addNoteInNotebookComponents
 
+import android.os.Bundle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
@@ -28,8 +29,11 @@ import androidx.compose.material.icons.filled.FormatListBulleted
 import androidx.compose.material.icons.filled.FormatListNumbered
 import androidx.compose.material.icons.filled.FormatSize
 import androidx.compose.material.icons.filled.FormatUnderlined
+import androidx.compose.material.icons.filled.Palette
+import androidx.compose.material.icons.filled.Redo
 import androidx.compose.material.icons.filled.TextDecrease
 import androidx.compose.material.icons.filled.TextIncrease
+import androidx.compose.material.icons.filled.Undo
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -44,7 +48,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import com.mohamedrejeb.richeditor.model.RichTextState
+import java.util.Stack
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -57,6 +64,10 @@ fun BottomTextFormattingBarNoteInNotebook(
     isItalicActivated: MutableState<Boolean>,
     isOrderedListActivated: MutableState<Boolean>,
     isUnOrderedListActivated: MutableState<Boolean>,
+    undoStack: Stack<String>,
+    redoStack: Stack<String>,
+    currentContent: MutableState<String>,
+    showBottomSheet: MutableState<Boolean>
 ) {
     Column(modifier = Modifier.imePadding()) {
         if (showFontSize.value) {
@@ -110,6 +121,50 @@ fun BottomTextFormattingBarNoteInNotebook(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.horizontalScroll(rememberScrollState())
         ) {
+            IconButton(onClick = {
+                var analytics = Firebase.analytics
+                var bundle = Bundle()
+                bundle.putString(
+                    "color_button_pressed_add_note_screen",
+                    "color_button_pressed_add_note_screen"
+                )
+                analytics.logEvent("color_button_pressed_add_note_screen", bundle)
+                showBottomSheet.value = true
+            }) {
+                Icon(
+                    imageVector = Icons.Default.Palette,
+                    contentDescription = "background Color",
+                    tint = MaterialTheme.colors.onPrimary
+                )
+            }
+            IconButton(onClick = {
+                if (undoStack.isNotEmpty()) {
+                    redoStack.push(currentContent.value) // Save the current state to redo stack
+                    currentContent.value = undoStack.pop() // Get the last content from undo stack
+                    richTextState.value.setHtml(currentContent.value) // Set editor content
+                }
+            }) {
+                Icon(
+                    imageVector = Icons.Filled.Undo,
+                    contentDescription = "Undo",
+                    tint = MaterialTheme.colors.onPrimary
+                )
+            }
+
+            IconButton(onClick = {
+                if (redoStack.isNotEmpty()) {
+                    undoStack.push(currentContent.value) // Save the current state to undo stack
+                    currentContent.value = redoStack.pop() // Get the last content from redo stack
+                    richTextState.value.setHtml(currentContent.value) // Set editor content
+                }
+            }) {
+                Icon(
+                    imageVector = Icons.Filled.Redo,
+                    contentDescription = "Undo",
+                    tint = MaterialTheme.colors.onPrimary
+                )
+            }
+
             IconButton(
                 onClick = {
                     richTextState.value.toggleSpanStyle(SpanStyle(fontWeight = FontWeight.Bold))

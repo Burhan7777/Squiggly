@@ -37,7 +37,8 @@ fun NoteContentNoteInNotebook(
     textFieldValue: MutableState<TextFieldValue>,
     boldText: MutableState<Boolean>,
     richStateText: RichTextState,
-    hideFormattingTextBar: MutableState<Boolean>
+    hideFormattingTextBar: MutableState<Boolean>,
+    backgroundColor: MutableState<Color>
 //    notebook: MutableState<ArrayList<String>>,
 //    notebookFromDB: MutableState<ArrayList<NoteBook>>
 ) {
@@ -93,9 +94,9 @@ fun NoteContentNoteInNotebook(
             )
         },
         colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
-            backgroundColor = MaterialTheme.colors.primary,
-            focusedIndicatorColor = MaterialTheme.colors.primary,
-            unfocusedIndicatorColor = MaterialTheme.colors.primary,
+            backgroundColor = backgroundColor.value,
+            focusedIndicatorColor =  backgroundColor.value,
+            unfocusedIndicatorColor =  backgroundColor.value,
             cursorColor = MaterialTheme.colors.onPrimary
         ),
         textStyle = TextStyle(fontFamily = FontFamily.fontFamilyBold, fontSize = 20.sp),
@@ -118,11 +119,11 @@ fun NoteContentNoteInNotebook(
         RichTextEditor(
             state = richStateText,
             colors = RichTextEditorDefaults.richTextEditorColors(
-                containerColor = MaterialTheme.colors.primary,
+                containerColor =  backgroundColor.value,
                 cursorColor = MaterialTheme.colors.onPrimary,
                 textColor = MaterialTheme.colors.onPrimary,
-                unfocusedIndicatorColor = MaterialTheme.colors.primary,
-                focusedIndicatorColor = MaterialTheme.colors.primary,
+                unfocusedIndicatorColor =  backgroundColor.value,
+                focusedIndicatorColor =  backgroundColor.value,
                 selectionColors = TextSelectionColors(
                     handleColor = MaterialTheme.colors.onPrimary,
                     backgroundColor = Color.Gray
