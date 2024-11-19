@@ -39,7 +39,8 @@ fun SingleRowCheckBoxLockedNotes(
     mutableList: SnapshotStateList<MutableState<String>>,
     mutableListOfCheckBoxes: ArrayList<Boolean>,
     index: Int,
-    count: MutableState<Int>
+    count: MutableState<Int>,
+    backgroundColor: MutableState<Color>
 ) {
     var checkBox = rememberSaveable { mutableStateOf(false) }
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -80,12 +81,12 @@ fun SingleRowCheckBoxLockedNotes(
                 }
             ),
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colors.primary,
-                unfocusedContainerColor = MaterialTheme.colors.primary,
+                focusedContainerColor = backgroundColor.value,
+                unfocusedContainerColor = backgroundColor.value,
                 focusedTextColor = MaterialTheme.colors.onPrimary,
                 unfocusedTextColor = MaterialTheme.colors.onPrimary,
-                unfocusedIndicatorColor = MaterialTheme.colors.primary,
-                focusedIndicatorColor = MaterialTheme.colors.primary,
+                unfocusedIndicatorColor = backgroundColor.value,
+                focusedIndicatorColor = backgroundColor.value,
                 cursorColor = MaterialTheme.colors.onPrimary,
                 selectionColors = TextSelectionColors(
                     handleColor = MaterialTheme.colors.onPrimary,

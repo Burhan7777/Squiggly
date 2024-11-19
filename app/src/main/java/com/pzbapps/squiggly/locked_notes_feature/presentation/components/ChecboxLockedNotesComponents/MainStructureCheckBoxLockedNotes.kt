@@ -1,8 +1,11 @@
 package com.pzbapps.squiggly.locked_notes_feature.presentation.components.ChecboxLockedNotesComponents
 
+import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
@@ -12,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -28,12 +32,16 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
+import com.pzbapps.squiggly.add_note_feature.presentation.components.BottomSheet.AddNoteBottomSheet
 import com.pzbapps.squiggly.add_note_feature.presentation.components.DiscardNoteAlertBox
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
@@ -66,6 +74,11 @@ fun MainStructureCheckBoxLockedNotes(
             false
         )
     }
+    val showBottomSheet = remember { mutableStateOf(false) }
+
+    val backgroundColor1 = MaterialTheme.colors.primary
+    val backgroundColor = remember { mutableStateOf(backgroundColor1) }
+
 
     LaunchedEffect(key1 = true) {
         if (mutableListOfCheckboxTexts.isEmpty()) {
@@ -103,7 +116,8 @@ fun MainStructureCheckBoxLockedNotes(
                 timeModified = System.currentTimeMillis(),
                 notebook = notebookState.value,
                 timeStamp = System.currentTimeMillis(),
-                locked = true
+                locked = true,
+                color = backgroundColor.value.toArgb()
 //            listOfCheckedNotes = mutableListConverted,
 //            listOfCheckedBoxes = mutableListOfCheckBoxes,
 
@@ -143,7 +157,8 @@ fun MainStructureCheckBoxLockedNotes(
             notebook = notebookState.value,
             listOfCheckedNotes = mutableListConverted,
             listOfCheckedBoxes = mutableListOfCheckBoxes,
-            locked = true
+            locked = true,
+            color = backgroundColor.value.toArgb()
         )
         viewModel.updateNote(note1)
     }
@@ -181,7 +196,8 @@ fun MainStructureCheckBoxLockedNotes(
                         notebook = notebookState.value,
                         listOfCheckedNotes = mutableListConverted,
                         listOfCheckedBoxes = mutableListOfCheckBoxes,
-                        locked = true
+                        locked = true,
+                        color = backgroundColor.value.toArgb()
                     )
                     viewModel.updateNote(note1)
                 }
@@ -206,7 +222,7 @@ fun MainStructureCheckBoxLockedNotes(
                 modifier = Modifier
                     .fillMaxWidth(),
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colors.primary
+                    containerColor = backgroundColor.value
                 ),
                 title = { Text(text = "") },
                 navigationIcon = {
@@ -223,7 +239,8 @@ fun MainStructureCheckBoxLockedNotes(
                                 listOfCheckedBoxes = mutableListOfCheckBoxes,
                                 timeStamp = System.currentTimeMillis(),
                                 locked = true,
-                                timeModified = System.currentTimeMillis()
+                                timeModified = System.currentTimeMillis(),
+                                color = backgroundColor.value.toArgb()
                             )
                             viewModel.updateNote(note)
                             Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)
@@ -244,6 +261,22 @@ fun MainStructureCheckBoxLockedNotes(
                     }
                 },
                 actions = {
+                    IconButton(onClick = {
+                        var analytics = Firebase.analytics
+                        var bundle = Bundle()
+                        bundle.putString(
+                            "color_button_pressed_add_note_screen",
+                            "color_button_pressed_add_note_screen"
+                        )
+                        analytics.logEvent("color_button_pressed_add_note_screen", bundle)
+                        showBottomSheet.value = true
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.Palette,
+                            contentDescription = "Backgroound color",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    }
                     IconButton(onClick = {
                         showDiscardNoteAlertBox.value = true
                     }) {
@@ -266,7 +299,8 @@ fun MainStructureCheckBoxLockedNotes(
                                 listOfCheckedBoxes = mutableListOfCheckBoxes,
                                 timeStamp = System.currentTimeMillis(),
                                 locked = true,
-                                timeModified = System.currentTimeMillis()
+                                timeModified = System.currentTimeMillis(),
+                                color = backgroundColor.value.toArgb()
                             )
                             viewModel.updateNote(note)
                             Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)
@@ -302,7 +336,11 @@ fun MainStructureCheckBoxLockedNotes(
                 }
             }*/
     ) {
-        Column(modifier = Modifier.padding(it)) {
+        Column(
+            modifier = Modifier
+                .padding(it).fillMaxSize()
+                .background(backgroundColor.value)
+        ) {
             if (showDiscardNoteAlertBox.value) {
                 DiscardNoteAlertBox(
                     viewModel = viewModel,
@@ -313,6 +351,9 @@ fun MainStructureCheckBoxLockedNotes(
                     showDiscardNoteAlertBox.value = false
                 }
             }
+            if (showBottomSheet.value) {
+                AddNoteBottomSheet(showBottomSheet, backgroundColor)
+            }
             CheckboxLockedNotes(
                 viewModel,
                 navController,
@@ -320,7 +361,8 @@ fun MainStructureCheckBoxLockedNotes(
                 title,
                 mutableListOfCheckboxTexts,
                 mutableListOfCheckBoxes,
-                count
+                count,
+                backgroundColor
             )
         }
     }

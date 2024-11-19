@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -25,7 +26,8 @@ fun CheckboxLockedNotes(
     title: MutableState<String>,
     mutableListOfCheckBoxTexts: SnapshotStateList<MutableState<String>>,
     mutableListOfCheckBoxes: ArrayList<Boolean>,
-    count: MutableState<Int>
+    count: MutableState<Int>,
+    backgroundColor: MutableState<Color>
 ) {
 
     var dialogOpen = remember {
@@ -50,7 +52,7 @@ fun CheckboxLockedNotes(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(androidx.compose.material.MaterialTheme.colors.primary)
+            .background(backgroundColor.value)
     ) {
 
         androidx.compose.material.TextField(
@@ -66,9 +68,9 @@ fun CheckboxLockedNotes(
                 )
             },
             colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = MaterialTheme.colors.primary,
-                focusedIndicatorColor = MaterialTheme.colors.primary,
-                unfocusedIndicatorColor = MaterialTheme.colors.primary,
+                backgroundColor = backgroundColor.value,
+                focusedIndicatorColor = backgroundColor.value,
+                unfocusedIndicatorColor = backgroundColor.value,
                 cursorColor = MaterialTheme.colors.onPrimary,
                 textColor = androidx.compose.material.MaterialTheme.colors.onPrimary
             ),
@@ -89,8 +91,9 @@ fun CheckboxLockedNotes(
                     mutableListOfCheckBoxes,
                     indexed,
                     count,
+                    backgroundColor
 
-                )
+                    )
             }
         }
     }
