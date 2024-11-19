@@ -40,6 +40,7 @@ fun SingleRowBulletPointLockedNotes(
     index: Int,
     count: MutableState<Int>,
     focusRequester: FocusRequester,
+    backgroundColor: MutableState<androidx.compose.ui.graphics.Color>,
     onDelete: () -> Unit
 ) {
 
@@ -67,12 +68,12 @@ fun SingleRowBulletPointLockedNotes(
                 }
             ),
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colors.primary,
-                unfocusedContainerColor = MaterialTheme.colors.primary,
+                focusedContainerColor = backgroundColor.value,
+                unfocusedContainerColor = backgroundColor.value,
                 focusedTextColor = MaterialTheme.colors.onPrimary,
                 unfocusedTextColor = MaterialTheme.colors.onPrimary,
-                unfocusedIndicatorColor = MaterialTheme.colors.primary,
-                focusedIndicatorColor = MaterialTheme.colors.primary,
+                unfocusedIndicatorColor = backgroundColor.value,
+                focusedIndicatorColor = backgroundColor.value,
                 cursorColor = MaterialTheme.colors.onPrimary,
                 selectionColors = TextSelectionColors(
                     handleColor = MaterialTheme.colors.onPrimary,

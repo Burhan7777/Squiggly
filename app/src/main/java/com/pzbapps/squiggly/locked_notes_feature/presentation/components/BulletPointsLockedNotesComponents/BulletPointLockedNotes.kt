@@ -31,7 +31,8 @@ fun BulletPointLockedNotes(
     title: MutableState<String>,
     mutableListOfBulletPointsNotes: SnapshotStateList<MutableState<String>>,
     count: MutableState<Int>,
-    mutableListConverted: ArrayList<String>
+    mutableListConverted: ArrayList<String>,
+    backgroundColor: MutableState<androidx.compose.ui.graphics.Color>
 ) {
 
     val context = LocalContext.current
@@ -63,7 +64,7 @@ fun BulletPointLockedNotes(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(androidx.compose.material.MaterialTheme.colors.primary)
+            .background(backgroundColor.value)
     ) {
 
         androidx.compose.material.TextField(
@@ -79,9 +80,9 @@ fun BulletPointLockedNotes(
                 )
             },
             colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = MaterialTheme.colors.primary,
-                focusedIndicatorColor = MaterialTheme.colors.primary,
-                unfocusedIndicatorColor = MaterialTheme.colors.primary,
+                backgroundColor = backgroundColor.value,
+                focusedIndicatorColor = backgroundColor.value,
+                unfocusedIndicatorColor = backgroundColor.value,
                 cursorColor = MaterialTheme.colors.onPrimary,
                 textColor = androidx.compose.material.MaterialTheme.colors.onPrimary
             ),
@@ -110,6 +111,7 @@ fun BulletPointLockedNotes(
                         indexed,
                         count,
                         focusRequester,
+                        backgroundColor,
                         onDelete = {
                             try {
                                 focusRequesters.removeAt(indexed)
