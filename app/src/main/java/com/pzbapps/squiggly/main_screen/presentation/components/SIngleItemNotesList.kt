@@ -95,7 +95,7 @@ fun SingleItemNoteList(note: Note, navHostController: NavHostController, scope: 
                 bottomStart = CornerSize(10.dp),
                 bottomEnd = CornerSize(10.dp),
             ),
-            elevation = CardDefaults.cardElevation(15.dp),
+           // elevation = CardDefaults.cardElevation(15.dp),
             colors = CardDefaults.cardColors(
                 containerColor = Color(note.color),
                 contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
@@ -103,22 +103,27 @@ fun SingleItemNoteList(note: Note, navHostController: NavHostController, scope: 
                 disabledContentColor = androidx.compose.material.MaterialTheme.colors.onPrimary
             )
         ) {
-            Text(
-                text = note.title,
-                modifier = Modifier.padding(10.dp),
-                fontSize = 25.sp,
-                fontFamily = FontFamily.fontFamilyBold,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-            Text(
-                text = contentText.value,
-                modifier = Modifier.padding(10.dp),
-                fontSize = 15.sp,
-                overflow = TextOverflow.Ellipsis,
-                fontFamily = FontFamily.fontFamilyLight,
-                maxLines = 4
-            )
+            Column(modifier = Modifier
+                .fillMaxSize()
+                .background(Color(note.color))) {
+                Text(
+                    text = note.title,
+                    modifier = Modifier
+                        .padding(10.dp),
+                    fontSize = 25.sp,
+                    fontFamily = FontFamily.fontFamilyBold,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Text(
+                    text = contentText.value,
+                    modifier = Modifier.padding(10.dp),
+                    fontSize = 15.sp,
+                    overflow = TextOverflow.Ellipsis,
+                    fontFamily = FontFamily.fontFamilyLight,
+                    maxLines = 4
+                )
+            }
         }
     } else if (note.listOfCheckedNotes.size > 0 && !note.deletedNote && !note.archive && !note.locked && note.listOfBulletPointNotes.size == 0) {
         Card(
@@ -150,7 +155,7 @@ fun SingleItemNoteList(note: Note, navHostController: NavHostController, scope: 
                 bottomStart = CornerSize(10.dp),
                 bottomEnd = CornerSize(10.dp),
             ),
-            elevation = CardDefaults.cardElevation(15.dp),
+          //  elevation = CardDefaults.cardElevation(15.dp),
             colors = CardDefaults.cardColors(
                 containerColor = Color(note.color),
                 contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
@@ -269,7 +274,7 @@ fun SingleItemNoteList(note: Note, navHostController: NavHostController, scope: 
                 bottomStart = CornerSize(10.dp),
                 bottomEnd = CornerSize(10.dp),
             ),
-            elevation = CardDefaults.cardElevation(15.dp),
+           // elevation = CardDefaults.cardElevation(15.dp),
             colors = CardDefaults.cardColors(
                 containerColor = Color(note.color),
                 contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,

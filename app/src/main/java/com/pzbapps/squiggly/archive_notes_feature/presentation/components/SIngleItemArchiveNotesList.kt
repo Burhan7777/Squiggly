@@ -88,7 +88,7 @@ fun SingleItemArchiveNoteList(
                 bottomStart = CornerSize(10.dp),
                 bottomEnd = CornerSize(10.dp),
             ),
-            elevation = CardDefaults.cardElevation(15.dp),
+        //    elevation = CardDefaults.cardElevation(15.dp),
             colors = CardDefaults.cardColors(
                 containerColor = Color(note.color),
                 contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
@@ -143,7 +143,7 @@ fun SingleItemArchiveNoteList(
                 bottomStart = CornerSize(10.dp),
                 bottomEnd = CornerSize(10.dp),
             ),
-            elevation = CardDefaults.cardElevation(15.dp),
+         //   elevation = CardDefaults.cardElevation(15.dp),
             colors = CardDefaults.cardColors(
                 containerColor = Color(note.color),
                 contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
@@ -261,7 +261,7 @@ fun SingleItemArchiveNoteList(
                 bottomStart = CornerSize(10.dp),
                 bottomEnd = CornerSize(10.dp),
             ),
-            elevation = CardDefaults.cardElevation(15.dp),
+     //       elevation = CardDefaults.cardElevation(15.dp),
             colors = CardDefaults.cardColors(
                 containerColor = Color(note.color),
                 contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
