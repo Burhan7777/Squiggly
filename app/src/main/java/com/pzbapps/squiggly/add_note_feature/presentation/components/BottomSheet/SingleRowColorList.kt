@@ -57,6 +57,7 @@ fun SingleRowColorList(
         }
         Spacer(modifier = Modifier.height(5.dp))
         Text(colorList.name, color = androidx.compose.material.MaterialTheme.colors.onPrimary)
+        Spacer(modifier = Modifier.height(5.dp))
     }
 
 }
