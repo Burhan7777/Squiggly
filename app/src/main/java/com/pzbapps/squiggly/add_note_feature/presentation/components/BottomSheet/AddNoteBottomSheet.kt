@@ -9,6 +9,8 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.TabRowDefaults
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -33,10 +35,12 @@ fun AddNoteBottomSheet(
         val scope = rememberCoroutineScope()
 
         var selectedTabIndex by remember { mutableStateOf(0) }
-        val tabTitles = listOf("Colors", "Gradients")
+        val tabTitles = listOf("Colors")
 
         ModalBottomSheet(
-            modifier = Modifier.height(500.dp),
+            modifier = Modifier
+                .height(500.dp),
+            containerColor = MaterialTheme.colors.primaryVariant,
             onDismissRequest = { scope.launch { showBottomSheet.value = false } },
             // sheetState = sheetState,
         ) {
@@ -44,21 +48,18 @@ fun AddNoteBottomSheet(
                 ScrollableTabRow(selectedTabIndex = selectedTabIndex) {
                     tabTitles.forEachIndexed { index, title ->
                         Tab(selected = selectedTabIndex == index,
+                            selectedContentColor = MaterialTheme.colors.primary,
                             onClick = { selectedTabIndex = index },
-                            text = { Text(title) })
+                            text = { Text(title, color = Color.Black) })
                     }
                 }
             }
 
             when (selectedTabIndex) {
                 0 -> {
-                    ColorSelection(backgroundColor,backgroundColorInInt)
+                    ColorSelection(backgroundColor, backgroundColorInInt)
                 }
 
-                1 -> {
-                    BasicText(text = "Tab 2 Content")
-
-                }
             }
             // Button to show the bottom shee
         }
