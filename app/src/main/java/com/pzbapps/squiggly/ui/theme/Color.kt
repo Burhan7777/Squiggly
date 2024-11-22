@@ -25,3 +25,17 @@ val red4 = Color(0xFFF95454)
 val black1 = Color(0xFF1A1A1D)
 val black2 = Color(0xFF343131)
 val black3 = Color(0xFF3C3D37)
+
+val white2 = Color(0xFFFEF9F2)
+val white3 = Color(0xFFF4F6FF)
+val white4 = Color(0xFFFEFAE0)
+
+val pink1 = Color(0xFF6A1E55)
+val pink2 = Color(0xFFA64D79)
+val pink3 = Color(0xFFFF77B7)
+val pink4 = Color(0xFFFFCCEA)
+
+val blue1 = Color(0xFF3D3BF3)
+val blue2 = Color(0xFF4335A7)
+val blue3 = Color(0xFF80C4E9)
+val blue4 = Color(0xFFC9E6F0)
