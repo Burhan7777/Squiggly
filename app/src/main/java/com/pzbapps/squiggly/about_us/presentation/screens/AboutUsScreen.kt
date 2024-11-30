@@ -28,7 +28,7 @@ fun AboutUsScreen(
         Image(painter = painterResource(id = com.pzbapps.squiggly.R.drawable.ic_launcher), contentDescription = "logo")
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "v-3.1.0 - BETA",
+            text = "v-3.2.0 - BETA",
             fontSize = 20.sp,
             fontFamily = FontFamily.fontFamilyBold,
             color = MaterialTheme.colors.onPrimary

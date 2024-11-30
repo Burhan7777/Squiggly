@@ -1,6 +1,12 @@
 -------------------------- CHANGE LOG------------------------
 
+v-3.2.0-beta
+----------------------------
+1) Text colors added.
 
+v-3.1.0-beta
+-----------------------------
+1) Background colors added
 v-3.0.3-beta
 -----------------------------
 1) key bug in main screen solved
