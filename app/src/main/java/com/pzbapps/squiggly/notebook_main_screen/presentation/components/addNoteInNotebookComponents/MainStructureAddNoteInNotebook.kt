@@ -39,6 +39,7 @@ import com.pzbapps.squiggly.add_note_feature.presentation.components.DiscardNote
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.common.presentation.components.AlertDialogBoxTrialEnded
+import com.pzbapps.squiggly.common.presentation.textcolorsbottomsheet.TextColorBottomSheet
 import com.pzbapps.squiggly.main_screen.domain.model.Note
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.debounce
@@ -98,6 +99,7 @@ fun MainStructureAddNoteInNotebook(
     var fontSize = remember { mutableStateOf("20") }
 
     val showBottomSheet = remember { mutableStateOf(false) }
+    val showTextColorBottomSheet = remember { mutableStateOf(false) }
     val backgroundColor1 = MaterialTheme.colors.primary
     val backgroundColor = remember { mutableStateOf(backgroundColor1) }
 
@@ -375,6 +377,9 @@ fun MainStructureAddNoteInNotebook(
                 if (showBottomSheet.value) {
                     AddNoteBottomSheet(showBottomSheet, backgroundColor)
                 }
+                if(showTextColorBottomSheet.value){
+                    TextColorBottomSheet(showTextColorBottomSheet,richTextState)
+                }
                 NoteContentNoteInNotebook(
                     title,
                     content,
@@ -415,7 +420,8 @@ fun MainStructureAddNoteInNotebook(
                         undoStack = undoStack,
                         redoStack = redoStack,
                         currentContent = currentContent,
-                        showBottomSheet = showBottomSheet
+                        showBottomSheet = showBottomSheet,
+                        showTextColorBottomSheet = showTextColorBottomSheet
                     )
                 }
             }
