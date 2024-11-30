@@ -39,6 +39,7 @@ import com.pzbapps.squiggly.add_note_feature.presentation.components.DiscardNote
 import com.pzbapps.squiggly.common.domain.utils.Constant
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
+import com.pzbapps.squiggly.common.presentation.textcolorsbottomsheet.TextColorBottomSheet
 import com.pzbapps.squiggly.main_screen.domain.model.Note
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.debounce
@@ -99,6 +100,7 @@ fun MainStructureAddNoteLockedScreen(
     var hideFormattingTextBarWhileTitleIsInFocus = remember { mutableStateOf(true) }
 
     val showBottomSheet = remember { mutableStateOf(false) }
+    val showTextColorBottomSheet = remember { mutableStateOf(false) }
 
     val backgroundColor1 = MaterialTheme.colors.primary
     val backgroundColor = remember { mutableStateOf(backgroundColor1) }
@@ -348,7 +350,9 @@ fun MainStructureAddNoteLockedScreen(
         }
 
     ) {
-        Box(modifier = Modifier.fillMaxSize().background(backgroundColor.value)) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .background(backgroundColor.value)) {
             Column(modifier = Modifier.padding(it)) {
                 if (showDiscardNoteAlertBox.value) {
                     DiscardNoteAlertBox(
@@ -361,7 +365,10 @@ fun MainStructureAddNoteLockedScreen(
                     }
                 }
                 if (showBottomSheet.value) {
-                    AddNoteBottomSheet(showBottomSheet, backgroundColor =backgroundColor)
+                    AddNoteBottomSheet(showBottomSheet, backgroundColor = backgroundColor)
+                }
+                if (showTextColorBottomSheet.value) {
+                    TextColorBottomSheet(showTextColorBottomSheet, richTextState)
                 }
                 NoteContentNoteInLockedScreen(
                     title,
@@ -403,7 +410,8 @@ fun MainStructureAddNoteLockedScreen(
                         undoStack = undoStack,
                         redoStack = redoStack,
                         currentContent = currentContent,
-                        showBottomSheet = showBottomSheet
+                        showBottomSheet = showBottomSheet,
+                        showTextColorBottomSheet = showTextColorBottomSheet
                     )
                 }
             }

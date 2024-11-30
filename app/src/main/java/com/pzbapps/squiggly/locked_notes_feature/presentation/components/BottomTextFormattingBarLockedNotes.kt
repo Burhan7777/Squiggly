@@ -3,12 +3,16 @@ package com.pzbapps.squiggly.locked_notes_feature.presentation.components
 import android.os.Bundle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -67,7 +71,8 @@ fun BottomTextFormattingBarLockedNote(
     undoStack: Stack<String>,
     redoStack: Stack<String>,
     currentContent: MutableState<String>,
-    showBottomSheet: MutableState<Boolean>
+    showBottomSheet: MutableState<Boolean>,
+    showTextColorBottomSheet: MutableState<Boolean>
 ) {
     Column(modifier = Modifier.imePadding()) {
         if (showFontSize.value) {
@@ -164,6 +169,27 @@ fun BottomTextFormattingBarLockedNote(
                     tint = MaterialTheme.colors.onPrimary
                 )
             }
+            Spacer(modifier = Modifier.width(5.dp))
+            Box(
+                modifier = Modifier
+                    .size(20.dp)
+                    .clip(
+                        CircleShape
+                    )
+                    .background(MaterialTheme.colors.onSecondary)
+                    .border(
+                        width = 10.dp, // Border width
+                        color = MaterialTheme.colors.secondary, // Border color
+                        shape = CircleShape // Ensure the border follows a circular shape
+                    )
+                    .clickable {
+                        showTextColorBottomSheet.value = true
+                    }
+
+            )
+
+            Spacer(modifier = Modifier.width(5.dp))
+
             IconButton(
                 onClick = {
                     richTextState.value.toggleSpanStyle(SpanStyle(fontWeight = FontWeight.Bold))
