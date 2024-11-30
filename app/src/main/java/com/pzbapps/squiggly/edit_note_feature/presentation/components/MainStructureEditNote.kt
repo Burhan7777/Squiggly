@@ -47,6 +47,7 @@ import com.pzbapps.squiggly.add_note_feature.presentation.components.BottomTextF
 import com.pzbapps.squiggly.common.domain.utils.Constant
 import com.pzbapps.squiggly.common.presentation.*
 import com.pzbapps.squiggly.common.presentation.components.AlertDialogBoxTrialEnded
+import com.pzbapps.squiggly.common.presentation.textcolorsbottomsheet.TextColorBottomSheet
 import com.pzbapps.squiggly.edit_note_feature.domain.usecase.checkIfUserHasCreatedPassword
 import com.pzbapps.squiggly.edit_note_feature.domain.utils.permissionHandlerNotification
 import com.pzbapps.squiggly.edit_note_feature.presentation.components.alertBoxes.AlertBoxShareNote
@@ -104,6 +105,7 @@ fun MainStructureEditNote(
     var iconPosition = remember { mutableStateOf(Offset.Zero) }
 
     val showBottomSheet = remember { mutableStateOf(false) }
+    val showTextColorBottomSheet = remember { mutableStateOf(false) }
 
     if (richStateText.value.annotatedString.text == "") fontSize.value = "20"
 
@@ -1065,7 +1067,8 @@ fun MainStructureEditNote(
                         undoStack = undoStack,
                         redoStack = redoStack,
                         currentContent = currentContent,
-                        showBottomSheet = showBottomSheet
+                        showBottomSheet = showBottomSheet,
+                        showTextColorBottomSheet = showTextColorBottomSheet
                     )
                 }
             }
@@ -1157,6 +1160,9 @@ fun MainStructureEditNote(
     }
     if (showBottomSheet.value) {
         AddNoteBottomSheet(showBottomSheet, backgroundColorInInt = backgroundColor)
+    }
+    if (showTextColorBottomSheet.value) {
+        TextColorBottomSheet(showTextColorBottomSheet, richStateText)
     }
 }
 

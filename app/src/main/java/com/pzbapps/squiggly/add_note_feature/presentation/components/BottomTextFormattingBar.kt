@@ -3,12 +3,17 @@ package com.pzbapps.squiggly.add_note_feature.presentation.components
 import android.os.Bundle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -40,6 +45,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -68,7 +74,8 @@ fun BottomTextFormattingBar(
     undoStack: Stack<String>,
     redoStack: Stack<String>,
     currentContent: MutableState<String>,
-    showBottomSheet: MutableState<Boolean>
+    showBottomSheet: MutableState<Boolean>,
+    showTextColorBottomSheet: MutableState<Boolean>,
 ) {
     Column(modifier = Modifier.imePadding()) {
 
@@ -166,6 +173,26 @@ fun BottomTextFormattingBar(
                     tint = MaterialTheme.colors.onPrimary
                 )
             }
+            Spacer(modifier = Modifier.width(5.dp))
+            Box(
+                modifier = Modifier
+                    .size(20.dp)
+                    .clip(
+                        CircleShape
+                    )
+                    .background(MaterialTheme.colors.onSecondary)
+                    .border(
+                        width = 10.dp, // Border width
+                        color = MaterialTheme.colors.secondary, // Border color
+                        shape = CircleShape // Ensure the border follows a circular shape
+                    )
+                    .clickable {
+                    showTextColorBottomSheet.value = true
+                    }
+
+            )
+
+            Spacer(modifier = Modifier.width(5.dp))
 
             IconButton(
                 onClick = {
