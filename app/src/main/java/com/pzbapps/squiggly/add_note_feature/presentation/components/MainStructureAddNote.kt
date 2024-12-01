@@ -177,15 +177,28 @@ fun MainStructureAddNote(
 
     DisposableEffect(Unit) {
         if (generatedNoteId.value.toInt() == 0) {
-            val note = Note(
-                title = title.value,
-                content = richTextState.value.toHtml(),
-                timeModified = System.currentTimeMillis(),
-                notebook = notebookState.value,
-                color = backgroundColor.value.toArgb(),
-                timeStamp = System.currentTimeMillis()
-            )
-            viewModel.insertNote(note)
+            if (backgroundColor.value != backgroundColor1) {
+                val note = Note(
+                    title = title.value,
+                    content = richTextState.value.toHtml(),
+                    timeModified = System.currentTimeMillis(),
+                    notebook = notebookState.value,
+                    color = backgroundColor.value.toArgb(),
+                    timeStamp = System.currentTimeMillis()
+                )
+                viewModel.insertNote(note)
+            } else {
+                val note = Note(
+                    title = title.value,
+                    content = richTextState.value.toHtml(),
+                    timeModified = System.currentTimeMillis(),
+                    notebook = notebookState.value,
+                    color = 0,
+                    timeStamp = System.currentTimeMillis()
+                )
+                viewModel.insertNote(note)
+            }
+
         }
         viewModel.generatedNoteId.observe(activity) {
             generatedNoteId.value = it
@@ -198,16 +211,30 @@ fun MainStructureAddNote(
                 // Get the note by ID and update it
                 // viewModel.getNoteById(generatedNoteId.value.toInt())
                 // val noteFromDb = viewModel.getNoteById.value
-                val updatedNote = Note(
-                    id = generatedNoteId.value.toInt(),
-                    title = title.value,
-                    content = richTextState.value.toHtml(),
-                    timeModified = System.currentTimeMillis(),
-                    notebook = notebookState.value,
-                    color = backgroundColor.value.toArgb(),
-                    timeStamp = System.currentTimeMillis()
-                )
-                viewModel.updateNote(updatedNote)
+                if (backgroundColor.value != backgroundColor1) {
+                    val updatedNote = Note(
+                        id = generatedNoteId.value.toInt(),
+                        title = title.value,
+                        content = richTextState.value.toHtml(),
+                        timeModified = System.currentTimeMillis(),
+                        notebook = notebookState.value,
+                        color = backgroundColor.value.toArgb(),
+                        timeStamp = System.currentTimeMillis()
+                    )
+                    viewModel.updateNote(updatedNote)
+                } else {
+                    val updatedNote = Note(
+                        id = generatedNoteId.value.toInt(),
+                        title = title.value,
+                        content = richTextState.value.toHtml(),
+                        timeModified = System.currentTimeMillis(),
+                        notebook = notebookState.value,
+                        color = 0,
+                        timeStamp = System.currentTimeMillis()
+                    )
+                    viewModel.updateNote(updatedNote)
+                }
+
                 //  showSavedText.value = true
                 delay(5000L)
                 // Save every 10 seconds
@@ -226,16 +253,29 @@ fun MainStructureAddNote(
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_STOP) {
                 // Trigger autosave when app goes to background (onStop)
-                val updatedNote = Note(
-                    id = generatedNoteId.value.toInt(),
-                    title = title.value,
-                    content = richTextState.value.toHtml(),
-                    timeModified = System.currentTimeMillis(),
-                    notebook = notebookState.value,
-                    color = backgroundColor.value.toArgb(),
-                    timeStamp = System.currentTimeMillis()
-                )
-                viewModel.updateNote(updatedNote)
+                if (backgroundColor.value != backgroundColor1) {
+                    val updatedNote = Note(
+                        id = generatedNoteId.value.toInt(),
+                        title = title.value,
+                        content = richTextState.value.toHtml(),
+                        timeModified = System.currentTimeMillis(),
+                        notebook = notebookState.value,
+                        color = backgroundColor.value.toArgb(),
+                        timeStamp = System.currentTimeMillis()
+                    )
+                    viewModel.updateNote(updatedNote)
+                } else {
+                    val updatedNote = Note(
+                        id = generatedNoteId.value.toInt(),
+                        title = title.value,
+                        content = richTextState.value.toHtml(),
+                        timeModified = System.currentTimeMillis(),
+                        notebook = notebookState.value,
+                        color = 0,
+                        timeStamp = System.currentTimeMillis()
+                    )
+                    viewModel.updateNote(updatedNote)
+                }
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -252,16 +292,32 @@ fun MainStructureAddNote(
         bundle.putString("back_handler_triggered_add_notes", "back_handler_triggered_add_notes")
         analytics.logEvent("back_handler_triggered_add_notes", bundle)
         if (title.value.isNotEmpty() || richTextState.value.annotatedString.text.isNotEmpty()) {
-            val updatedNote = Note(
-                id = generatedNoteId.value.toInt(),
-                title = title.value,
-                content = richTextState.value.toHtml(),
-                timeModified = System.currentTimeMillis(),
-                notebook = notebookState.value,
-                color = backgroundColor.value.toArgb(),
-                timeStamp = System.currentTimeMillis()
-            )
-            viewModel.updateNote(updatedNote)
+            if (backgroundColor.value != backgroundColor1) {
+                val updatedNote = Note(
+                    id = generatedNoteId.value.toInt(),
+                    title = title.value,
+                    content = richTextState.value.toHtml(),
+                    timeModified = System.currentTimeMillis(),
+                    notebook = notebookState.value,
+                    color = backgroundColor.value.toArgb(),
+                    timeStamp = System.currentTimeMillis()
+                )
+                print("not equal")
+                viewModel.updateNote(updatedNote)
+            } else {
+                val updatedNote = Note(
+                    id = generatedNoteId.value.toInt(),
+                    title = title.value,
+                    content = richTextState.value.toHtml(),
+                    timeModified = System.currentTimeMillis(),
+                    notebook = notebookState.value,
+                    color = 0,
+                    timeStamp = System.currentTimeMillis()
+                )
+                print("equal")
+                viewModel.updateNote(updatedNote)
+            }
+
             navController.navigateUp()
         } else {
             Toast.makeText(context, "Empty note discarded", Toast.LENGTH_SHORT).show()
@@ -288,20 +344,37 @@ fun MainStructureAddNote(
                         )
                         analytics.logEvent("back_pressed_in_add_note_screen", bundle)
                         if (title.value.isNotEmpty() || richTextState.value.annotatedString.text.isNotEmpty()) {
-                            var note2 = Note(
-                                id = generatedNoteId.value.toInt(),
-                                title = title.value,
-                                content = richTextState.value.toHtml(),
-                                archive = false,
-                                notebook = notebookState.value,
-                                timeStamp = System.currentTimeMillis(),
-                                deletedNote = false,
-                                locked = false,
-                                timeModified = System.currentTimeMillis(),
-                                color = backgroundColor.value.toArgb()
+                            if (backgroundColor.value != backgroundColor1) {
+                                var note2 = Note(
+                                    id = generatedNoteId.value.toInt(),
+                                    title = title.value,
+                                    content = richTextState.value.toHtml(),
+                                    archive = false,
+                                    notebook = notebookState.value,
+                                    timeStamp = System.currentTimeMillis(),
+                                    deletedNote = false,
+                                    locked = false,
+                                    timeModified = System.currentTimeMillis(),
+                                    color = backgroundColor.value.toArgb()
 
-                            )
-                            viewModel.updateNote(note2)
+                                )
+                                viewModel.updateNote(note2)
+                            } else {
+                                var note2 = Note(
+                                    id = generatedNoteId.value.toInt(),
+                                    title = title.value,
+                                    content = richTextState.value.toHtml(),
+                                    archive = false,
+                                    notebook = notebookState.value,
+                                    timeStamp = System.currentTimeMillis(),
+                                    deletedNote = false,
+                                    locked = false,
+                                    timeModified = System.currentTimeMillis(),
+                                    color = 0
+
+                                )
+                                viewModel.updateNote(note2)
+                            }
                             Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT)
                                 .show()
                             navController.navigateUp()
@@ -345,20 +418,37 @@ fun MainStructureAddNote(
                     IconButton(onClick = {
 
                         if (title.value.isNotEmpty() || richTextState.value.annotatedString.text.isNotEmpty()) {
-                            var note2 = Note(
-                                id = generatedNoteId.value.toInt(),
-                                title = title.value,
-                                content = richTextState.value.toHtml(),
-                                archive = false,
-                                notebook = notebookState.value,
-                                timeStamp = System.currentTimeMillis(),
-                                color = backgroundColor.value.toArgb(),
-                                deletedNote = false,
-                                locked = false,
-                                timeModified = System.currentTimeMillis()
+                            if (backgroundColor.value != backgroundColor1) {
+                                var note2 = Note(
+                                    id = generatedNoteId.value.toInt(),
+                                    title = title.value,
+                                    content = richTextState.value.toHtml(),
+                                    archive = false,
+                                    notebook = notebookState.value,
+                                    timeStamp = System.currentTimeMillis(),
+                                    color = backgroundColor.value.toArgb(),
+                                    deletedNote = false,
+                                    locked = false,
+                                    timeModified = System.currentTimeMillis()
 
-                            )
-                            viewModel.updateNote(note2)
+                                )
+                                viewModel.updateNote(note2)
+                            } else {
+                                var note2 = Note(
+                                    id = generatedNoteId.value.toInt(),
+                                    title = title.value,
+                                    content = richTextState.value.toHtml(),
+                                    archive = false,
+                                    notebook = notebookState.value,
+                                    timeStamp = System.currentTimeMillis(),
+                                    color = 0,
+                                    deletedNote = false,
+                                    locked = false,
+                                    timeModified = System.currentTimeMillis()
+
+                                )
+                                viewModel.updateNote(note2)
+                            }
                             Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT)
                                 .show()
                             navController.navigateUp()
