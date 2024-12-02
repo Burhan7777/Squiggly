@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -49,7 +50,7 @@ fun SingleItemNotebookList(
 
     var richTextState = rememberRichTextState()
     var contentText = remember { mutableStateOf("") }
-
+    val color = if (note.color == 0) MaterialTheme.colors.primary.toArgb() else note.color
     //  LaunchedEffect(note.content) {
     //    scope.launch(Dispatchers.Default) {
     // Truncate the HTML content to a reasonable preview length
@@ -96,11 +97,11 @@ fun SingleItemNotebookList(
                 bottomStart = CornerSize(10.dp),
                 bottomEnd = CornerSize(10.dp),
             ),
-         //   elevation = CardDefaults.cardElevation(15.dp),
+            //   elevation = CardDefaults.cardElevation(15.dp),
             colors = CardDefaults.cardColors(
-                containerColor = Color(note.color),
+                containerColor = Color(color),
                 contentColor = MaterialTheme.colors.onPrimary,
-                disabledContainerColor = Color(note.color),
+                disabledContainerColor = Color(color),
                 disabledContentColor = MaterialTheme.colors.onPrimary
             )
         ) {
@@ -150,11 +151,11 @@ fun SingleItemNotebookList(
                 bottomStart = CornerSize(10.dp),
                 bottomEnd = CornerSize(10.dp),
             ),
-         //   elevation = CardDefaults.cardElevation(15.dp),
+            //   elevation = CardDefaults.cardElevation(15.dp),
             colors = CardDefaults.cardColors(
-                containerColor =Color(note.color),
+                containerColor = Color(color),
                 contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
-                disabledContainerColor = Color(note.color),
+                disabledContainerColor = Color(color),
                 disabledContentColor = androidx.compose.material.MaterialTheme.colors.onPrimary
             )
         ) {
@@ -268,11 +269,11 @@ fun SingleItemNotebookList(
                 bottomStart = CornerSize(10.dp),
                 bottomEnd = CornerSize(10.dp),
             ),
-        //    elevation = CardDefaults.cardElevation(15.dp),
+            //    elevation = CardDefaults.cardElevation(15.dp),
             colors = CardDefaults.cardColors(
-                containerColor = Color(note.color),
+                containerColor = Color(color),
                 contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
-                disabledContainerColor = Color(note.color),
+                disabledContainerColor = Color(color),
                 disabledContentColor = androidx.compose.material.MaterialTheme.colors.onPrimary
             )
         ) {
