@@ -173,17 +173,30 @@ fun MainStructureAddNoteLockedScreen(
     var coroutineScope = rememberCoroutineScope()
 
     DisposableEffect(Unit) {
-        if (generatedNoteId.value.toInt() == 0) {
-            val note = Note(
-                title = title.value,
-                content = richTextState.value.toHtml(),
-                timeModified = System.currentTimeMillis(),
-                notebook = Constant.NOT_CATEGORIZED,
-                timeStamp = System.currentTimeMillis(),
-                locked = true,
-                color = backgroundColor.value.toArgb()
-            )
-            viewModel.insertNote(note)
+            if (generatedNoteId.value.toInt() == 0) {
+                if (backgroundColor.value != backgroundColor1) {
+                val note = Note(
+                    title = title.value,
+                    content = richTextState.value.toHtml(),
+                    timeModified = System.currentTimeMillis(),
+                    notebook = Constant.NOT_CATEGORIZED,
+                    timeStamp = System.currentTimeMillis(),
+                    locked = true,
+                    color = backgroundColor.value.toArgb()
+                )
+                viewModel.insertNote(note)
+            } else {
+                val note = Note(
+                    title = title.value,
+                    content = richTextState.value.toHtml(),
+                    timeModified = System.currentTimeMillis(),
+                    notebook = Constant.NOT_CATEGORIZED,
+                    timeStamp = System.currentTimeMillis(),
+                    locked = true,
+                    color = 0
+                )
+                viewModel.insertNote(note)
+            }
         }
         viewModel.generatedNoteId.observe(activity) {
             generatedNoteId.value = it
@@ -196,17 +209,31 @@ fun MainStructureAddNoteLockedScreen(
                 // Get the note by ID and update it
                 // viewModel.getNoteById(generatedNoteId.value.toInt())
                 // val noteFromDb = viewModel.getNoteById.value
-                val updatedNote = Note(
-                    id = generatedNoteId.value.toInt(),
-                    title = title.value,
-                    content = richTextState.value.toHtml(),
-                    timeModified = System.currentTimeMillis(),
-                    notebook = Constant.NOT_CATEGORIZED,
-                    timeStamp = System.currentTimeMillis(),
-                    locked = true,
-                    color = backgroundColor.value.toArgb()
-                )
-                viewModel.updateNote(updatedNote)
+                if (backgroundColor.value != backgroundColor1) {
+                    val updatedNote = Note(
+                        id = generatedNoteId.value.toInt(),
+                        title = title.value,
+                        content = richTextState.value.toHtml(),
+                        timeModified = System.currentTimeMillis(),
+                        notebook = Constant.NOT_CATEGORIZED,
+                        timeStamp = System.currentTimeMillis(),
+                        locked = true,
+                        color = backgroundColor.value.toArgb()
+                    )
+                    viewModel.updateNote(updatedNote)
+                } else {
+                    val updatedNote = Note(
+                        id = generatedNoteId.value.toInt(),
+                        title = title.value,
+                        content = richTextState.value.toHtml(),
+                        timeModified = System.currentTimeMillis(),
+                        notebook = Constant.NOT_CATEGORIZED,
+                        timeStamp = System.currentTimeMillis(),
+                        locked = true,
+                        color = 0
+                    )
+                    viewModel.updateNote(updatedNote)
+                }
                 delay(5000L)
                 // Save every 10 seconds
             }
@@ -224,17 +251,31 @@ fun MainStructureAddNoteLockedScreen(
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_STOP) {
                 // Trigger autosave when app goes to background (onStop)
-                val updatedNote = Note(
-                    id = generatedNoteId.value.toInt(),
-                    title = title.value,
-                    content = richTextState.value.toHtml(),
-                    timeModified = System.currentTimeMillis(),
-                    notebook = Constant.NOT_CATEGORIZED,
-                    timeStamp = System.currentTimeMillis(),
-                    locked = true,
-                    color = backgroundColor.value.toArgb()
-                )
-                viewModel.updateNote(updatedNote)
+                if (backgroundColor.value != backgroundColor1) {
+                    val updatedNote = Note(
+                        id = generatedNoteId.value.toInt(),
+                        title = title.value,
+                        content = richTextState.value.toHtml(),
+                        timeModified = System.currentTimeMillis(),
+                        notebook = Constant.NOT_CATEGORIZED,
+                        timeStamp = System.currentTimeMillis(),
+                        locked = true,
+                        color = backgroundColor.value.toArgb()
+                    )
+                    viewModel.updateNote(updatedNote)
+                } else {
+                    val updatedNote = Note(
+                        id = generatedNoteId.value.toInt(),
+                        title = title.value,
+                        content = richTextState.value.toHtml(),
+                        timeModified = System.currentTimeMillis(),
+                        notebook = Constant.NOT_CATEGORIZED,
+                        timeStamp = System.currentTimeMillis(),
+                        locked = true,
+                        color = 0
+                    )
+                    viewModel.updateNote(updatedNote)
+                }
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -247,17 +288,31 @@ fun MainStructureAddNoteLockedScreen(
 
     BackHandler {
         if (title.value.isNotEmpty() || richTextState.value.annotatedString.text.isNotEmpty()) {
-            val updatedNote = Note(
-                id = generatedNoteId.value.toInt(),
-                title = title.value,
-                content = richTextState.value.toHtml(),
-                timeModified = System.currentTimeMillis(),
-                notebook = Constant.NOT_CATEGORIZED,
-                timeStamp = System.currentTimeMillis(),
-                locked = true,
-                color = backgroundColor.value.toArgb()
-            )
-            viewModel.updateNote(updatedNote)
+            if (backgroundColor.value != backgroundColor1) {
+                val updatedNote = Note(
+                    id = generatedNoteId.value.toInt(),
+                    title = title.value,
+                    content = richTextState.value.toHtml(),
+                    timeModified = System.currentTimeMillis(),
+                    notebook = Constant.NOT_CATEGORIZED,
+                    timeStamp = System.currentTimeMillis(),
+                    locked = true,
+                    color = backgroundColor.value.toArgb()
+                )
+                viewModel.updateNote(updatedNote)
+            } else {
+                val updatedNote = Note(
+                    id = generatedNoteId.value.toInt(),
+                    title = title.value,
+                    content = richTextState.value.toHtml(),
+                    timeModified = System.currentTimeMillis(),
+                    notebook = Constant.NOT_CATEGORIZED,
+                    timeStamp = System.currentTimeMillis(),
+                    locked = true,
+                    color = 0
+                )
+                viewModel.updateNote(updatedNote)
+            }
             navController.navigateUp()
         } else {
             viewModel.deleteNoteById(generatedNoteId.value.toInt())
@@ -280,20 +335,37 @@ fun MainStructureAddNoteLockedScreen(
                 navigationIcon = {
                     IconButton(onClick = {
                         if (title.value.isNotEmpty() || richTextState.value.annotatedString.text.isNotEmpty()) {
-                            var note1 = Note(
-                                id = generatedNoteId.value.toInt(),
-                                title = title.value,
-                                content = richTextState.value.toHtml(),
-                                timeModified = System.currentTimeMillis(),
-                                notebook = notebookState.value,
-                                locked = true,
-                                color = backgroundColor.value.toArgb()
+                            if (backgroundColor.value != backgroundColor1) {
+                                var note1 = Note(
+                                    id = generatedNoteId.value.toInt(),
+                                    title = title.value,
+                                    content = richTextState.value.toHtml(),
+                                    timeModified = System.currentTimeMillis(),
+                                    notebook = notebookState.value,
+                                    locked = true,
+                                    color = backgroundColor.value.toArgb()
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
 
-                            )
-                            viewModel.updateNote(note1)
+                                )
+                                viewModel.updateNote(note1)
+                            } else {
+                                var note1 = Note(
+                                    id = generatedNoteId.value.toInt(),
+                                    title = title.value,
+                                    content = richTextState.value.toHtml(),
+                                    timeModified = System.currentTimeMillis(),
+                                    notebook = notebookState.value,
+                                    locked = true,
+                                    color = 0
+//                listOfBulletPointNotes = convertedBulletPoints,
+//                listOfCheckedNotes = converted,
+//                listOfCheckedBoxes = mutableListOfCheckBoxes
+
+                                )
+                                viewModel.updateNote(note1)
+                            }
                             Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT)
                                 .show()
                             navController.popBackStack()
@@ -319,20 +391,37 @@ fun MainStructureAddNoteLockedScreen(
                     }
                     IconButton(onClick = {
                         if (title.value.isNotEmpty() || richTextState.value.annotatedString.text.isNotEmpty()) {
-                            var note1 = Note(
-                                id = generatedNoteId.value.toInt(),
-                                title = title.value,
-                                content = richTextState.value.toHtml(),
-                                timeModified = System.currentTimeMillis(),
-                                notebook = notebookState.value,
-                                locked = true,
-                                color = backgroundColor.value.toArgb()
+                            if (backgroundColor.value != backgroundColor1) {
+                                var note1 = Note(
+                                    id = generatedNoteId.value.toInt(),
+                                    title = title.value,
+                                    content = richTextState.value.toHtml(),
+                                    timeModified = System.currentTimeMillis(),
+                                    notebook = notebookState.value,
+                                    locked = true,
+                                    color = backgroundColor.value.toArgb()
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
 
-                            )
-                            viewModel.updateNote(note1)
+                                )
+                                viewModel.updateNote(note1)
+                            } else {
+                                var note1 = Note(
+                                    id = generatedNoteId.value.toInt(),
+                                    title = title.value,
+                                    content = richTextState.value.toHtml(),
+                                    timeModified = System.currentTimeMillis(),
+                                    notebook = notebookState.value,
+                                    locked = true,
+                                    color = 0
+//                listOfBulletPointNotes = convertedBulletPoints,
+//                listOfCheckedNotes = converted,
+//                listOfCheckedBoxes = mutableListOfCheckBoxes
+
+                                )
+                                viewModel.updateNote(note1)
+                            }
                             Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT)
                                 .show()
                             navController.popBackStack()
@@ -350,9 +439,11 @@ fun MainStructureAddNoteLockedScreen(
         }
 
     ) {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .background(backgroundColor.value)) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(backgroundColor.value)
+        ) {
             Column(modifier = Modifier.padding(it)) {
                 if (showDiscardNoteAlertBox.value) {
                     DiscardNoteAlertBox(

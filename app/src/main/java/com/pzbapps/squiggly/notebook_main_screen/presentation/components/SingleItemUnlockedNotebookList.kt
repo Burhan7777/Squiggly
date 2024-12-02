@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -49,6 +50,7 @@ fun SingleItemUnlockNotebookList(
 
     var richTextState = rememberRichTextState()
     var contentText = remember { mutableStateOf("") }
+    var color = if (note.color == 0) MaterialTheme.colors.primary.toArgb() else note.color
 
     //  LaunchedEffect(note.content) {
     //    scope.launch(Dispatchers.Default) {
@@ -98,9 +100,9 @@ fun SingleItemUnlockNotebookList(
             ),
             elevation = CardDefaults.cardElevation(15.dp),
             colors = CardDefaults.cardColors(
-                containerColor = Color(note.color),
+                containerColor = Color(color),
                 contentColor = MaterialTheme.colors.onPrimary,
-                disabledContainerColor = Color(note.color),
+                disabledContainerColor = Color(color),
                 disabledContentColor = MaterialTheme.colors.onPrimary
             )
         ) {
@@ -152,9 +154,9 @@ fun SingleItemUnlockNotebookList(
             ),
             elevation = CardDefaults.cardElevation(15.dp),
             colors = CardDefaults.cardColors(
-                containerColor = Color(note.color),
+                containerColor = Color(color),
                 contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
-                disabledContainerColor = Color(note.color),
+                disabledContainerColor = Color(color),
                 disabledContentColor = androidx.compose.material.MaterialTheme.colors.onPrimary
             )
         ) {
@@ -270,9 +272,9 @@ fun SingleItemUnlockNotebookList(
             ),
             elevation = CardDefaults.cardElevation(15.dp),
             colors = CardDefaults.cardColors(
-                containerColor = Color(note.color),
+                containerColor = Color(color),
                 contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
-                disabledContainerColor = Color(note.color),
+                disabledContainerColor = Color(color),
                 disabledContentColor = androidx.compose.material.MaterialTheme.colors.onPrimary
             )
         ) {

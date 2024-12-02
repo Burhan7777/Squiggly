@@ -107,6 +107,23 @@ fun MainStructureBulletPointsLockedNotes(
 
     if (generatedNoteId.value.toInt() == 0) {
         LaunchedEffect(key1 = true) {
+            if (backgroundColor.value != backgroundColor1) {
+                var note = Note(
+                    0,
+                    title = title.value,
+                    timeModified = System.currentTimeMillis(),
+                    notebook = notebookState.value,
+                    timeStamp = System.currentTimeMillis(),
+                    locked = true,
+                    color = backgroundColor.value.toArgb()
+//            listOfCheckedNotes = mutableListConverted,
+//            listOfCheckedBoxes = mutableListOfCheckBoxes,
+
+                )
+                viewModel.insertNote(note)
+            } else {
+
+            }
             var note = Note(
                 0,
                 title = title.value,
@@ -114,7 +131,7 @@ fun MainStructureBulletPointsLockedNotes(
                 notebook = notebookState.value,
                 timeStamp = System.currentTimeMillis(),
                 locked = true,
-                color = backgroundColor.value.toArgb()
+                color = 0
 //            listOfCheckedNotes = mutableListConverted,
 //            listOfCheckedBoxes = mutableListOfCheckBoxes,
 
@@ -146,17 +163,31 @@ fun MainStructureBulletPointsLockedNotes(
 
         mutableListConverted.removeAll { it == "" }
 
-        var note1 = Note(
-            id = generatedNoteId.value.toInt(),
-            title = title.value,
-            timeModified = System.currentTimeMillis(),
-            timeStamp = System.currentTimeMillis(),
-            notebook = notebookState.value,
-            listOfBulletPointNotes = mutableListConverted,
-            locked = true,
-            color = backgroundColor.value.toArgb()
-        )
-        viewModel.updateNote(note1)
+        if (backgroundColor.value != backgroundColor1) {
+            var note1 = Note(
+                id = generatedNoteId.value.toInt(),
+                title = title.value,
+                timeModified = System.currentTimeMillis(),
+                timeStamp = System.currentTimeMillis(),
+                notebook = notebookState.value,
+                listOfBulletPointNotes = mutableListConverted,
+                locked = true,
+                color = backgroundColor.value.toArgb()
+            )
+            viewModel.updateNote(note1)
+        } else {
+            var note1 = Note(
+                id = generatedNoteId.value.toInt(),
+                title = title.value,
+                timeModified = System.currentTimeMillis(),
+                timeStamp = System.currentTimeMillis(),
+                notebook = notebookState.value,
+                listOfBulletPointNotes = mutableListConverted,
+                locked = true,
+                color = 0
+            )
+            viewModel.updateNote(note1)
+        }
     }
 
     var remember = rememberCoroutineScope()
@@ -180,18 +211,31 @@ fun MainStructureBulletPointsLockedNotes(
                 // Trigger autosave when app goes to background (onStop)
                 activity.lifecycleScope.launch {
                     mutableListConverted.removeAll { it == "" }
-
-                    var note1 = Note(
-                        id = generatedNoteId.value.toInt(),
-                        title = title.value,
-                        timeModified = System.currentTimeMillis(),
-                        timeStamp = System.currentTimeMillis(),
-                        notebook = notebookState.value,
-                        listOfBulletPointNotes = mutableListConverted,
-                        locked = true,
-                        color = backgroundColor.value.toArgb()
-                    )
-                    viewModel.updateNote(note1)
+                    if (backgroundColor.value != backgroundColor1) {
+                        var note1 = Note(
+                            id = generatedNoteId.value.toInt(),
+                            title = title.value,
+                            timeModified = System.currentTimeMillis(),
+                            timeStamp = System.currentTimeMillis(),
+                            notebook = notebookState.value,
+                            listOfBulletPointNotes = mutableListConverted,
+                            locked = true,
+                            color = backgroundColor.value.toArgb()
+                        )
+                        viewModel.updateNote(note1)
+                    } else {
+                        var note1 = Note(
+                            id = generatedNoteId.value.toInt(),
+                            title = title.value,
+                            timeModified = System.currentTimeMillis(),
+                            timeStamp = System.currentTimeMillis(),
+                            notebook = notebookState.value,
+                            listOfBulletPointNotes = mutableListConverted,
+                            locked = true,
+                            color = 0
+                        )
+                        viewModel.updateNote(note1)
+                    }
                 }
             }
         }
@@ -223,16 +267,29 @@ fun MainStructureBulletPointsLockedNotes(
                             mutableListConverted
                         )
                         if (title.value.isNotEmpty() || (mutableListConverted.size != 1 || mutableListConverted[0].isNotEmpty())) {
-                            val note = Note(
-                                id = generatedNoteId.value.toInt(),
-                                title = title.value,
-                                listOfBulletPointNotes = mutableListConverted,
-                                timeStamp = System.currentTimeMillis(),
-                                locked = true,
-                                timeModified = System.currentTimeMillis(),
-                                color = backgroundColor.value.toArgb()
-                            )
-                            viewModel.updateNote(note)
+                            if (backgroundColor.value != backgroundColor1) {
+                                val note = Note(
+                                    id = generatedNoteId.value.toInt(),
+                                    title = title.value,
+                                    listOfBulletPointNotes = mutableListConverted,
+                                    timeStamp = System.currentTimeMillis(),
+                                    locked = true,
+                                    timeModified = System.currentTimeMillis(),
+                                    color = backgroundColor.value.toArgb()
+                                )
+                                viewModel.updateNote(note)
+                            } else {
+                                val note = Note(
+                                    id = generatedNoteId.value.toInt(),
+                                    title = title.value,
+                                    listOfBulletPointNotes = mutableListConverted,
+                                    timeStamp = System.currentTimeMillis(),
+                                    locked = true,
+                                    timeModified = System.currentTimeMillis(),
+                                    color = 0
+                                )
+                                viewModel.updateNote(note)
+                            }
                             Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)
                                 .show()
                             navController.navigateUp()
@@ -281,16 +338,29 @@ fun MainStructureBulletPointsLockedNotes(
                             mutableListOfBulletPointsNotes,
                             mutableListConverted
                         )
-                        val note = Note(
-                            id = generatedNoteId.value.toInt(),
-                            title = title.value,
-                            listOfBulletPointNotes = mutableListConverted,
-                            timeStamp = System.currentTimeMillis(),
-                            locked = true,
-                            timeModified = System.currentTimeMillis(),
-                            color = backgroundColor.value.toArgb()
-                        )
-                        viewModel.updateNote(note)
+                        if (backgroundColor.value != backgroundColor1) {
+                            val note = Note(
+                                id = generatedNoteId.value.toInt(),
+                                title = title.value,
+                                listOfBulletPointNotes = mutableListConverted,
+                                timeStamp = System.currentTimeMillis(),
+                                locked = true,
+                                timeModified = System.currentTimeMillis(),
+                                color = backgroundColor.value.toArgb()
+                            )
+                            viewModel.updateNote(note)
+                        } else {
+                            val note = Note(
+                                id = generatedNoteId.value.toInt(),
+                                title = title.value,
+                                listOfBulletPointNotes = mutableListConverted,
+                                timeStamp = System.currentTimeMillis(),
+                                locked = true,
+                                timeModified = System.currentTimeMillis(),
+                                color = 0
+                            )
+                            viewModel.updateNote(note)
+                        }
                         Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)
                             .show()
                         navController.popBackStack()
@@ -318,10 +388,12 @@ fun MainStructureBulletPointsLockedNotes(
                 }
             }*/
     ) {
-        Column(modifier = Modifier
-            .padding(it)
-            .fillMaxSize()
-            .background(backgroundColor.value)) {
+        Column(
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize()
+                .background(backgroundColor.value)
+        ) {
             if (showDiscardNoteAlertBox.value) {
                 DiscardNoteAlertBox(
                     viewModel = viewModel,

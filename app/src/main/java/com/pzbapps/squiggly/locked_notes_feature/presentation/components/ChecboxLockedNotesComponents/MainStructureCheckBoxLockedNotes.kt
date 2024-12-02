@@ -110,19 +110,35 @@ fun MainStructureCheckBoxLockedNotes(
 
     if (generatedNoteId.value.toInt() == 0) {
         LaunchedEffect(key1 = true) {
-            var note = Note(
-                0,
-                title = title.value,
-                timeModified = System.currentTimeMillis(),
-                notebook = notebookState.value,
-                timeStamp = System.currentTimeMillis(),
-                locked = true,
-                color = backgroundColor.value.toArgb()
+            if (backgroundColor.value != backgroundColor1) {
+                var note = Note(
+                    0,
+                    title = title.value,
+                    timeModified = System.currentTimeMillis(),
+                    notebook = notebookState.value,
+                    timeStamp = System.currentTimeMillis(),
+                    locked = true,
+                    color = backgroundColor.value.toArgb()
 //            listOfCheckedNotes = mutableListConverted,
 //            listOfCheckedBoxes = mutableListOfCheckBoxes,
 
-            )
-            viewModel.insertNote(note)
+                )
+                viewModel.insertNote(note)
+            } else {
+                var note = Note(
+                    0,
+                    title = title.value,
+                    timeModified = System.currentTimeMillis(),
+                    notebook = notebookState.value,
+                    timeStamp = System.currentTimeMillis(),
+                    locked = true,
+                    color = 0
+//            listOfCheckedNotes = mutableListConverted,
+//            listOfCheckedBoxes = mutableListOfCheckBoxes,
+
+                )
+                viewModel.insertNote(note)
+            }
 
         }
     }
@@ -149,18 +165,33 @@ fun MainStructureCheckBoxLockedNotes(
 
         mutableListConverted.removeAll { it == "" }
 
-        var note1 = Note(
-            id = generatedNoteId.value.toInt(),
-            title = title.value,
-            timeModified = System.currentTimeMillis(),
-            timeStamp = System.currentTimeMillis(),
-            notebook = notebookState.value,
-            listOfCheckedNotes = mutableListConverted,
-            listOfCheckedBoxes = mutableListOfCheckBoxes,
-            locked = true,
-            color = backgroundColor.value.toArgb()
-        )
-        viewModel.updateNote(note1)
+        if (backgroundColor.value != backgroundColor1) {
+            var note1 = Note(
+                id = generatedNoteId.value.toInt(),
+                title = title.value,
+                timeModified = System.currentTimeMillis(),
+                timeStamp = System.currentTimeMillis(),
+                notebook = notebookState.value,
+                listOfCheckedNotes = mutableListConverted,
+                listOfCheckedBoxes = mutableListOfCheckBoxes,
+                locked = true,
+                color = backgroundColor.value.toArgb()
+            )
+            viewModel.updateNote(note1)
+        } else {
+            var note1 = Note(
+                id = generatedNoteId.value.toInt(),
+                title = title.value,
+                timeModified = System.currentTimeMillis(),
+                timeStamp = System.currentTimeMillis(),
+                notebook = notebookState.value,
+                listOfCheckedNotes = mutableListConverted,
+                listOfCheckedBoxes = mutableListOfCheckBoxes,
+                locked = true,
+                color = 0
+            )
+            viewModel.updateNote(note1)
+        }
     }
 
 //    LaunchedEffect(key1 = mutableListOfCheckboxTexts.size > 0) {
@@ -188,19 +219,35 @@ fun MainStructureCheckBoxLockedNotes(
                 // Trigger autosave when app goes to background (onStop)
                 activity.lifecycleScope.launch {
                     mutableListConverted.removeAll { it == "" }
-                    var note1 = Note(
-                        id = generatedNoteId.value.toInt(),
-                        title = title.value,
-                        timeModified = System.currentTimeMillis(),
-                        timeStamp = System.currentTimeMillis(),
-                        notebook = notebookState.value,
-                        listOfCheckedNotes = mutableListConverted,
-                        listOfCheckedBoxes = mutableListOfCheckBoxes,
-                        locked = true,
-                        color = backgroundColor.value.toArgb()
-                    )
-                    viewModel.updateNote(note1)
+                    if (backgroundColor.value != backgroundColor1) {
+                        var note1 = Note(
+                            id = generatedNoteId.value.toInt(),
+                            title = title.value,
+                            timeModified = System.currentTimeMillis(),
+                            timeStamp = System.currentTimeMillis(),
+                            notebook = notebookState.value,
+                            listOfCheckedNotes = mutableListConverted,
+                            listOfCheckedBoxes = mutableListOfCheckBoxes,
+                            locked = true,
+                            color = backgroundColor.value.toArgb()
+                        )
+                        viewModel.updateNote(note1)
+                    } else {
+                        var note1 = Note(
+                            id = generatedNoteId.value.toInt(),
+                            title = title.value,
+                            timeModified = System.currentTimeMillis(),
+                            timeStamp = System.currentTimeMillis(),
+                            notebook = notebookState.value,
+                            listOfCheckedNotes = mutableListConverted,
+                            listOfCheckedBoxes = mutableListOfCheckBoxes,
+                            locked = true,
+                            color = 0
+                        )
+                        viewModel.updateNote(note1)
+                    }
                 }
+
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -232,17 +279,31 @@ fun MainStructureCheckBoxLockedNotes(
                             mutableListConverted
                         )
                         if (title.value.isNotEmpty() || (mutableListConverted.size != 1 || mutableListConverted[0].isNotEmpty())) {
-                            val note = Note(
-                                id = generatedNoteId.value.toInt(),
-                                title = title.value,
-                                listOfCheckedNotes = mutableListConverted,
-                                listOfCheckedBoxes = mutableListOfCheckBoxes,
-                                timeStamp = System.currentTimeMillis(),
-                                locked = true,
-                                timeModified = System.currentTimeMillis(),
-                                color = backgroundColor.value.toArgb()
-                            )
-                            viewModel.updateNote(note)
+                            if (backgroundColor.value != backgroundColor1) {
+                                val note = Note(
+                                    id = generatedNoteId.value.toInt(),
+                                    title = title.value,
+                                    listOfCheckedNotes = mutableListConverted,
+                                    listOfCheckedBoxes = mutableListOfCheckBoxes,
+                                    timeStamp = System.currentTimeMillis(),
+                                    locked = true,
+                                    timeModified = System.currentTimeMillis(),
+                                    color = backgroundColor.value.toArgb()
+                                )
+                                viewModel.updateNote(note)
+                            } else {
+                                val note = Note(
+                                    id = generatedNoteId.value.toInt(),
+                                    title = title.value,
+                                    listOfCheckedNotes = mutableListConverted,
+                                    listOfCheckedBoxes = mutableListOfCheckBoxes,
+                                    timeStamp = System.currentTimeMillis(),
+                                    locked = true,
+                                    timeModified = System.currentTimeMillis(),
+                                    color = 0
+                                )
+                                viewModel.updateNote(note)
+                            }
                             Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)
                                 .show()
                             navController.navigateUp()
@@ -292,17 +353,31 @@ fun MainStructureCheckBoxLockedNotes(
                             mutableListConverted
                         )
                         if (title.value.isNotEmpty() || (mutableListConverted.size != 1 || mutableListConverted[0].isNotEmpty())) {
-                            val note = Note(
-                                id = generatedNoteId.value.toInt(),
-                                title = title.value,
-                                listOfCheckedNotes = mutableListConverted,
-                                listOfCheckedBoxes = mutableListOfCheckBoxes,
-                                timeStamp = System.currentTimeMillis(),
-                                locked = true,
-                                timeModified = System.currentTimeMillis(),
-                                color = backgroundColor.value.toArgb()
-                            )
-                            viewModel.updateNote(note)
+                            if (backgroundColor.value != backgroundColor1) {
+                                val note = Note(
+                                    id = generatedNoteId.value.toInt(),
+                                    title = title.value,
+                                    listOfCheckedNotes = mutableListConverted,
+                                    listOfCheckedBoxes = mutableListOfCheckBoxes,
+                                    timeStamp = System.currentTimeMillis(),
+                                    locked = true,
+                                    timeModified = System.currentTimeMillis(),
+                                    color = backgroundColor.value.toArgb()
+                                )
+                                viewModel.updateNote(note)
+                            } else {
+                                val note = Note(
+                                    id = generatedNoteId.value.toInt(),
+                                    title = title.value,
+                                    listOfCheckedNotes = mutableListConverted,
+                                    listOfCheckedBoxes = mutableListOfCheckBoxes,
+                                    timeStamp = System.currentTimeMillis(),
+                                    locked = true,
+                                    timeModified = System.currentTimeMillis(),
+                                    color = 0
+                                )
+                                viewModel.updateNote(note)
+                            }
                             Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)
                                 .show()
                             navController.navigateUp()
@@ -338,7 +413,8 @@ fun MainStructureCheckBoxLockedNotes(
     ) {
         Column(
             modifier = Modifier
-                .padding(it).fillMaxSize()
+                .padding(it)
+                .fillMaxSize()
                 .background(backgroundColor.value)
         ) {
             if (showDiscardNoteAlertBox.value) {
