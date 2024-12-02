@@ -105,17 +105,31 @@ fun MainStructureBulletPointsNotes(
 
     if (generatedNoteId.value.toInt() == 0) {
         LaunchedEffect(key1 = true) {
-            var note = Note(
-                title = title.value,
-                timeModified = System.currentTimeMillis(),
-                notebook = notebookState.value,
-                timeStamp = System.currentTimeMillis(),
-                color = backgroundColor.value.toArgb()
+            if (backgroundColor.value != backgroundColor1) {
+                var note = Note(
+                    title = title.value,
+                    timeModified = System.currentTimeMillis(),
+                    notebook = notebookState.value,
+                    timeStamp = System.currentTimeMillis(),
+                    color = backgroundColor.value.toArgb()
 //            listOfCheckedNotes = mutableListConverted,
 //            listOfCheckedBoxes = mutableListOfCheckBoxes,
 
-            )
-            viewModel.insertNote(note)
+                )
+                viewModel.insertNote(note)
+            } else {
+                var note = Note(
+                    title = title.value,
+                    timeModified = System.currentTimeMillis(),
+                    notebook = notebookState.value,
+                    timeStamp = System.currentTimeMillis(),
+                    color = 0
+//            listOfCheckedNotes = mutableListConverted,
+//            listOfCheckedBoxes = mutableListOfCheckBoxes,
+
+                )
+                viewModel.insertNote(note)
+            }
 
         }
     }
@@ -142,16 +156,29 @@ fun MainStructureBulletPointsNotes(
 
         mutableListConverted.removeAll { it == "" }
 
-        var note1 = Note(
-            id = generatedNoteId.value.toInt(),
-            title = title.value,
-            timeModified = System.currentTimeMillis(),
-            timeStamp = System.currentTimeMillis(),
-            notebook = notebookState.value,
-            listOfBulletPointNotes = mutableListConverted,
-            color = backgroundColor.value.toArgb()
-        )
-        viewModel.updateNote(note1)
+        if (backgroundColor.value != backgroundColor1) {
+            var note1 = Note(
+                id = generatedNoteId.value.toInt(),
+                title = title.value,
+                timeModified = System.currentTimeMillis(),
+                timeStamp = System.currentTimeMillis(),
+                notebook = notebookState.value,
+                listOfBulletPointNotes = mutableListConverted,
+                color = backgroundColor.value.toArgb()
+            )
+            viewModel.updateNote(note1)
+        } else {
+            var note1 = Note(
+                id = generatedNoteId.value.toInt(),
+                title = title.value,
+                timeModified = System.currentTimeMillis(),
+                timeStamp = System.currentTimeMillis(),
+                notebook = notebookState.value,
+                listOfBulletPointNotes = mutableListConverted,
+                color = 0
+            )
+            viewModel.updateNote(note1)
+        }
     }
 
     var remember = rememberCoroutineScope()
@@ -175,16 +202,29 @@ fun MainStructureBulletPointsNotes(
                 activity.lifecycleScope.launch {
                     mutableListConverted.removeAll { it == "" }
 
-                    var note1 = Note(
-                        id = generatedNoteId.value.toInt(),
-                        title = title.value,
-                        timeModified = System.currentTimeMillis(),
-                        timeStamp = System.currentTimeMillis(),
-                        notebook = notebookState.value,
-                        listOfBulletPointNotes = mutableListConverted,
-                        color = backgroundColor.value.toArgb()
-                    )
-                    viewModel.updateNote(note1)
+                    if (backgroundColor.value != backgroundColor1) {
+                        var note1 = Note(
+                            id = generatedNoteId.value.toInt(),
+                            title = title.value,
+                            timeModified = System.currentTimeMillis(),
+                            timeStamp = System.currentTimeMillis(),
+                            notebook = notebookState.value,
+                            listOfBulletPointNotes = mutableListConverted,
+                            color = backgroundColor.value.toArgb()
+                        )
+                        viewModel.updateNote(note1)
+                    } else {
+                        var note1 = Note(
+                            id = generatedNoteId.value.toInt(),
+                            title = title.value,
+                            timeModified = System.currentTimeMillis(),
+                            timeStamp = System.currentTimeMillis(),
+                            notebook = notebookState.value,
+                            listOfBulletPointNotes = mutableListConverted,
+                            color = 0
+                        )
+                        viewModel.updateNote(note1)
+                    }
                 }
             }
         }
@@ -216,15 +256,29 @@ fun MainStructureBulletPointsNotes(
                             mutableListConverted
                         )
                         if (title.value.isNotEmpty() || (mutableListConverted.size != 1 || mutableListConverted[0].isNotEmpty())) {
-                            val note = Note(
-                                id = generatedNoteId.value.toInt(),
-                                title = title.value,
-                                notebook = notebookState.value,
-                                listOfBulletPointNotes = mutableListConverted,
-                                timeStamp = System.currentTimeMillis(),
-                                timeModified = System.currentTimeMillis()
-                            )
-                            viewModel.updateNote(note)
+                            if (backgroundColor.value != backgroundColor1) {
+                                val note = Note(
+                                    id = generatedNoteId.value.toInt(),
+                                    title = title.value,
+                                    notebook = notebookState.value,
+                                    listOfBulletPointNotes = mutableListConverted,
+                                    timeStamp = System.currentTimeMillis(),
+                                    timeModified = System.currentTimeMillis(),
+                                    color = backgroundColor.value.toArgb()
+                                )
+                                viewModel.updateNote(note)
+                            } else {
+                                val note = Note(
+                                    id = generatedNoteId.value.toInt(),
+                                    title = title.value,
+                                    notebook = notebookState.value,
+                                    listOfBulletPointNotes = mutableListConverted,
+                                    timeStamp = System.currentTimeMillis(),
+                                    timeModified = System.currentTimeMillis(),
+                                    color = 0
+                                )
+                                viewModel.updateNote(note)
+                            }
                             Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)
                                 .show()
                             scope.launch {
@@ -278,15 +332,29 @@ fun MainStructureBulletPointsNotes(
                             mutableListConverted
                         )
                         if (title.value.isNotEmpty() || (mutableListConverted.size != 1 || mutableListConverted[0].isNotEmpty())) {
-                            val note = Note(
-                                id = generatedNoteId.value.toInt(),
-                                title = title.value,
-                                notebook = notebookState.value,
-                                listOfBulletPointNotes = mutableListConverted,
-                                timeStamp = System.currentTimeMillis(),
-                                timeModified = System.currentTimeMillis()
-                            )
-                            viewModel.updateNote(note)
+                            if(backgroundColor.value != backgroundColor1) {
+                                val note = Note(
+                                    id = generatedNoteId.value.toInt(),
+                                    title = title.value,
+                                    notebook = notebookState.value,
+                                    listOfBulletPointNotes = mutableListConverted,
+                                    timeStamp = System.currentTimeMillis(),
+                                    timeModified = System.currentTimeMillis(),
+                                    color = backgroundColor.value.toArgb()
+                                )
+                                viewModel.updateNote(note)
+                            }else{
+                                val note = Note(
+                                    id = generatedNoteId.value.toInt(),
+                                    title = title.value,
+                                    notebook = notebookState.value,
+                                    listOfBulletPointNotes = mutableListConverted,
+                                    timeStamp = System.currentTimeMillis(),
+                                    timeModified = System.currentTimeMillis(),
+                                    color = 0
+                                )
+                                viewModel.updateNote(note)
+                            }
                             Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)
                                 .show()
                             scope.launch {

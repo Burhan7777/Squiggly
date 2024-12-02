@@ -104,18 +104,33 @@ fun MainStructureCheckBoxNote(
 
     if (generatedNoteId.value.toInt() == 0) {
         LaunchedEffect(key1 = true) {
-            var note = Note(
-                0,
-                title = title.value,
-                timeModified = System.currentTimeMillis(),
-                notebook = notebookState.value,
-                timeStamp = System.currentTimeMillis(),
-                color = backgroundColor.value.toArgb()
+            if (backgroundColor.value != backgroundColor1) {
+                var note = Note(
+                    0,
+                    title = title.value,
+                    timeModified = System.currentTimeMillis(),
+                    notebook = notebookState.value,
+                    timeStamp = System.currentTimeMillis(),
+                    color = backgroundColor.value.toArgb()
 //            listOfCheckedNotes = mutableListConverted,
 //            listOfCheckedBoxes = mutableListOfCheckBoxes,
 
-            )
-            viewModel.insertNote(note)
+                )
+                viewModel.insertNote(note)
+            } else {
+                var note = Note(
+                    0,
+                    title = title.value,
+                    timeModified = System.currentTimeMillis(),
+                    notebook = notebookState.value,
+                    timeStamp = System.currentTimeMillis(),
+                    color = 0
+//            listOfCheckedNotes = mutableListConverted,
+//            listOfCheckedBoxes = mutableListOfCheckBoxes,
+
+                )
+                viewModel.insertNote(note)
+            }
 
         }
     }
@@ -142,17 +157,31 @@ fun MainStructureCheckBoxNote(
 
             mutableListConverted.removeAll { it == "" }
 
-            var note1 = Note(
-                id = generatedNoteId.value.toInt(),
-                title = title.value,
-                timeModified = System.currentTimeMillis(),
-                timeStamp = System.currentTimeMillis(),
-                notebook = notebookState.value,
-                listOfCheckedNotes = mutableListConverted,
-                listOfCheckedBoxes = mutableListOfCheckBoxes,
-                color = backgroundColor.value.toArgb()
-            )
-            viewModel.updateNote(note1)
+            if (backgroundColor.value != backgroundColor1) {
+                var note1 = Note(
+                    id = generatedNoteId.value.toInt(),
+                    title = title.value,
+                    timeModified = System.currentTimeMillis(),
+                    timeStamp = System.currentTimeMillis(),
+                    notebook = notebookState.value,
+                    listOfCheckedNotes = mutableListConverted,
+                    listOfCheckedBoxes = mutableListOfCheckBoxes,
+                    color = backgroundColor.value.toArgb()
+                )
+                viewModel.updateNote(note1)
+            } else {
+                var note1 = Note(
+                    id = generatedNoteId.value.toInt(),
+                    title = title.value,
+                    timeModified = System.currentTimeMillis(),
+                    timeStamp = System.currentTimeMillis(),
+                    notebook = notebookState.value,
+                    listOfCheckedNotes = mutableListConverted,
+                    listOfCheckedBoxes = mutableListOfCheckBoxes,
+                    color = 0
+                )
+                viewModel.updateNote(note1)
+            }
         }
     }
 
@@ -181,17 +210,31 @@ fun MainStructureCheckBoxNote(
                 // Trigger autosave when app goes to background (onStop)
                 activity.lifecycleScope.launch {
                     mutableListConverted.removeAll { it == "" }
-                    var note1 = Note(
-                        id = generatedNoteId.value.toInt(),
-                        title = title.value,
-                        timeModified = System.currentTimeMillis(),
-                        timeStamp = System.currentTimeMillis(),
-                        notebook = notebookState.value,
-                        listOfCheckedNotes = mutableListConverted,
-                        listOfCheckedBoxes = mutableListOfCheckBoxes,
-                        color = backgroundColor.value.toArgb()
-                    )
-                    viewModel.updateNote(note1)
+                    if (backgroundColor.value != backgroundColor1) {
+                        var note1 = Note(
+                            id = generatedNoteId.value.toInt(),
+                            title = title.value,
+                            timeModified = System.currentTimeMillis(),
+                            timeStamp = System.currentTimeMillis(),
+                            notebook = notebookState.value,
+                            listOfCheckedNotes = mutableListConverted,
+                            listOfCheckedBoxes = mutableListOfCheckBoxes,
+                            color = backgroundColor.value.toArgb()
+                        )
+                        viewModel.updateNote(note1)
+                    } else {
+                        var note1 = Note(
+                            id = generatedNoteId.value.toInt(),
+                            title = title.value,
+                            timeModified = System.currentTimeMillis(),
+                            timeStamp = System.currentTimeMillis(),
+                            notebook = notebookState.value,
+                            listOfCheckedNotes = mutableListConverted,
+                            listOfCheckedBoxes = mutableListOfCheckBoxes,
+                            color = 0
+                        )
+                        viewModel.updateNote(note1)
+                    }
                 }
             }
         }
@@ -219,17 +262,31 @@ fun MainStructureCheckBoxNote(
                             mutableListConverted
                         )
                         if (title.value.isNotEmpty() || (mutableListConverted.size != 1 || mutableListConverted[0].isNotEmpty())) {
-                            val note = Note(
-                                id = generatedNoteId.value.toInt(),
-                                title = title.value,
-                                notebook = notebookState.value,
-                                listOfCheckedNotes = mutableListConverted,
-                                listOfCheckedBoxes = mutableListOfCheckBoxes,
-                                timeStamp = System.currentTimeMillis(),
-                                timeModified = System.currentTimeMillis(),
-                                color = backgroundColor.value.toArgb()
-                            )
-                            viewModel.updateNote(note)
+                            if (backgroundColor.value != backgroundColor1) {
+                                val note = Note(
+                                    id = generatedNoteId.value.toInt(),
+                                    title = title.value,
+                                    notebook = notebookState.value,
+                                    listOfCheckedNotes = mutableListConverted,
+                                    listOfCheckedBoxes = mutableListOfCheckBoxes,
+                                    timeStamp = System.currentTimeMillis(),
+                                    timeModified = System.currentTimeMillis(),
+                                    color = backgroundColor.value.toArgb()
+                                )
+                                viewModel.updateNote(note)
+                            } else {
+                                val note = Note(
+                                    id = generatedNoteId.value.toInt(),
+                                    title = title.value,
+                                    notebook = notebookState.value,
+                                    listOfCheckedNotes = mutableListConverted,
+                                    listOfCheckedBoxes = mutableListOfCheckBoxes,
+                                    timeStamp = System.currentTimeMillis(),
+                                    timeModified = System.currentTimeMillis(),
+                                    color = 0
+                                )
+                                viewModel.updateNote(note)
+                            }
                             navController.navigateUp()
                         } else {
                             viewModel.deleteNoteById(generatedNoteId.value.toInt())
@@ -278,17 +335,31 @@ fun MainStructureCheckBoxNote(
                         )
 
                         if (title.value.isNotEmpty() || (mutableListConverted.size != 1 || mutableListConverted[0].isNotEmpty())) {
-                            val note = Note(
-                                id = generatedNoteId.value.toInt(),
-                                title = title.value,
-                                notebook = notebookState.value,
-                                listOfCheckedNotes = mutableListConverted,
-                                listOfCheckedBoxes = mutableListOfCheckBoxes,
-                                timeStamp = System.currentTimeMillis(),
-                                timeModified = System.currentTimeMillis(),
-                                color = backgroundColor.value.toArgb()
-                            )
-                            viewModel.updateNote(note)
+                            if (backgroundColor.value != backgroundColor1) {
+                                val note = Note(
+                                    id = generatedNoteId.value.toInt(),
+                                    title = title.value,
+                                    notebook = notebookState.value,
+                                    listOfCheckedNotes = mutableListConverted,
+                                    listOfCheckedBoxes = mutableListOfCheckBoxes,
+                                    timeStamp = System.currentTimeMillis(),
+                                    timeModified = System.currentTimeMillis(),
+                                    color = backgroundColor.value.toArgb()
+                                )
+                                viewModel.updateNote(note)
+                            } else {
+                                val note = Note(
+                                    id = generatedNoteId.value.toInt(),
+                                    title = title.value,
+                                    notebook = notebookState.value,
+                                    listOfCheckedNotes = mutableListConverted,
+                                    listOfCheckedBoxes = mutableListOfCheckBoxes,
+                                    timeStamp = System.currentTimeMillis(),
+                                    timeModified = System.currentTimeMillis(),
+                                    color = 0
+                                )
+                                viewModel.updateNote(note)
+                            }
                             navController.navigateUp()
                         } else {
                             viewModel.deleteNoteById(generatedNoteId.value.toInt())
