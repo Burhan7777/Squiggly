@@ -84,6 +84,13 @@ class AppModule {
         }
     }
 
+    var migration_20_21 = object : Migration(20, 21) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE notes ADD COLUMN font TEXT NOT NULL DEFAULT 'Default' ")
+        }
+    }
+
+
 
     @Provides
     @Singleton
@@ -95,7 +102,8 @@ class AppModule {
                 migration_16_17,
                 migration_17_18,
                 migration_18_19,
-                migration_19_20
+                migration_19_20,
+                migration_20_21
             )
             .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
             //.setJournalMode(RoomDatabase.JournalMode.WRITE_AHEAD_LOGGING)

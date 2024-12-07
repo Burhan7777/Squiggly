@@ -1068,7 +1068,8 @@ fun MainStructureEditNote(
                         redoStack = redoStack,
                         currentContent = currentContent,
                         showBottomSheet = showBottomSheet,
-                        showTextColorBottomSheet = showTextColorBottomSheet
+                        showTextColorBottomSheet = showTextColorBottomSheet,
+                        showFontBottomSheet = mutableStateOf(false)
                     )
                 }
             }

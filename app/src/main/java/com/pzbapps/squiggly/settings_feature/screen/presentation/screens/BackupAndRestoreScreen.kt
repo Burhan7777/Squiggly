@@ -49,13 +49,14 @@ import com.google.firebase.storage.ListResult
 import com.google.firebase.storage.ktx.storage
 import com.pzbapps.squiggly.common.domain.utils.Constant
 import com.pzbapps.squiggly.common.presentation.FontFamily
+import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.settings_feature.screen.presentation.components.DatabaseBackupNameAlertBox
 import com.pzbapps.squiggly.settings_feature.screen.presentation.components.DisplayBackupNamesAlertBox
 import com.pzbapps.squiggly.settings_feature.screen.presentation.components.LoadingDialogBox
 
 
 @Composable
-fun BackupAndRestoreScreen(navHostController: NavHostController) {
+fun BackupAndRestoreScreen(navHostController: NavHostController, activity: MainActivity) {
     val context = LocalContext.current
     var backUpFileName = remember { mutableStateOf("") }
     var showBackUpFIleNameAlertBox = remember { mutableStateOf(false) }
@@ -351,7 +352,8 @@ fun BackupAndRestoreScreen(navHostController: NavHostController) {
         if (showListOfBackupFilesDialogBox.value) {
             DisplayBackupNamesAlertBox(
                 listOfBackUpFiles = listOfBackUpFiles.value?.items!!,
-                loadingDialogWhenRestoring
+                loadingDialogWhenRestoring,
+                activity = activity
             ) {
                 showListOfBackupFilesDialogBox.value = false
             }
@@ -376,8 +378,3 @@ fun BackupAndRestoreScreen(navHostController: NavHostController) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun preview() {
-    BackupAndRestoreScreen(rememberNavController())
-}

@@ -10,4 +10,6 @@ object FontFamily {
     val fontFamilyRegular = Font(R.font.lufgaregular).toFontFamily()
     val fontFamilyLight = Font(R.font.lufgalight).toFontFamily()
     val fontFamilyBold = Font(R.font.lufgablack).toFontFamily()
+    val pacificoRegular = Font(R.font.pacificoregular).toFontFamily()
+    val parkinsons = Font(R.font.parkinsons).toFontFamily()
 }

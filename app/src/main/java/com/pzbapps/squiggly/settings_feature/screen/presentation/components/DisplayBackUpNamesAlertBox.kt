@@ -1,5 +1,6 @@
 package com.pzbapps.squiggly.settings_feature.screen.presentation.components
 
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.firebase.storage.StorageReference
 import com.pzbapps.squiggly.common.presentation.FontFamily
+import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.di.AppModule
 import java.io.File
 import java.io.FileInputStream
@@ -34,6 +36,7 @@ import java.io.FileOutputStream
 fun DisplayBackupNamesAlertBox(
     listOfBackUpFiles: List<StorageReference>,
     loadingDialog: MutableState<Boolean>,
+    activity: MainActivity,
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
@@ -106,6 +109,11 @@ fun DisplayBackupNamesAlertBox(
                                                             Toast.LENGTH_SHORT
                                                         )
                                                         .show()
+                                                    val intent =
+                                                        Intent(context, MainActivity::class.java)
+                                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                                                    activity.finish()
+                                                    context.startActivity(intent)
                                                 } else {
                                                     Toast
                                                         .makeText(

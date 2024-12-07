@@ -1,5 +1,12 @@
 -------------------------- CHANGE LOG------------------------
 
+v3.3.0-beta
+---------------------------
+
+v3.2.1-beta
+----------------------------
+1) Fixes color issues in light and dark themes
+
 v-3.2.0-beta
 ----------------------------
 1) Text colors added.
@@ -7,6 +14,7 @@ v-3.2.0-beta
 v-3.1.0-beta
 -----------------------------
 1) Background colors added
+
 v-3.0.3-beta
 -----------------------------
 1) key bug in main screen solved

@@ -1,5 +1,6 @@
 package com.pzbapps.squiggly.main_screen.textrecognition
 
+import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.IntentSenderRequest
@@ -58,7 +59,11 @@ fun SelectScriptDialogBox(
 
         title = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("Select the language of document", fontSize = 12.sp, color = androidx.compose.material.MaterialTheme.colors.onPrimary)
+                Text(
+                    "Select the language of document",
+                    fontSize = 12.sp,
+                    color = androidx.compose.material.MaterialTheme.colors.onPrimary
+                )
                 ScriptCardView(
                     "Latin script (English, Spanish, German etc)",
                     selectedScript,
@@ -131,11 +136,22 @@ fun ScriptCardView(
                 scanner
                     .getStartScanIntent(activity)
                     .addOnSuccessListener {
-                        result.launch(
-                            IntentSenderRequest
-                                .Builder(it)
-                                .build()
-                        )
+                        try {
+                            result.launch(
+                                IntentSenderRequest
+                                    .Builder(it)
+                                    .build()
+                            )
+                        } catch (exception: RuntimeException) {
+                            Toast
+                                .makeText(
+                                    activity,
+                                    "Failed to open the activity. Please try again",
+                                    Toast.LENGTH_SHORT
+                                )
+                                .show()
+                        }
+
                     }
                 onDismiss()
             },

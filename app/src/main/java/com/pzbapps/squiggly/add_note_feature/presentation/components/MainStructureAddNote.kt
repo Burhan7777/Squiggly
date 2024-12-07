@@ -42,6 +42,7 @@ import com.pzbapps.squiggly.add_note_feature.presentation.components.BottomSheet
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.common.presentation.components.AlertDialogBoxTrialEnded
+import com.pzbapps.squiggly.common.presentation.fontsbottomsheet.FontBottomSheet
 import com.pzbapps.squiggly.common.presentation.textcolorsbottomsheet.TextColorBottomSheet
 import com.pzbapps.squiggly.main_screen.domain.model.Note
 import kotlinx.coroutines.delay
@@ -115,6 +116,8 @@ fun MainStructureAddNote(
 
     // Track the current content as a snapshot
     var currentContent = remember { mutableStateOf("") }
+
+    var showFontBottomSheet = remember { mutableStateOf(false) }
 
     LaunchedEffect(richTextState.value) {
         snapshotFlow { richTextState.value.annotatedString }
@@ -538,7 +541,8 @@ fun MainStructureAddNote(
                         redoStack = redoStack,
                         currentContent = currentContent,
                         showBottomSheet = showBottomSheet,
-                        showTextColorBottomSheet = showTextColorBottomSheet
+                        showTextColorBottomSheet = showTextColorBottomSheet,
+                        showFontBottomSheet = showFontBottomSheet
                     )
                 }
             }
@@ -547,6 +551,9 @@ fun MainStructureAddNote(
             }
             if (showTextColorBottomSheet.value) {
                 TextColorBottomSheet(showTextColorBottomSheet, richTextState)
+            }
+            if (showFontBottomSheet.value) {
+                FontBottomSheet(showFontBottomSheet, richTextState)
             }
         }
     }

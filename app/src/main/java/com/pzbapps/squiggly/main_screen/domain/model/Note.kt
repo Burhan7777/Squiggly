@@ -23,5 +23,7 @@ data class Note(
     var deletedNote: Boolean = false,
     var notePinned: Boolean = false,
     var timeModified: Long = 0,
-    var reminder: Long = 0
+    var reminder: Long = 0,
+    var font:String = "Default"
+
 )
