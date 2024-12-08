@@ -23,6 +23,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FontDownload
 import androidx.compose.material.icons.filled.FormatAlignCenter
 import androidx.compose.material.icons.filled.FormatAlignJustify
 import androidx.compose.material.icons.filled.FormatAlignLeft
@@ -72,7 +73,8 @@ fun BottomTextFormattingBarLockedNote(
     redoStack: Stack<String>,
     currentContent: MutableState<String>,
     showBottomSheet: MutableState<Boolean>,
-    showTextColorBottomSheet: MutableState<Boolean>
+    showTextColorBottomSheet: MutableState<Boolean>,
+    showFontBottomSheet: MutableState<Boolean>
 ) {
     Column(modifier = Modifier.imePadding()) {
         if (showFontSize.value) {
@@ -265,6 +267,17 @@ fun BottomTextFormattingBarLockedNote(
                     imageVector = Icons.Filled.FormatItalic,
                     contentDescription = "Make text Italic",
                     tint = if (isItalicActivated.value) MaterialTheme.colors.onSecondary else MaterialTheme.colors.onPrimary,
+                )
+            }
+            IconButton(
+                onClick = {
+
+                    showFontBottomSheet.value = true
+                },
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.FontDownload,
+                    contentDescription = "Change Font",
                 )
             }
             IconButton(onClick = {

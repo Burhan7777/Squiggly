@@ -37,8 +37,10 @@ import com.mohamedrejeb.richeditor.model.RichTextState
 import com.pzbapps.squiggly.add_note_feature.presentation.components.BottomSheet.AddNoteBottomSheet
 import com.pzbapps.squiggly.add_note_feature.presentation.components.DiscardNoteAlertBox
 import com.pzbapps.squiggly.common.domain.utils.Constant
+import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
+import com.pzbapps.squiggly.common.presentation.fontsbottomsheet.FontBottomSheet
 import com.pzbapps.squiggly.common.presentation.textcolorsbottomsheet.TextColorBottomSheet
 import com.pzbapps.squiggly.main_screen.domain.model.Note
 import kotlinx.coroutines.delay
@@ -111,6 +113,28 @@ fun MainStructureAddNoteLockedScreen(
     // Track the current content as a snapshot
     var currentContent = remember { mutableStateOf("") }
 
+    var showFontBottomSheet = remember { mutableStateOf(false) }
+
+    var fontFamily = remember { mutableStateOf(FontFamily.fontFamilyRegular) }
+
+    var fontFamilyString = remember { mutableStateOf("") }
+
+    when (fontFamily.value) {
+        FontFamily.fontFamilyRegular -> fontFamilyString.value = FontFamily.lufgaRegular
+        FontFamily.fontFamilyBold -> fontFamilyString.value = FontFamily.lufgaBold
+        FontFamily.fontFamilyExtraLight -> fontFamilyString.value = FontFamily.lufgaextraLight
+        FontFamily.pacificoRegular -> fontFamilyString.value = FontFamily.pacificoString
+        FontFamily.parkinsons -> fontFamilyString.value = FontFamily.parkinsonsString
+        FontFamily.jaro -> fontFamilyString.value = FontFamily.jaroString
+        FontFamily.dancingScript -> fontFamilyString.value = FontFamily.dancingScriptString
+        FontFamily.doto -> fontFamilyString.value = FontFamily.dotoString
+        FontFamily.edu -> fontFamilyString.value = FontFamily.eduString
+        FontFamily.lobster -> fontFamilyString.value = FontFamily.lobsterString
+        FontFamily.playfair -> fontFamilyString.value = FontFamily.playfairString
+        FontFamily.poppins -> fontFamilyString.value = FontFamily.poppinsString
+        else -> FontFamily.fontFamilyRegular
+    }
+
     LaunchedEffect(richTextState.value) {
         snapshotFlow { richTextState.value.annotatedString }
             .debounce(200)
@@ -173,8 +197,8 @@ fun MainStructureAddNoteLockedScreen(
     var coroutineScope = rememberCoroutineScope()
 
     DisposableEffect(Unit) {
-            if (generatedNoteId.value.toInt() == 0) {
-                if (backgroundColor.value != backgroundColor1) {
+        if (generatedNoteId.value.toInt() == 0) {
+            if (backgroundColor.value != backgroundColor1) {
                 val note = Note(
                     title = title.value,
                     content = richTextState.value.toHtml(),
@@ -182,7 +206,8 @@ fun MainStructureAddNoteLockedScreen(
                     notebook = Constant.NOT_CATEGORIZED,
                     timeStamp = System.currentTimeMillis(),
                     locked = true,
-                    color = backgroundColor.value.toArgb()
+                    color = backgroundColor.value.toArgb(),
+                    font = fontFamilyString.value
                 )
                 viewModel.insertNote(note)
             } else {
@@ -193,7 +218,8 @@ fun MainStructureAddNoteLockedScreen(
                     notebook = Constant.NOT_CATEGORIZED,
                     timeStamp = System.currentTimeMillis(),
                     locked = true,
-                    color = 0
+                    color = 0,
+                    font = fontFamilyString.value
                 )
                 viewModel.insertNote(note)
             }
@@ -218,7 +244,8 @@ fun MainStructureAddNoteLockedScreen(
                         notebook = Constant.NOT_CATEGORIZED,
                         timeStamp = System.currentTimeMillis(),
                         locked = true,
-                        color = backgroundColor.value.toArgb()
+                        color = backgroundColor.value.toArgb(),
+                        font = fontFamilyString.value
                     )
                     viewModel.updateNote(updatedNote)
                 } else {
@@ -230,7 +257,8 @@ fun MainStructureAddNoteLockedScreen(
                         notebook = Constant.NOT_CATEGORIZED,
                         timeStamp = System.currentTimeMillis(),
                         locked = true,
-                        color = 0
+                        color = 0,
+                        font = fontFamilyString.value
                     )
                     viewModel.updateNote(updatedNote)
                 }
@@ -260,7 +288,8 @@ fun MainStructureAddNoteLockedScreen(
                         notebook = Constant.NOT_CATEGORIZED,
                         timeStamp = System.currentTimeMillis(),
                         locked = true,
-                        color = backgroundColor.value.toArgb()
+                        color = backgroundColor.value.toArgb(),
+                        font = fontFamilyString.value
                     )
                     viewModel.updateNote(updatedNote)
                 } else {
@@ -272,7 +301,8 @@ fun MainStructureAddNoteLockedScreen(
                         notebook = Constant.NOT_CATEGORIZED,
                         timeStamp = System.currentTimeMillis(),
                         locked = true,
-                        color = 0
+                        color = 0,
+                        font = fontFamilyString.value
                     )
                     viewModel.updateNote(updatedNote)
                 }
@@ -297,7 +327,8 @@ fun MainStructureAddNoteLockedScreen(
                     notebook = Constant.NOT_CATEGORIZED,
                     timeStamp = System.currentTimeMillis(),
                     locked = true,
-                    color = backgroundColor.value.toArgb()
+                    color = backgroundColor.value.toArgb(),
+                    font = fontFamilyString.value
                 )
                 viewModel.updateNote(updatedNote)
             } else {
@@ -309,7 +340,8 @@ fun MainStructureAddNoteLockedScreen(
                     notebook = Constant.NOT_CATEGORIZED,
                     timeStamp = System.currentTimeMillis(),
                     locked = true,
-                    color = 0
+                    color = 0,
+                    font = fontFamilyString.value
                 )
                 viewModel.updateNote(updatedNote)
             }
@@ -343,7 +375,8 @@ fun MainStructureAddNoteLockedScreen(
                                     timeModified = System.currentTimeMillis(),
                                     notebook = notebookState.value,
                                     locked = true,
-                                    color = backgroundColor.value.toArgb()
+                                    color = backgroundColor.value.toArgb(),
+                                    font = fontFamilyString.value
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
@@ -358,7 +391,8 @@ fun MainStructureAddNoteLockedScreen(
                                     timeModified = System.currentTimeMillis(),
                                     notebook = notebookState.value,
                                     locked = true,
-                                    color = 0
+                                    color = 0,
+                                    font = fontFamilyString.value
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
@@ -399,7 +433,8 @@ fun MainStructureAddNoteLockedScreen(
                                     timeModified = System.currentTimeMillis(),
                                     notebook = notebookState.value,
                                     locked = true,
-                                    color = backgroundColor.value.toArgb()
+                                    color = backgroundColor.value.toArgb(),
+                                    font = fontFamilyString.value
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
@@ -414,7 +449,8 @@ fun MainStructureAddNoteLockedScreen(
                                     timeModified = System.currentTimeMillis(),
                                     notebook = notebookState.value,
                                     locked = true,
-                                    color = 0
+                                    color = 0,
+                                    font = fontFamilyString.value
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
@@ -461,6 +497,9 @@ fun MainStructureAddNoteLockedScreen(
                 if (showTextColorBottomSheet.value) {
                     TextColorBottomSheet(showTextColorBottomSheet, richTextState)
                 }
+                if (showFontBottomSheet.value) {
+                    FontBottomSheet(showFontBottomSheet, richTextState, fontFamily)
+                }
                 NoteContentNoteInLockedScreen(
                     title,
                     content,
@@ -471,7 +510,8 @@ fun MainStructureAddNoteLockedScreen(
                     boldText,
                     richTextState.value,
                     hideFormattingTextBarWhileTitleIsInFocus,
-                    backgroundColor
+                    backgroundColor,
+                    fontFamily
 //                notebook,
 //                notebookFromDB)
                 )
@@ -502,7 +542,8 @@ fun MainStructureAddNoteLockedScreen(
                         redoStack = redoStack,
                         currentContent = currentContent,
                         showBottomSheet = showBottomSheet,
-                        showTextColorBottomSheet = showTextColorBottomSheet
+                        showTextColorBottomSheet = showTextColorBottomSheet,
+                        showFontBottomSheet = showFontBottomSheet
                     )
                 }
             }
