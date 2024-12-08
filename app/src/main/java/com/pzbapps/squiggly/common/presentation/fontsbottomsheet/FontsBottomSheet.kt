@@ -43,7 +43,7 @@ fun FontBottomSheet(
         ) {
             LazyVerticalGrid(columns = GridCells.Fixed(3)) {
                 items(FontFamily.listOfFonts()) { font ->
-                    SingleRowFontsBottomSheet(font, richTextState, fontFamily)
+                    SingleRowFontsBottomSheet(font, richTextState, fontFamily, showBottomSheet)
                 }
             }
 

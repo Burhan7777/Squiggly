@@ -332,7 +332,7 @@ fun MainStructureBulletPointsNotes(
                             mutableListConverted
                         )
                         if (title.value.isNotEmpty() || (mutableListConverted.size != 1 || mutableListConverted[0].isNotEmpty())) {
-                            if(backgroundColor.value != backgroundColor1) {
+                            if (backgroundColor.value != backgroundColor1) {
                                 val note = Note(
                                     id = generatedNoteId.value.toInt(),
                                     title = title.value,
@@ -343,7 +343,7 @@ fun MainStructureBulletPointsNotes(
                                     color = backgroundColor.value.toArgb()
                                 )
                                 viewModel.updateNote(note)
-                            }else{
+                            } else {
                                 val note = Note(
                                     id = generatedNoteId.value.toInt(),
                                     title = title.value,
@@ -404,7 +404,7 @@ fun MainStructureBulletPointsNotes(
                 }
             }
             if (showBottomSheet.value) {
-                AddNoteBottomSheet(showBottomSheet, backgroundColor)
+                AddNoteBottomSheet(showBottomSheet, backgroundColor, activity = activity)
             }
             BulletPointNote(
                 viewModel,

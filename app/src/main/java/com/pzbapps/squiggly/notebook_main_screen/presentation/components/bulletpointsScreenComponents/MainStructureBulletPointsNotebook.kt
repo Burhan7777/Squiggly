@@ -406,7 +406,7 @@ fun MainStructureBulletPointsNotebook(
                 }
             }
             if (showBottomSheet.value) {
-                AddNoteBottomSheet(showBottomSheet, backgroundColor)
+                AddNoteBottomSheet(showBottomSheet, backgroundColor,activity = activity)
             }
             BulletPointNotebook(
                 viewModel,

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -49,6 +50,7 @@ import com.pzbapps.squiggly.common.presentation.components.AlertDialogBoxTrialEn
 import com.pzbapps.squiggly.common.presentation.fontsbottomsheet.FontBottomSheet
 import com.pzbapps.squiggly.common.presentation.textcolorsbottomsheet.TextColorBottomSheet
 import com.pzbapps.squiggly.main_screen.domain.model.Note
+import com.pzbapps.squiggly.ui.theme.white
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
@@ -422,7 +424,11 @@ fun MainStructureAddNote(
                             navController.navigateUp()
                         }
                     }) {
-                        Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Undo")
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Undo",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
                     }
                 },
                 actions = {
@@ -498,7 +504,11 @@ fun MainStructureAddNote(
                             navController.navigateUp()
                         }
                     }) {
-                        Icon(imageVector = Icons.Filled.Check, contentDescription = "Save")
+                        Icon(
+                            imageVector = Icons.Filled.Check,
+                            contentDescription = "Save",
+                            tint =MaterialTheme.colors.onPrimary
+                        )
                     }
                     if (showTrialEndedDialogBox.value) {
                         AlertDialogBoxTrialEnded {
@@ -546,7 +556,7 @@ fun MainStructureAddNote(
                     hideTextFomattingBarWhenTitleIsInFocus,
                     showSavedText,
                     backgroundColor,
-                    fontFamily
+                    fontFamily,
 //                notebook,
 //                notebookFromDB)
                 )
@@ -584,7 +594,7 @@ fun MainStructureAddNote(
                 }
             }
             if (showBottomSheet.value) {
-                AddNoteBottomSheet(showBottomSheet = showBottomSheet, backgroundColor)
+                AddNoteBottomSheet(showBottomSheet = showBottomSheet, backgroundColor,activity = activity)
             }
             if (showTextColorBottomSheet.value) {
                 TextColorBottomSheet(showTextColorBottomSheet, richTextState)

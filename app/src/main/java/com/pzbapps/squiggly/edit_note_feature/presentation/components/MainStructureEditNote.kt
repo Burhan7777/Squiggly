@@ -1205,7 +1205,11 @@ fun MainStructureEditNote(
         }
     }
     if (showBottomSheet.value) {
-        AddNoteBottomSheet(showBottomSheet, backgroundColorInInt = backgroundColor)
+        AddNoteBottomSheet(
+            showBottomSheet,
+            backgroundColorInInt = backgroundColor,
+            activity = activity
+        )
     }
     if (showTextColorBottomSheet.value) {
         TextColorBottomSheet(showTextColorBottomSheet, richStateText)

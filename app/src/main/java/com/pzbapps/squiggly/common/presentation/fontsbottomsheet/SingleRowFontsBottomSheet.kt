@@ -27,7 +27,8 @@ import com.mohamedrejeb.richeditor.model.RichTextState
 fun SingleRowFontsBottomSheet(
     font: FontFamily,
     richTextState: MutableState<RichTextState>,
-    fontFamily: MutableState<FontFamily>
+    fontFamily: MutableState<FontFamily>,
+    showBottomSheet: MutableState<Boolean>
 ) {
     Card(
         modifier = Modifier
@@ -36,6 +37,7 @@ fun SingleRowFontsBottomSheet(
             .height(50.dp)
             .clickable {
                 fontFamily.value = font
+                showBottomSheet.value = false
             }, shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colors.primary,

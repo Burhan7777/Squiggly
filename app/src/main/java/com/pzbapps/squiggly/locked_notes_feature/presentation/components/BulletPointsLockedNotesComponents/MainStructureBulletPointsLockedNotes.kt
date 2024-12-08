@@ -405,7 +405,7 @@ fun MainStructureBulletPointsLockedNotes(
                 }
             }
             if (showBottomSheet.value) {
-                AddNoteBottomSheet(showBottomSheet, backgroundColor)
+                AddNoteBottomSheet(showBottomSheet, backgroundColor,activity = activity)
             }
             BulletPointLockedNotes(
                 viewModel,

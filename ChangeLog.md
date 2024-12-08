@@ -2,6 +2,8 @@
 
 v3.3.0-beta
 ---------------------------
+1) Fixes crashing of app on activity not found in document scanner feature
+2) Adds new fonts. 12 new fonts added.
 
 v3.2.1-beta
 ----------------------------

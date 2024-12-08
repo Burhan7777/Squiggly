@@ -496,7 +496,7 @@ fun MainStructureAddNoteInNotebook(
                     }
                 }
                 if (showBottomSheet.value) {
-                    AddNoteBottomSheet(showBottomSheet, backgroundColor)
+                    AddNoteBottomSheet(showBottomSheet, backgroundColor, activity = activity)
                 }
                 if (showTextColorBottomSheet.value) {
                     TextColorBottomSheet(showTextColorBottomSheet, richTextState)

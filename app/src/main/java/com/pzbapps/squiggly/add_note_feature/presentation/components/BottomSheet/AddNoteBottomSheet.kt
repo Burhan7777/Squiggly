@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import com.pzbapps.squiggly.add_note_feature.presentation.components.BottomSheet.bottomsheetcomponents.ColorSelection
+import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.ui.theme.primaryColorDark
 import kotlinx.coroutines.launch
 
@@ -27,7 +28,8 @@ import kotlinx.coroutines.launch
 fun AddNoteBottomSheet(
     showBottomSheet: MutableState<Boolean>,
     backgroundColor: MutableState<Color> = mutableStateOf(Color.Black),
-    backgroundColorInInt: MutableState<Int> = mutableIntStateOf(0)
+    backgroundColorInInt: MutableState<Int> = mutableIntStateOf(0),
+    activity: MainActivity
 ) {
     if (showBottomSheet.value) {
 
@@ -57,7 +59,7 @@ fun AddNoteBottomSheet(
 
             when (selectedTabIndex) {
                 0 -> {
-                    ColorSelection(backgroundColor, backgroundColorInInt)
+                    ColorSelection(backgroundColor, backgroundColorInInt, activity)
                 }
 
             }

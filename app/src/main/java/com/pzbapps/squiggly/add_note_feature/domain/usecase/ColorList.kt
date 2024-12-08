@@ -36,12 +36,12 @@ data class ColorList(
 
 var listOfColors =
     listOf<ColorList>(
-        ColorList("Default", primaryColorDark.toArgb()),
+        ColorList("black1", primaryColorDark.toArgb()),
         ColorList("black2", black1.toArgb()),
         ColorList("black3", black2.toArgb()),
         ColorList("black4", black3.toArgb()),
 
-        ColorList("Default", primaryColorLight.toArgb()),
+        ColorList("white1", primaryColorLight.toArgb()),
         ColorList("white2", white2.toArgb()),
         ColorList("white3", white3.toArgb()),
         ColorList("white4", white4.toArgb()),

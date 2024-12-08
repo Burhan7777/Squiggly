@@ -403,7 +403,7 @@ fun MainStructureCheckBoxNote(
                 }
             }
             if (showBottomSheet.value) {
-                AddNoteBottomSheet(showBottomSheet, backgroundColor)
+                AddNoteBottomSheet(showBottomSheet, backgroundColor, activity = activity)
             }
             CheckboxNote(
                 viewModel,

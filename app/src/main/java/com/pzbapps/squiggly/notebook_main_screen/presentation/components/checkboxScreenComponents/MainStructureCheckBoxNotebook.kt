@@ -421,7 +421,7 @@ fun MainStructureCheckBoxNotebook(
                 }
             }
             if (showBottomSheet.value) {
-                AddNoteBottomSheet(showBottomSheet, backgroundColor)
+                AddNoteBottomSheet(showBottomSheet, backgroundColor, activity = activity)
             }
             CheckboxNotebook(
                 viewModel,

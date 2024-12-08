@@ -492,7 +492,11 @@ fun MainStructureAddNoteLockedScreen(
                     }
                 }
                 if (showBottomSheet.value) {
-                    AddNoteBottomSheet(showBottomSheet, backgroundColor = backgroundColor)
+                    AddNoteBottomSheet(
+                        showBottomSheet,
+                        backgroundColor = backgroundColor,
+                        activity = activity
+                    )
                 }
                 if (showTextColorBottomSheet.value) {
                     TextColorBottomSheet(showTextColorBottomSheet, richTextState)
