@@ -97,7 +97,8 @@ fun NoteContent(
     time: MutableLongState,
     systemTime: MutableLongState,
     timeInString: MutableState<String>,
-    backgroundColor: MutableState<Int>
+    backgroundColor: MutableState<Int>,
+    fontFamily: MutableState<androidx.compose.ui.text.font.FontFamily>
 ) {
 
     var dialogOpen = remember {
@@ -193,7 +194,7 @@ fun NoteContent(
                 unfocusedIndicatorColor = Color(backgroundColor.value),
                 cursorColor = MaterialTheme.colors.onPrimary
             ),
-            textStyle = TextStyle(fontFamily = FontFamily.fontFamilyBold, fontSize = 20.sp),
+            textStyle = TextStyle(fontFamily = fontFamily.value, fontSize = 20.sp),
             modifier = Modifier
                 .focusRequester(focusRequester)
                 .onFocusChanged {
@@ -233,7 +234,7 @@ fun NoteContent(
                         modifier = Modifier.alpha(0.5f)
                     )
                 },
-                textStyle = TextStyle(fontFamily = FontFamily.fontFamilyRegular, fontSize = 18.sp)
+                textStyle = TextStyle(fontFamily = fontFamily.value, fontSize = 18.sp)
             )
             if (systemTime.longValue < time.longValue) {
                 Card(

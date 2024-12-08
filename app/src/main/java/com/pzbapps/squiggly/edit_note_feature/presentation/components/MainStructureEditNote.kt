@@ -47,6 +47,7 @@ import com.pzbapps.squiggly.add_note_feature.presentation.components.BottomTextF
 import com.pzbapps.squiggly.common.domain.utils.Constant
 import com.pzbapps.squiggly.common.presentation.*
 import com.pzbapps.squiggly.common.presentation.components.AlertDialogBoxTrialEnded
+import com.pzbapps.squiggly.common.presentation.fontsbottomsheet.FontBottomSheet
 import com.pzbapps.squiggly.common.presentation.textcolorsbottomsheet.TextColorBottomSheet
 import com.pzbapps.squiggly.edit_note_feature.domain.usecase.checkIfUserHasCreatedPassword
 import com.pzbapps.squiggly.edit_note_feature.domain.utils.permissionHandlerNotification
@@ -202,6 +203,24 @@ fun MainStructureEditNote(
 
     val backgroundColor = remember { mutableStateOf<Int>(0) }
 
+    var fontFamily = remember { mutableStateOf(FontFamily.fontFamilyRegular) }
+
+    var fontFamilyString = remember { mutableStateOf("Default") }
+
+    var showFontBottomSheet = remember { mutableStateOf(false) }
+
+    LaunchedEffect(true) {
+    }
+
+    when (fontFamily.value) {
+        FontFamily.fontFamilyRegular -> fontFamilyString.value = FontFamily.lufgaRegular
+        FontFamily.fontFamilyBold -> fontFamilyString.value = FontFamily.lufgaBold
+        FontFamily.fontFamilyExtraLight -> fontFamilyString.value = FontFamily.lufgaextraLight
+        FontFamily.pacificoRegular -> fontFamilyString.value = FontFamily.pacificoString
+        FontFamily.parkinsons -> fontFamilyString.value = FontFamily.parkinsonsString
+        else -> FontFamily.fontFamilyRegular
+    }
+
 
     var notificationLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -222,6 +241,15 @@ fun MainStructureEditNote(
         var noteFromDb = viewModel.getNoteById
         pinnedOrNot.value = noteFromDb.value.notePinned
         backgroundColor.value = noteFromDb.value.color
+        fontFamilyString.value = noteFromDb.value.font
+        when (fontFamilyString.value) {
+            FontFamily.lufgaRegular -> fontFamily.value = FontFamily.fontFamilyRegular
+            FontFamily.lufgaBold -> fontFamily.value = FontFamily.fontFamilyBold
+            FontFamily.lufgaextraLight -> fontFamily.value = FontFamily.fontFamilyExtraLight
+            FontFamily.pacificoString -> fontFamily.value = FontFamily.pacificoRegular
+            FontFamily.parkinsonsString -> fontFamily.value = FontFamily.parkinsons
+            else -> FontFamily.fontFamilyRegular
+        }
     }
 
 
@@ -348,7 +376,8 @@ fun MainStructureEditNote(
                             content = richStateText.value.toHtml(),
                             timeModified = System.currentTimeMillis(),
                             notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
-                            color = backgroundColor.value
+                            color = backgroundColor.value,
+                            font = fontFamilyString.value
 
                         )
                         viewModel.updateNote(note!!)
@@ -515,7 +544,8 @@ fun MainStructureEditNote(
                     content = richStateText.value.toHtml(),
                     timeModified = System.currentTimeMillis(),
                     notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
-                    reminder = reminder
+                    reminder = reminder,
+                    font = fontFamilyString.value
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
@@ -578,7 +608,8 @@ fun MainStructureEditNote(
                     timeModified = System.currentTimeMillis(),
                     notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
                     reminder = reminder,
-                    color = backgroundColor.value
+                    color = backgroundColor.value,
+                    font = fontFamilyString.value
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
@@ -652,7 +683,8 @@ fun MainStructureEditNote(
                             timeModified = System.currentTimeMillis(),
                             notePinned = pinned,
                             reminder = reminder,
-                            color = backgroundColor.value
+                            color = backgroundColor.value,
+                            font = fontFamilyString.value
                         )
                         viewModel.updateNote(note)
                         Toast.makeText(context, "Note has been updated", Toast.LENGTH_SHORT)
@@ -873,7 +905,8 @@ fun MainStructureEditNote(
                             timeModified = System.currentTimeMillis(),
                             notePinned = pinned,
                             reminder = reminder,
-                            color = backgroundColor.value
+                            color = backgroundColor.value,
+                            font = fontFamilyString.value
                         )
                         viewModel.updateNote(note)
                         scope.launch {
@@ -1037,7 +1070,8 @@ fun MainStructureEditNote(
                     time,
                     systemTime,
                     timeInString,
-                    backgroundColor
+                    backgroundColor,
+                    fontFamily
                 )
             }
             if (mutableListOfCheckboxTexts.size == 0 && mutableListOfBulletPoints.size == 0 && !hideFormattingTextBarWhenTitleIsInFocus.value) {
@@ -1069,7 +1103,7 @@ fun MainStructureEditNote(
                         currentContent = currentContent,
                         showBottomSheet = showBottomSheet,
                         showTextColorBottomSheet = showTextColorBottomSheet,
-                        showFontBottomSheet = mutableStateOf(false)
+                        showFontBottomSheet = showFontBottomSheet
                     )
                 }
             }
@@ -1164,6 +1198,9 @@ fun MainStructureEditNote(
     }
     if (showTextColorBottomSheet.value) {
         TextColorBottomSheet(showTextColorBottomSheet, richStateText)
+    }
+    if (showFontBottomSheet.value) {
+        FontBottomSheet(showFontBottomSheet, richStateText, fontFamily)
     }
 }
 

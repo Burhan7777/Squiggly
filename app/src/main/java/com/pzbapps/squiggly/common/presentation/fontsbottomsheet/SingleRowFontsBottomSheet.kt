@@ -24,21 +24,25 @@ import androidx.compose.ui.unit.sp
 import com.mohamedrejeb.richeditor.model.RichTextState
 
 @Composable
-fun SingleRowFontsBottomSheet(font: FontFamily, richTextState: MutableState<RichTextState>) {
+fun SingleRowFontsBottomSheet(
+    font: FontFamily,
+    richTextState: MutableState<RichTextState>,
+    fontFamily: MutableState<FontFamily>
+) {
     Card(
         modifier = Modifier
             .padding(10.dp)
             .width(100.dp)
             .height(50.dp)
             .clickable {
-                richTextState.value.toggleSpanStyle(SpanStyle(fontFamily = font))
+                fontFamily.value = font
             }, shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colors.primary,
             contentColor = MaterialTheme.colors.onPrimary
         )
     ) {
-        Box(contentAlignment = Alignment.Center,modifier = Modifier.fillMaxSize()) {
+        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
             Text(
                 "Squiggly",
                 fontFamily = font,

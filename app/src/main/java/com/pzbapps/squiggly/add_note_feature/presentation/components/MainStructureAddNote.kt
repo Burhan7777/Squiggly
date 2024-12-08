@@ -30,6 +30,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.font.FontListFontFamily
+import androidx.compose.ui.text.font.GenericFontFamily
+import androidx.compose.ui.text.font.LoadedFontFamily
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -39,6 +42,7 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import com.mohamedrejeb.richeditor.model.RichTextState
 import com.pzbapps.squiggly.add_note_feature.presentation.components.BottomSheet.AddNoteBottomSheet
+import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.common.presentation.components.AlertDialogBoxTrialEnded
@@ -119,6 +123,19 @@ fun MainStructureAddNote(
 
     var showFontBottomSheet = remember { mutableStateOf(false) }
 
+    var fontFamily = remember { mutableStateOf(FontFamily.fontFamilyRegular) }
+
+    var fontFamilyString = remember { mutableStateOf("") }
+
+    when (fontFamily.value) {
+        FontFamily.fontFamilyRegular -> fontFamilyString.value = FontFamily.lufgaRegular
+        FontFamily.fontFamilyBold -> fontFamilyString.value = FontFamily.lufgaBold
+        FontFamily.fontFamilyExtraLight -> fontFamilyString.value = FontFamily.lufgaextraLight
+        FontFamily.pacificoRegular -> fontFamilyString.value = FontFamily.pacificoString
+        FontFamily.parkinsons -> fontFamilyString.value = FontFamily.parkinsonsString
+        else -> FontFamily.fontFamilyRegular
+    }
+
     LaunchedEffect(richTextState.value) {
         snapshotFlow { richTextState.value.annotatedString }
             .debounce(200)
@@ -187,7 +204,8 @@ fun MainStructureAddNote(
                     timeModified = System.currentTimeMillis(),
                     notebook = notebookState.value,
                     color = backgroundColor.value.toArgb(),
-                    timeStamp = System.currentTimeMillis()
+                    timeStamp = System.currentTimeMillis(),
+                    font = fontFamilyString.value
                 )
                 viewModel.insertNote(note)
             } else {
@@ -197,7 +215,8 @@ fun MainStructureAddNote(
                     timeModified = System.currentTimeMillis(),
                     notebook = notebookState.value,
                     color = 0,
-                    timeStamp = System.currentTimeMillis()
+                    timeStamp = System.currentTimeMillis(),
+                    font = fontFamilyString.value
                 )
                 viewModel.insertNote(note)
             }
@@ -222,7 +241,8 @@ fun MainStructureAddNote(
                         timeModified = System.currentTimeMillis(),
                         notebook = notebookState.value,
                         color = backgroundColor.value.toArgb(),
-                        timeStamp = System.currentTimeMillis()
+                        timeStamp = System.currentTimeMillis(),
+                        font = fontFamilyString.value
                     )
                     viewModel.updateNote(updatedNote)
                 } else {
@@ -233,7 +253,8 @@ fun MainStructureAddNote(
                         timeModified = System.currentTimeMillis(),
                         notebook = notebookState.value,
                         color = 0,
-                        timeStamp = System.currentTimeMillis()
+                        timeStamp = System.currentTimeMillis(),
+                        font = fontFamilyString.value
                     )
                     viewModel.updateNote(updatedNote)
                 }
@@ -264,7 +285,8 @@ fun MainStructureAddNote(
                         timeModified = System.currentTimeMillis(),
                         notebook = notebookState.value,
                         color = backgroundColor.value.toArgb(),
-                        timeStamp = System.currentTimeMillis()
+                        timeStamp = System.currentTimeMillis(),
+                        font = fontFamilyString.value
                     )
                     viewModel.updateNote(updatedNote)
                 } else {
@@ -275,7 +297,8 @@ fun MainStructureAddNote(
                         timeModified = System.currentTimeMillis(),
                         notebook = notebookState.value,
                         color = 0,
-                        timeStamp = System.currentTimeMillis()
+                        timeStamp = System.currentTimeMillis(),
+                        font = fontFamilyString.value
                     )
                     viewModel.updateNote(updatedNote)
                 }
@@ -303,7 +326,8 @@ fun MainStructureAddNote(
                     timeModified = System.currentTimeMillis(),
                     notebook = notebookState.value,
                     color = backgroundColor.value.toArgb(),
-                    timeStamp = System.currentTimeMillis()
+                    timeStamp = System.currentTimeMillis(),
+                    font = fontFamilyString.value
                 )
                 print("not equal")
                 viewModel.updateNote(updatedNote)
@@ -315,7 +339,8 @@ fun MainStructureAddNote(
                     timeModified = System.currentTimeMillis(),
                     notebook = notebookState.value,
                     color = 0,
-                    timeStamp = System.currentTimeMillis()
+                    timeStamp = System.currentTimeMillis(),
+                    font = fontFamilyString.value
                 )
                 print("equal")
                 viewModel.updateNote(updatedNote)
@@ -358,7 +383,8 @@ fun MainStructureAddNote(
                                     deletedNote = false,
                                     locked = false,
                                     timeModified = System.currentTimeMillis(),
-                                    color = backgroundColor.value.toArgb()
+                                    color = backgroundColor.value.toArgb(),
+                                    font = fontFamilyString.value
 
                                 )
                                 viewModel.updateNote(note2)
@@ -373,7 +399,8 @@ fun MainStructureAddNote(
                                     deletedNote = false,
                                     locked = false,
                                     timeModified = System.currentTimeMillis(),
-                                    color = 0
+                                    color = 0,
+                                    font = fontFamilyString.value
 
                                 )
                                 viewModel.updateNote(note2)
@@ -432,7 +459,8 @@ fun MainStructureAddNote(
                                     color = backgroundColor.value.toArgb(),
                                     deletedNote = false,
                                     locked = false,
-                                    timeModified = System.currentTimeMillis()
+                                    timeModified = System.currentTimeMillis(),
+                                    font = fontFamilyString.value
 
                                 )
                                 viewModel.updateNote(note2)
@@ -447,7 +475,8 @@ fun MainStructureAddNote(
                                     color = 0,
                                     deletedNote = false,
                                     locked = false,
-                                    timeModified = System.currentTimeMillis()
+                                    timeModified = System.currentTimeMillis(),
+                                    font = fontFamilyString.value
 
                                 )
                                 viewModel.updateNote(note2)
@@ -509,7 +538,8 @@ fun MainStructureAddNote(
                     richTextState.value,
                     hideTextFomattingBarWhenTitleIsInFocus,
                     showSavedText,
-                    backgroundColor
+                    backgroundColor,
+                    fontFamily
 //                notebook,
 //                notebookFromDB)
                 )
@@ -553,7 +583,7 @@ fun MainStructureAddNote(
                 TextColorBottomSheet(showTextColorBottomSheet, richTextState)
             }
             if (showFontBottomSheet.value) {
-                FontBottomSheet(showFontBottomSheet, richTextState)
+                FontBottomSheet(showFontBottomSheet, richTextState, fontFamily)
             }
         }
     }

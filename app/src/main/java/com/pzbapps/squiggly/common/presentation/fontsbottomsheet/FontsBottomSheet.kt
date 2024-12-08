@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.mohamedrejeb.richeditor.model.RichTextState
+import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.common.presentation.textcolorsbottomsheet.bottomsheetcomponents.ColorsColorSelection
 import kotlinx.coroutines.launch
 
@@ -25,6 +26,7 @@ import kotlinx.coroutines.launch
 fun FontBottomSheet(
     showBottomSheet: MutableState<Boolean>,
     richTextState: MutableState<RichTextState>,
+    fontFamily: MutableState<androidx.compose.ui.text.font.FontFamily>
 ) {
     if (showBottomSheet.value) {
 
@@ -39,11 +41,11 @@ fun FontBottomSheet(
             onDismissRequest = { scope.launch { showBottomSheet.value = false } },
             // sheetState = sheetState,
         ) {
-//            LazyVerticalGrid(columns = GridCells.Fixed(3)) {
-//                items(getListOfFonts()) { font ->
-//                    SingleRowFontsBottomSheet(font, richTextState)
-//                }
-//            }
+            LazyVerticalGrid(columns = GridCells.Fixed(3)) {
+                items(FontFamily.listOfFonts()) { font ->
+                    SingleRowFontsBottomSheet(font, richTextState, fontFamily)
+                }
+            }
 
             // Button to show the bottom shee
         }
