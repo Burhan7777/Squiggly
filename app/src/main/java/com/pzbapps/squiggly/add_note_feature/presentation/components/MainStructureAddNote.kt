@@ -133,6 +133,13 @@ fun MainStructureAddNote(
         FontFamily.fontFamilyExtraLight -> fontFamilyString.value = FontFamily.lufgaextraLight
         FontFamily.pacificoRegular -> fontFamilyString.value = FontFamily.pacificoString
         FontFamily.parkinsons -> fontFamilyString.value = FontFamily.parkinsonsString
+        FontFamily.jaro -> fontFamilyString.value = FontFamily.jaroString
+        FontFamily.dancingScript -> fontFamilyString.value = FontFamily.dancingScriptString
+        FontFamily.doto -> fontFamilyString.value = FontFamily.dotoString
+        FontFamily.edu -> fontFamilyString.value = FontFamily.eduString
+        FontFamily.lobster -> fontFamilyString.value = FontFamily.lobsterString
+        FontFamily.playfair -> fontFamilyString.value = FontFamily.playfairString
+        FontFamily.poppins -> fontFamilyString.value = FontFamily.poppinsString
         else -> FontFamily.fontFamilyRegular
     }
 

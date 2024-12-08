@@ -218,6 +218,13 @@ fun MainStructureEditNote(
         FontFamily.fontFamilyExtraLight -> fontFamilyString.value = FontFamily.lufgaextraLight
         FontFamily.pacificoRegular -> fontFamilyString.value = FontFamily.pacificoString
         FontFamily.parkinsons -> fontFamilyString.value = FontFamily.parkinsonsString
+        FontFamily.jaro -> fontFamilyString.value = FontFamily.jaroString
+        FontFamily.dancingScript -> fontFamilyString.value = FontFamily.dancingScriptString
+        FontFamily.doto -> fontFamilyString.value = FontFamily.dotoString
+        FontFamily.edu -> fontFamilyString.value = FontFamily.eduString
+        FontFamily.lobster -> fontFamilyString.value = FontFamily.lobsterString
+        FontFamily.playfair -> fontFamilyString.value = FontFamily.playfairString
+        FontFamily.poppins -> fontFamilyString.value = FontFamily.poppinsString
         else -> FontFamily.fontFamilyRegular
     }
 
@@ -248,6 +255,13 @@ fun MainStructureEditNote(
             FontFamily.lufgaextraLight -> fontFamily.value = FontFamily.fontFamilyExtraLight
             FontFamily.pacificoString -> fontFamily.value = FontFamily.pacificoRegular
             FontFamily.parkinsonsString -> fontFamily.value = FontFamily.parkinsons
+            FontFamily.jaroString -> fontFamily.value = FontFamily.jaro
+            FontFamily.dancingScriptString -> fontFamily.value = FontFamily.dancingScript
+            FontFamily.dotoString -> fontFamily.value = FontFamily.doto
+            FontFamily.eduString -> fontFamily.value = FontFamily.edu
+            FontFamily.lobsterString -> fontFamily.value = FontFamily.lobster
+            FontFamily.playfairString -> fontFamily.value = FontFamily.playfair
+            FontFamily.poppinsString -> fontFamily.value = FontFamily.poppins
             else -> FontFamily.fontFamilyRegular
         }
     }

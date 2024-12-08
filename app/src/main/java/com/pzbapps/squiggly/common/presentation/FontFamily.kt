@@ -13,12 +13,26 @@ object FontFamily {
     val fontFamilyBold = Font(R.font.lufgablack).toFontFamily()
     val pacificoRegular = Font(R.font.pacificoregular).toFontFamily()
     val parkinsons = Font(R.font.parkinsons).toFontFamily()
+    val jaro = Font(R.font.jaro).toFontFamily()
+    val dancingScript = Font(R.font.dancingscript).toFontFamily()
+    val doto = Font(R.font.doto).toFontFamily()
+    val edu = Font(R.font.edu).toFontFamily()
+    val lobster = Font(R.font.lobster).toFontFamily()
+    val playfair = Font(R.font.playfair).toFontFamily()
+    val poppins = Font(R.font.poppins).toFontFamily()
 
     var lufgaRegular = "Default"
     var lufgaBold = "lufgaBold"
     var lufgaextraLight = "lufgaextraLight"
     var pacificoString = "pacificoRegular"
     var parkinsonsString = "parkinsons"
+    val jaroString = "jaro"
+    val dancingScriptString = "dancingscript"
+    val dotoString = "doto"
+    val eduString = "edu"
+    val lobsterString = "lobster"
+    val playfairString = "playfair"
+    val poppinsString = "poppins"
 
     val listOfFonts = ArrayList<FontFamily>()
     fun listOfFonts(): ArrayList<FontFamily> {
@@ -36,6 +50,28 @@ object FontFamily {
 
         if (!listOfFonts.contains(parkinsons))
             listOfFonts.add(parkinsons)
+
+        if (!listOfFonts.contains(jaro))
+            listOfFonts.add(jaro)
+
+        if (!listOfFonts.contains(dancingScript))
+            listOfFonts.add(dancingScript)
+
+        if (!listOfFonts.contains(doto))
+            listOfFonts.add(doto)
+
+        if (!listOfFonts.contains(edu))
+            listOfFonts.add(edu)
+
+        if (!listOfFonts.contains(lobster))
+            listOfFonts.add(lobster)
+
+        if (!listOfFonts.contains(playfair))
+            listOfFonts.add(playfair)
+
+        if (!listOfFonts.contains(poppins))
+            listOfFonts.add(poppins)
+
         return listOfFonts
     }
 }
