@@ -45,6 +45,26 @@ fun SingleItemArchiveNoteList(
         var richTextState = rememberRichTextState()
         var contentText = remember { mutableStateOf("") }
 
+        var fontFamily = remember { mutableStateOf(FontFamily.fontFamilyRegular) }
+
+        var fontFamilyString = note.font
+
+        when (fontFamilyString) {
+            FontFamily.lufgaRegular -> fontFamily.value = FontFamily.fontFamilyRegular
+            FontFamily.lufgaBold -> fontFamily.value = FontFamily.fontFamilyBold
+            FontFamily.lufgaextraLight -> fontFamily.value = FontFamily.fontFamilyExtraLight
+            FontFamily.pacificoString -> fontFamily.value = FontFamily.pacificoRegular
+            FontFamily.parkinsonsString -> fontFamily.value = FontFamily.parkinsons
+            FontFamily.jaroString -> fontFamily.value = FontFamily.jaro
+            FontFamily.dancingScriptString -> fontFamily.value = FontFamily.dancingScript
+            FontFamily.dotoString -> fontFamily.value = FontFamily.doto
+            FontFamily.eduString -> fontFamily.value = FontFamily.edu
+            FontFamily.lobsterString -> fontFamily.value = FontFamily.lobster
+            FontFamily.playfairString -> fontFamily.value = FontFamily.playfair
+            FontFamily.poppinsString -> fontFamily.value = FontFamily.poppins
+            else -> FontFamily.fontFamilyRegular
+        }
+
         //  LaunchedEffect(note.content) {
         //    scope.launch(Dispatchers.Default) {
         // Truncate the HTML content to a reasonable preview length
@@ -100,7 +120,7 @@ fun SingleItemArchiveNoteList(
                 text = note.title,
                 modifier = Modifier.padding(10.dp),
                 fontSize = 25.sp,
-                fontFamily = com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyBold,
+                fontFamily = fontFamily.value,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
@@ -109,7 +129,7 @@ fun SingleItemArchiveNoteList(
                 modifier = Modifier.padding(10.dp),
                 fontSize = 15.sp,
                 overflow = TextOverflow.Ellipsis,
-                fontFamily = com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyLight
+                fontFamily = fontFamily.value
             )
         }
     } else if (note.listOfCheckedNotes.size > 0 && note.archive && note.listOfBulletPointNotes.size == 0 && !note.deletedNote && !note.locked) {

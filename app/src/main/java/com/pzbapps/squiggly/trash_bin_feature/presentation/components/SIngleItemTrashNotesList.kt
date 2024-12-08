@@ -51,6 +51,26 @@ fun SingleItemTrashNoteList(note: Note, navHostController: NavHostController) {
     // Set the truncated HTML to richTextState for a preview
     val previewText = richTextState.setHtml(truncatedHtml).annotatedString.text
 
+    var fontFamily = remember { mutableStateOf(FontFamily.fontFamilyRegular) }
+
+    var fontFamilyString = note.font
+
+    when (fontFamilyString) {
+        FontFamily.lufgaRegular -> fontFamily.value = FontFamily.fontFamilyRegular
+        FontFamily.lufgaBold -> fontFamily.value = FontFamily.fontFamilyBold
+        FontFamily.lufgaextraLight -> fontFamily.value = FontFamily.fontFamilyExtraLight
+        FontFamily.pacificoString -> fontFamily.value = FontFamily.pacificoRegular
+        FontFamily.parkinsonsString -> fontFamily.value = FontFamily.parkinsons
+        FontFamily.jaroString -> fontFamily.value = FontFamily.jaro
+        FontFamily.dancingScriptString -> fontFamily.value = FontFamily.dancingScript
+        FontFamily.dotoString -> fontFamily.value = FontFamily.doto
+        FontFamily.eduString -> fontFamily.value = FontFamily.edu
+        FontFamily.lobsterString -> fontFamily.value = FontFamily.lobster
+        FontFamily.playfairString -> fontFamily.value = FontFamily.playfair
+        FontFamily.poppinsString -> fontFamily.value = FontFamily.poppins
+        else -> FontFamily.fontFamilyRegular
+    }
+
     // Update the contentText on the main thread with the preview text
     //  withContext(Dispatchers.Main) {
     contentText.value = previewText
@@ -81,7 +101,7 @@ fun SingleItemTrashNoteList(note: Note, navHostController: NavHostController) {
                 bottomStart = CornerSize(10.dp),
                 bottomEnd = CornerSize(10.dp),
             ),
-     //       elevation = CardDefaults.cardElevation(15.dp),
+            //       elevation = CardDefaults.cardElevation(15.dp),
             colors = CardDefaults.cardColors(
                 containerColor = Color(note.color),
                 contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
@@ -93,7 +113,7 @@ fun SingleItemTrashNoteList(note: Note, navHostController: NavHostController) {
                 text = note.title,
                 modifier = Modifier.padding(10.dp),
                 fontSize = 25.sp,
-                fontFamily = FontFamily.fontFamilyBold,
+                fontFamily = fontFamily.value,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
@@ -102,7 +122,7 @@ fun SingleItemTrashNoteList(note: Note, navHostController: NavHostController) {
                 modifier = Modifier.padding(10.dp),
                 fontSize = 15.sp,
                 overflow = TextOverflow.Ellipsis,
-                fontFamily = FontFamily.fontFamilyLight
+                fontFamily = fontFamily.value
             )
         }
     } else if (note.listOfCheckedNotes.size > 0 && note.deletedNote && note.listOfBulletPointNotes.size == 0) {
@@ -132,7 +152,7 @@ fun SingleItemTrashNoteList(note: Note, navHostController: NavHostController) {
                 bottomStart = CornerSize(10.dp),
                 bottomEnd = CornerSize(10.dp),
             ),
-      //      elevation = CardDefaults.cardElevation(15.dp),
+            //      elevation = CardDefaults.cardElevation(15.dp),
             colors = CardDefaults.cardColors(
                 containerColor = Color(note.color),
                 contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
@@ -247,7 +267,7 @@ fun SingleItemTrashNoteList(note: Note, navHostController: NavHostController) {
                 bottomStart = CornerSize(10.dp),
                 bottomEnd = CornerSize(10.dp),
             ),
-       //     elevation = CardDefaults.cardElevation(15.dp),
+            //     elevation = CardDefaults.cardElevation(15.dp),
             colors = CardDefaults.cardColors(
                 containerColor = Color(note.color),
                 contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,

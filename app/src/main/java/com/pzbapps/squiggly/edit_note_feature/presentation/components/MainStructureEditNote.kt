@@ -209,9 +209,6 @@ fun MainStructureEditNote(
 
     var showFontBottomSheet = remember { mutableStateOf(false) }
 
-    LaunchedEffect(true) {
-    }
-
     when (fontFamily.value) {
         FontFamily.fontFamilyRegular -> fontFamilyString.value = FontFamily.lufgaRegular
         FontFamily.fontFamilyBold -> fontFamilyString.value = FontFamily.lufgaBold
