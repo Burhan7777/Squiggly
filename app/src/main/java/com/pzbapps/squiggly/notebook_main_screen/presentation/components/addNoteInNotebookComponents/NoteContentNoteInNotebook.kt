@@ -38,7 +38,8 @@ fun NoteContentNoteInNotebook(
     boldText: MutableState<Boolean>,
     richStateText: RichTextState,
     hideFormattingTextBar: MutableState<Boolean>,
-    backgroundColor: MutableState<Color>
+    backgroundColor: MutableState<Color>,
+    fontFamily: MutableState<androidx.compose.ui.text.font.FontFamily>
 //    notebook: MutableState<ArrayList<String>>,
 //    notebookFromDB: MutableState<ArrayList<NoteBook>>
 ) {
@@ -95,11 +96,11 @@ fun NoteContentNoteInNotebook(
         },
         colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
             backgroundColor = backgroundColor.value,
-            focusedIndicatorColor =  backgroundColor.value,
-            unfocusedIndicatorColor =  backgroundColor.value,
+            focusedIndicatorColor = backgroundColor.value,
+            unfocusedIndicatorColor = backgroundColor.value,
             cursorColor = MaterialTheme.colors.onPrimary
         ),
-        textStyle = TextStyle(fontFamily = FontFamily.fontFamilyBold, fontSize = 20.sp),
+        textStyle = TextStyle(fontFamily = fontFamily.value, fontSize = 20.sp),
         modifier = Modifier
             .focusRequester(focusRequester)
             .onFocusChanged {
@@ -119,11 +120,11 @@ fun NoteContentNoteInNotebook(
         RichTextEditor(
             state = richStateText,
             colors = RichTextEditorDefaults.richTextEditorColors(
-                containerColor =  backgroundColor.value,
+                containerColor = backgroundColor.value,
                 cursorColor = MaterialTheme.colors.onPrimary,
                 textColor = MaterialTheme.colors.onPrimary,
-                unfocusedIndicatorColor =  backgroundColor.value,
-                focusedIndicatorColor =  backgroundColor.value,
+                unfocusedIndicatorColor = backgroundColor.value,
+                focusedIndicatorColor = backgroundColor.value,
                 selectionColors = TextSelectionColors(
                     handleColor = MaterialTheme.colors.onPrimary,
                     backgroundColor = Color.Gray
@@ -140,7 +141,7 @@ fun NoteContentNoteInNotebook(
                 )
             },
             textStyle = TextStyle(
-                fontFamily = FontFamily.fontFamilyRegular,
+                fontFamily = fontFamily.value,
                 fontSize = 18.sp
             )
         )

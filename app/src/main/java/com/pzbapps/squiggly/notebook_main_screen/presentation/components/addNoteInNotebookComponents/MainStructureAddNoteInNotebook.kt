@@ -36,9 +36,11 @@ import androidx.navigation.NavHostController
 import com.mohamedrejeb.richeditor.model.RichTextState
 import com.pzbapps.squiggly.add_note_feature.presentation.components.BottomSheet.AddNoteBottomSheet
 import com.pzbapps.squiggly.add_note_feature.presentation.components.DiscardNoteAlertBox
+import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.common.presentation.components.AlertDialogBoxTrialEnded
+import com.pzbapps.squiggly.common.presentation.fontsbottomsheet.FontBottomSheet
 import com.pzbapps.squiggly.common.presentation.textcolorsbottomsheet.TextColorBottomSheet
 import com.pzbapps.squiggly.main_screen.domain.model.Note
 import kotlinx.coroutines.delay
@@ -111,6 +113,28 @@ fun MainStructureAddNoteInNotebook(
     // Track the current content as a snapshot
     var currentContent = remember { mutableStateOf("") }
 
+    var showFontBottomSheet = remember { mutableStateOf(false) }
+
+    var fontFamily = remember { mutableStateOf(FontFamily.fontFamilyRegular) }
+
+    var fontFamilyString = remember { mutableStateOf("") }
+
+    when (fontFamily.value) {
+        FontFamily.fontFamilyRegular -> fontFamilyString.value = FontFamily.lufgaRegular
+        FontFamily.fontFamilyBold -> fontFamilyString.value = FontFamily.lufgaBold
+        FontFamily.fontFamilyExtraLight -> fontFamilyString.value = FontFamily.lufgaextraLight
+        FontFamily.pacificoRegular -> fontFamilyString.value = FontFamily.pacificoString
+        FontFamily.parkinsons -> fontFamilyString.value = FontFamily.parkinsonsString
+        FontFamily.jaro -> fontFamilyString.value = FontFamily.jaroString
+        FontFamily.dancingScript -> fontFamilyString.value = FontFamily.dancingScriptString
+        FontFamily.doto -> fontFamilyString.value = FontFamily.dotoString
+        FontFamily.edu -> fontFamilyString.value = FontFamily.eduString
+        FontFamily.lobster -> fontFamilyString.value = FontFamily.lobsterString
+        FontFamily.playfair -> fontFamilyString.value = FontFamily.playfairString
+        FontFamily.poppins -> fontFamilyString.value = FontFamily.poppinsString
+        else -> FontFamily.fontFamilyRegular
+    }
+
     LaunchedEffect(richTextState.value) {
         snapshotFlow { richTextState.value.annotatedString }
             .debounce(200)
@@ -182,7 +206,8 @@ fun MainStructureAddNoteInNotebook(
                     timeModified = System.currentTimeMillis(),
                     notebook = notebookName,
                     timeStamp = System.currentTimeMillis(),
-                    color = backgroundColor.value.toArgb()
+                    color = backgroundColor.value.toArgb(),
+                    font = fontFamilyString.value
                 )
                 viewModel.insertNote(note)
             } else {
@@ -192,7 +217,8 @@ fun MainStructureAddNoteInNotebook(
                     timeModified = System.currentTimeMillis(),
                     notebook = notebookName,
                     timeStamp = System.currentTimeMillis(),
-                    color = 0
+                    color = 0,
+                    font = fontFamilyString.value
                 )
                 viewModel.insertNote(note)
             }
@@ -216,7 +242,8 @@ fun MainStructureAddNoteInNotebook(
                         timeModified = System.currentTimeMillis(),
                         notebook = notebookName,
                         timeStamp = System.currentTimeMillis(),
-                        color = backgroundColor.value.toArgb()
+                        color = backgroundColor.value.toArgb(),
+                        font = fontFamilyString.value
                     )
                     viewModel.updateNote(updatedNote)
                 } else {
@@ -227,7 +254,8 @@ fun MainStructureAddNoteInNotebook(
                         timeModified = System.currentTimeMillis(),
                         notebook = notebookName,
                         timeStamp = System.currentTimeMillis(),
-                        color = 0
+                        color = 0,
+                        font = fontFamilyString.value
                     )
                     viewModel.updateNote(updatedNote)
                 }
@@ -256,7 +284,8 @@ fun MainStructureAddNoteInNotebook(
                         timeModified = System.currentTimeMillis(),
                         notebook = notebookName,
                         timeStamp = System.currentTimeMillis(),
-                        color = backgroundColor.value.toArgb()
+                        color = backgroundColor.value.toArgb(),
+                        font = fontFamilyString.value
                     )
                     viewModel.updateNote(updatedNote)
                 } else {
@@ -267,7 +296,8 @@ fun MainStructureAddNoteInNotebook(
                         timeModified = System.currentTimeMillis(),
                         notebook = notebookName,
                         timeStamp = System.currentTimeMillis(),
-                        color = 0
+                        color = 0,
+                        font = fontFamilyString.value
                     )
                     viewModel.updateNote(updatedNote)
                 }
@@ -291,7 +321,8 @@ fun MainStructureAddNoteInNotebook(
                     timeModified = System.currentTimeMillis(),
                     notebook = notebookName,
                     timeStamp = System.currentTimeMillis(),
-                    color = backgroundColor.value.toArgb()
+                    color = backgroundColor.value.toArgb(),
+                    font = fontFamilyString.value
                 )
                 viewModel.updateNote(updatedNote)
             } else {
@@ -302,7 +333,8 @@ fun MainStructureAddNoteInNotebook(
                     timeModified = System.currentTimeMillis(),
                     notebook = notebookName,
                     timeStamp = System.currentTimeMillis(),
-                    color = 0
+                    color = 0,
+                    font = fontFamilyString.value
                 )
                 viewModel.updateNote(updatedNote)
             }
@@ -334,7 +366,8 @@ fun MainStructureAddNoteInNotebook(
                                     timeModified = System.currentTimeMillis(),
                                     notebook = notebookName,
                                     timeStamp = System.currentTimeMillis(),
-                                    color = backgroundColor.value.toArgb()
+                                    color = backgroundColor.value.toArgb(),
+                                    font = fontFamilyString.value
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
@@ -349,7 +382,8 @@ fun MainStructureAddNoteInNotebook(
                                     timeModified = System.currentTimeMillis(),
                                     notebook = notebookName,
                                     timeStamp = System.currentTimeMillis(),
-                                    color = 0
+                                    color = 0,
+                                    font = fontFamilyString.value
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
@@ -390,7 +424,8 @@ fun MainStructureAddNoteInNotebook(
                                     timeModified = System.currentTimeMillis(),
                                     notebook = notebookName,
                                     timeStamp = System.currentTimeMillis(),
-                                    color = backgroundColor.value.toArgb()
+                                    color = backgroundColor.value.toArgb(),
+                                    font = fontFamilyString.value
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
@@ -405,7 +440,8 @@ fun MainStructureAddNoteInNotebook(
                                     timeModified = System.currentTimeMillis(),
                                     notebook = notebookName,
                                     timeStamp = System.currentTimeMillis(),
-                                    color = 0
+                                    color = 0,
+                                    font = fontFamilyString.value
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
@@ -465,6 +501,9 @@ fun MainStructureAddNoteInNotebook(
                 if (showTextColorBottomSheet.value) {
                     TextColorBottomSheet(showTextColorBottomSheet, richTextState)
                 }
+                if (showFontBottomSheet.value) {
+                    FontBottomSheet(showFontBottomSheet, richTextState, fontFamily)
+                }
                 NoteContentNoteInNotebook(
                     title,
                     content,
@@ -475,7 +514,8 @@ fun MainStructureAddNoteInNotebook(
                     boldText,
                     richTextState.value,
                     hideFormattingTextBarWhenTitleIsInFocus,
-                    backgroundColor
+                    backgroundColor,
+                    fontFamily
 //                notebook,
 //                notebookFromDB)
                 )
@@ -506,7 +546,8 @@ fun MainStructureAddNoteInNotebook(
                         redoStack = redoStack,
                         currentContent = currentContent,
                         showBottomSheet = showBottomSheet,
-                        showTextColorBottomSheet = showTextColorBottomSheet
+                        showTextColorBottomSheet = showTextColorBottomSheet,
+                        showFontBottomSheet = showFontBottomSheet
                     )
                 }
             }
