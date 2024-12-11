@@ -8,9 +8,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.ChipDefaults
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -39,7 +42,10 @@ import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import kotlinx.coroutines.delay
 
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class,
+    ExperimentalMaterialApi::class
+)
 @Composable
 fun NoteContent(
     title: MutableState<String>,
@@ -221,6 +227,24 @@ fun NoteContent(
                 fontSize = 18.sp
             )
         )
+
+        Text("Tags")
+        androidx.compose.material.Chip(
+            modifier = Modifier.padding(5.dp),
+            colors = ChipDefaults.chipColors(
+                backgroundColor = MaterialTheme.colors.primaryVariant,
+                contentColor = MaterialTheme.colors.onPrimary
+            ),
+            onClick = {},
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Filled.Add,
+                    contentDescription = "Add Tag",
+                    tint = MaterialTheme.colors.onPrimary
+                )
+            }) {
+            Text(text = "Add Tag", color = MaterialTheme.colors.onPrimary)
+        }
     }
 }
 

@@ -1,5 +1,9 @@
 -------------------------- CHANGE LOG------------------------
 
+
+v4.0.0 - rc
+---------------------------
+
 v3.3.0-beta
 ---------------------------
 1) Fixes crashing of app on activity not found in document scanner feature

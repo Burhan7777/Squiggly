@@ -3,6 +3,7 @@ package com.pzbapps.squiggly.common.data.data_source
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteQuery
 import com.pzbapps.squiggly.common.data.Model.NoteBook
+import com.pzbapps.squiggly.common.data.Model.Tag
 import com.pzbapps.squiggly.main_screen.domain.model.Note
 
 @androidx.room.Dao
@@ -15,7 +16,7 @@ interface Dao {
     fun getAllNotes(): List<Note>
 
     @Query("SELECT * from notes ORDER BY timeModified DESC")
-    fun getAllNotesByDateModified():List<Note>
+    fun getAllNotesByDateModified(): List<Note>
 
     @Delete
     fun deleteAllNotes(list: List<Note>)
@@ -34,6 +35,9 @@ interface Dao {
 
     @Upsert
     suspend fun addNoteBook(notebook: NoteBook)
+
+    @Upsert
+    suspend fun addTag(tag: Tag)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateNotebook(notebook: NoteBook)

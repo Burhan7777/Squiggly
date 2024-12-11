@@ -90,6 +90,18 @@ class AppModule {
         }
     }
 
+    var migration_21_22 = object : Migration(21, 22) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL(
+                """
+            CREATE TABLE IF NOT EXISTS tags (
+                id INTEGER PRIMARY KEY NOT NULL,
+                name TEXT NOT NULL
+            )
+            """
+            )
+        }
+    }
 
 
     @Provides
@@ -103,7 +115,8 @@ class AppModule {
                 migration_17_18,
                 migration_18_19,
                 migration_19_20,
-                migration_20_21
+                migration_20_21,
+                migration_21_22
             )
             .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
             //.setJournalMode(RoomDatabase.JournalMode.WRITE_AHEAD_LOGGING)

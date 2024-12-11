@@ -20,6 +20,7 @@ import com.pzbapps.squiggly.add_note_feature.domain.usecase.AddNotebookUseCase
 import com.pzbapps.squiggly.add_note_feature.domain.usecase.GetNoteBookUseCase
 import com.pzbapps.squiggly.archive_notes_feature.domain.GetArchiveNotesUseCase
 import com.pzbapps.squiggly.common.data.Model.NoteBook
+import com.pzbapps.squiggly.common.data.Model.Tag
 import com.pzbapps.squiggly.common.domain.utils.Constant
 import com.pzbapps.squiggly.common.domain.utils.GetResult
 import com.pzbapps.squiggly.edit_note_feature.data.repository.EditNoteRepository
@@ -216,7 +217,7 @@ class MainActivityViewModel @Inject constructor(
             getNoteById.value = editNoteRepository.getNotesById(id)
             //getNoteByIdLivData.postValue(editNoteRepository.getNotesById(id))
             _getNoteByIdFlow.value = editNoteRepository.getNotesById(id)
-             getNoteByIdLivData2.postValue(editNoteRepository.getNotesById(id))
+            getNoteByIdLivData2.postValue(editNoteRepository.getNotesById(id))
         }
     }
 
@@ -381,30 +382,11 @@ class MainActivityViewModel @Inject constructor(
         }
     }
 
-    fun archiveNote(id: Int, navHostController: NavHostController, activity: MainActivity) {
-
+    fun addTag(tag: Tag) {
         viewModelScope.launch(Dispatchers.IO) {
-
+            insertNoteRepository.addTag(tag)
         }
     }
 
-    suspend fun moveToTrashById(deletedNote: Boolean, timePutInTrash: Long, id: Int) {
-        editNoteRepository.moveToTrashById(deletedNote, timePutInTrash, id)
-    }
 
-    suspend fun moveToArchive(archive: Boolean, id: Int) {
-        editNoteRepository.moveToArchive(archive, id)
-    }
-
-    suspend fun lockOrUnlockNote(lockOrUnlock: Boolean, id: Int) {
-        editNoteRepository.lockOrUnlockNote(lockOrUnlock, id)
-    }
-
-    suspend fun pinOrUnpinNote(pinOrUnpin: Boolean, id: Int) {
-        editNoteRepository.pinOrUnpinNote(pinOrUnpin, id)
-    }
-
-    fun unArchiveNote(id: Int, navHostController: NavHostController, activity: MainActivity) {
-
-    }
 }
