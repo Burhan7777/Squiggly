@@ -50,7 +50,7 @@ import java.io.FileOutputStream
 @Composable
 fun SelectTags(
     lisOfTags: SnapshotStateList<Tag>,
-    listOfSelectedTags: ArrayList<String>,
+    listOfSelectedTags: MutableState<ArrayList<String>>,
     viewModel: MainActivityViewModel,
     showAddTagAlertBox: MutableState<Boolean>,
     onDismiss: () -> Unit
@@ -114,9 +114,9 @@ fun SelectTags(
                                         .clickable {
                                             checkbox.value = !checkbox.value
                                             if (checkbox.value) {
-                                                listOfSelectedTags.add(item.name)
+                                                listOfSelectedTags.value.add(item.name)
                                             } else {
-                                                listOfSelectedTags.remove(item.name)
+                                                listOfSelectedTags.value.remove(item.name)
                                             }
                                         }
 

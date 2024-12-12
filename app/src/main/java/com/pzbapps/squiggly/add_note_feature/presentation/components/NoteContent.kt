@@ -15,6 +15,7 @@ import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -117,7 +118,7 @@ fun NoteContent(
 
     Box(modifier = Modifier.fillMaxWidth()) {
         if (showSelectTagAlertBox.value) {
-            SelectTags(viewModel.tags, listOFSelectedTags.value, viewModel, showAddTagAlertBox) {
+            SelectTags(viewModel.tags, listOFSelectedTags, viewModel, showAddTagAlertBox) {
                 showSelectTagAlertBox.value = false
             }
         }
@@ -252,25 +253,50 @@ fun NoteContent(
             fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic,
             modifier = Modifier.padding(start = 10.dp)
         )
-        androidx.compose.material.Chip(
-            modifier = Modifier.padding(5.dp),
-            colors = ChipDefaults.chipColors(
-                backgroundColor = MaterialTheme.colors.primaryVariant,
-                contentColor = MaterialTheme.colors.onPrimary
-            ),
-            onClick = { showSelectTagAlertBox.value = true },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Filled.Add,
-                    contentDescription = "Add Tag",
-                    tint = MaterialTheme.colors.onPrimary
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(3.dp)
+        ) {
+            listOFSelectedTags.value.forEach { item ->
+                androidx.compose.material.Chip(onClick = {}, modifier = Modifier.padding(5.dp),
+                    colors = ChipDefaults.chipColors(
+                        backgroundColor = MaterialTheme.colors.onPrimary,
+                    ),
+                    leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Filled.Clear,
+                                contentDescription = "Remove from list",
+                                tint = MaterialTheme.colors.onSecondary
+                            )
+                    }
+                ) {
+                    Text(
+                        item,
+                        color = MaterialTheme.colors.onSecondary,
+                        fontFamily = FontFamily.fontFamilyRegular
+                    )
+                }
+            }
+            androidx.compose.material.Chip(
+                modifier = Modifier.padding(5.dp),
+                colors = ChipDefaults.chipColors(
+                    backgroundColor = MaterialTheme.colors.primaryVariant,
+                    contentColor = MaterialTheme.colors.onPrimary
+                ),
+                onClick = { showSelectTagAlertBox.value = true },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Filled.Add,
+                        contentDescription = "Add Tag",
+                        tint = MaterialTheme.colors.onPrimary
+                    )
+                }) {
+                Text(
+                    text = "Add Tag",
+                    color = MaterialTheme.colors.onPrimary,
+                    fontFamily = FontFamily.fontFamilyRegular
                 )
-            }) {
-            Text(
-                text = "Add Tag",
-                color = MaterialTheme.colors.onPrimary,
-                fontFamily = FontFamily.fontFamilyRegular
-            )
+            }
         }
     }
 }
