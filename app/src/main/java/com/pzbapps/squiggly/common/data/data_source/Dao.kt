@@ -70,6 +70,9 @@ interface Dao {
     @Query("SELECT * from notebook")
     suspend fun getAllNoteBooks(): List<NoteBook>
 
+    @Query("SELECT * FROM tags")
+    suspend fun getAllTags(): List<Tag>
+
     @Query("DELETE FROM notes where deletedNote = :deletedNote")
     suspend fun deleteNoteFromTrash(deletedNote: Boolean)
 

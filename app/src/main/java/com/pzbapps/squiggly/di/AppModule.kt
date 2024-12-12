@@ -103,6 +103,22 @@ class AppModule {
         }
     }
 
+    var migration_22_23 = object : Migration(22, 23) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL(
+                "ALTER TABLE notes ADD COLUMN tags TEXT NOT NULL DEFAULT '[]'"
+            )
+        }
+    }
+
+    var migration_23_24 = object : Migration(23, 24) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL(
+                "ALTER TABLE tags ADD COLUMN dummyColumn INTEGER NOT NULL DEFAULT (0) "
+            )
+        }
+    }
+
 
     @Provides
     @Singleton
@@ -116,7 +132,9 @@ class AppModule {
                 migration_18_19,
                 migration_19_20,
                 migration_20_21,
-                migration_21_22
+                migration_21_22,
+                migration_22_23,
+                migration_23_24
             )
             .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
             //.setJournalMode(RoomDatabase.JournalMode.WRITE_AHEAD_LOGGING)

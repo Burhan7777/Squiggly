@@ -31,6 +31,7 @@ fun AddNoteScreen(
     val richStateText = mutableStateOf(rememberRichTextState())
 
     viewModel.getAllNotebooks()
+    viewModel.getAllTags()
 
     //  var note = Note(0, title.value, content.value, getTimeInMilliSeconds(), 123456)
 

@@ -89,6 +89,8 @@ class MainActivityViewModel @Inject constructor(
     var notebooks =
         mutableStateListOf<String>() // These are the notebooks displayed in the drop down menu in the "ADD NOTE" screen
 
+    var tags =
+        mutableStateListOf<Tag>() // GETS ALL TAGS FROM THE DATABASE USED IN ADD NOTES OF ALL FEATURES AND EDIT NOTES AND ALSO CHECKBOXES AND BULLET-POINTS
     var getNote = mutableStateOf(Note())
         private set
 
@@ -385,6 +387,12 @@ class MainActivityViewModel @Inject constructor(
     fun addTag(tag: Tag) {
         viewModelScope.launch(Dispatchers.IO) {
             insertNoteRepository.addTag(tag)
+        }
+    }
+
+    fun getAllTags() {
+        viewModelScope.launch(Dispatchers.IO) {
+            tags = insertNoteRepository.getAllTags().toMutableStateList()
         }
     }
 

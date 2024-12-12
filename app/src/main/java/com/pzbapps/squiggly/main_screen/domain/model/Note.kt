@@ -24,6 +24,7 @@ data class Note(
     var notePinned: Boolean = false,
     var timeModified: Long = 0,
     var reminder: Long = 0,
-    var font:String = "Default"
+    var font:String = "Default",
+    var tags: ArrayList<String> = arrayListOf()
 
 )

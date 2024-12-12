@@ -1,4 +1,4 @@
-package com.pzbapps.squiggly.common.presentation.components
+package com.pzbapps.squiggly.common.presentation.alertboxes
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.CornerSize
@@ -8,27 +8,19 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.pzbapps.squiggly.common.presentation.FontFamily
 
+
 @Composable
-fun ShowFirebaseDialogBox(
-    title: String,
-    body: String,
-    confirmButtonText: String,
-    onClick: () -> Unit,
+fun AlertDialogBoxTrialEnded(
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
-
-    var scope = rememberCoroutineScope()
-    androidx.compose.material3.AlertDialog(
-        onDismissRequest = {
-            onDismiss()
-        },
+    androidx.compose.material3.AlertDialog(onDismissRequest = {
+        onDismiss()
+    },
         shape = MaterialTheme.shapes.medium.copy(
             topStart = CornerSize(15.dp),
             topEnd = CornerSize(15.dp),
@@ -40,17 +32,9 @@ fun ShowFirebaseDialogBox(
                      Icon(imageVector = Icons.Filled.Delete, contentDescription = "Delete")
               }*/
 
-        title = {
-            Text(
-                text = title,
-                fontFamily = FontFamily.fontFamilyBold,
-                fontSize = 20.sp,
-                color = MaterialTheme.colors.onPrimary
-            )
-        },
         text = {
             Text(
-                text = body,
+                text = " Great !!! You stuck with the app and completed your 30 days trial period. I hope you loved the app so far and would continue to use it. App now requires a one time payment of $1 and app will be yours forever with the current functionality. Please ignore if already bought",
                 fontFamily = FontFamily.fontFamilyRegular,
                 color = MaterialTheme.colors.onPrimary
             )
@@ -58,7 +42,7 @@ fun ShowFirebaseDialogBox(
         confirmButton = {
             Button(
                 onClick = {
-                    onClick()
+                    onDismiss()
                 },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.onPrimary,
@@ -71,7 +55,7 @@ fun ShowFirebaseDialogBox(
                     bottomEnd = CornerSize(15.dp),
                 )
             ) {
-                Text(text = confirmButtonText, fontFamily = FontFamily.fontFamilyRegular)
+                Text(text = "Buy App", fontFamily = FontFamily.fontFamilyRegular)
             }
         },
         dismissButton = {

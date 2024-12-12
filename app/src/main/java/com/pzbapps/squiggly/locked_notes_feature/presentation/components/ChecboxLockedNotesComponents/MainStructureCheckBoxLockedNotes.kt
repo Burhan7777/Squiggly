@@ -45,7 +45,7 @@ import com.pzbapps.squiggly.add_note_feature.presentation.components.BottomSheet
 import com.pzbapps.squiggly.add_note_feature.presentation.components.DiscardNoteAlertBox
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
-import com.pzbapps.squiggly.common.presentation.components.AlertDialogBoxTrialEnded
+import com.pzbapps.squiggly.common.presentation.alertboxes.AlertDialogBoxTrialEnded
 import com.pzbapps.squiggly.main_screen.domain.model.Note
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

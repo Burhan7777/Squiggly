@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -39,6 +40,8 @@ import com.mohamedrejeb.richeditor.ui.material3.RichTextEditorDefaults
 import com.pzbapps.squiggly.common.data.Model.NoteBook
 import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
+import com.pzbapps.squiggly.common.presentation.alertboxes.addTagAlertBoxes.AddTag
+import com.pzbapps.squiggly.common.presentation.alertboxes.addTagAlertBoxes.SelectTags
 import kotlinx.coroutines.delay
 
 
@@ -59,7 +62,8 @@ fun NoteContent(
     hideFormattingTextBar: MutableState<Boolean>,
     showSavedText: MutableState<Boolean>,
     backgroundColor: MutableState<Color>,
-    fontFamily: MutableState<androidx.compose.ui.text.font.FontFamily>
+    fontFamily: MutableState<androidx.compose.ui.text.font.FontFamily>,
+    listOFSelectedTags: MutableState<ArrayList<String>>
 //    notebook: MutableState<ArrayList<String>>,
 //    notebookFromDB: MutableState<ArrayList<NoteBook>>
 ) {
@@ -72,6 +76,9 @@ fun NoteContent(
 //        mutableStateOf("")
 //    }
 //
+
+    val showSelectTagAlertBox = remember { mutableStateOf(false) }
+    val showAddTagAlertBox = remember { mutableStateOf(false) }
 
     var notebook by remember {
         mutableStateOf("")
@@ -109,6 +116,17 @@ fun NoteContent(
 //    Log.i("notebooks", listOfNoteBooks?.size.toString())
 
     Box(modifier = Modifier.fillMaxWidth()) {
+        if (showSelectTagAlertBox.value) {
+            SelectTags(viewModel.tags, listOFSelectedTags.value, viewModel, showAddTagAlertBox) {
+                showSelectTagAlertBox.value = false
+            }
+        }
+
+        if (showAddTagAlertBox.value) {
+            AddTag(viewModel) {
+                showAddTagAlertBox.value = false
+            }
+        }
         Row(
             horizontalArrangement = Arrangement.spacedBy(0.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -228,14 +246,19 @@ fun NoteContent(
             )
         )
 
-        Text("Tags")
+        Text(
+            "Tags",
+            color = MaterialTheme.colors.onPrimary.copy(alpha = 0.5f),
+            fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic,
+            modifier = Modifier.padding(start = 10.dp)
+        )
         androidx.compose.material.Chip(
             modifier = Modifier.padding(5.dp),
             colors = ChipDefaults.chipColors(
                 backgroundColor = MaterialTheme.colors.primaryVariant,
                 contentColor = MaterialTheme.colors.onPrimary
             ),
-            onClick = {},
+            onClick = { showSelectTagAlertBox.value = true },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Filled.Add,
@@ -243,7 +266,11 @@ fun NoteContent(
                     tint = MaterialTheme.colors.onPrimary
                 )
             }) {
-            Text(text = "Add Tag", color = MaterialTheme.colors.onPrimary)
+            Text(
+                text = "Add Tag",
+                color = MaterialTheme.colors.onPrimary,
+                fontFamily = FontFamily.fontFamilyRegular
+            )
         }
     }
 }

@@ -1,8 +1,5 @@
 package com.pzbapps.squiggly.edit_note_feature.presentation.components
 
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
-import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
@@ -29,7 +26,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.DpOffset
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,7 +33,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
-import com.google.android.datatransport.cct.StringMerger
 import com.google.firebase.Firebase
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.auth.auth
@@ -46,11 +41,10 @@ import com.pzbapps.squiggly.add_note_feature.presentation.components.BottomSheet
 import com.pzbapps.squiggly.add_note_feature.presentation.components.BottomTextFormattingBar
 import com.pzbapps.squiggly.common.domain.utils.Constant
 import com.pzbapps.squiggly.common.presentation.*
-import com.pzbapps.squiggly.common.presentation.components.AlertDialogBoxTrialEnded
+import com.pzbapps.squiggly.common.presentation.alertboxes.AlertDialogBoxTrialEnded
 import com.pzbapps.squiggly.common.presentation.fontsbottomsheet.FontBottomSheet
 import com.pzbapps.squiggly.common.presentation.textcolorsbottomsheet.TextColorBottomSheet
 import com.pzbapps.squiggly.edit_note_feature.domain.usecase.checkIfUserHasCreatedPassword
-import com.pzbapps.squiggly.edit_note_feature.domain.utils.permissionHandlerNotification
 import com.pzbapps.squiggly.edit_note_feature.presentation.components.alertBoxes.AlertBoxShareNote
 import com.pzbapps.squiggly.edit_note_feature.presentation.components.alertBoxes.AlertBoxShowRationale
 import com.pzbapps.squiggly.edit_note_feature.presentation.components.alertBoxes.AlertDialogBoxDelete
@@ -58,7 +52,6 @@ import com.pzbapps.squiggly.edit_note_feature.presentation.components.alertBoxes
 import com.pzbapps.squiggly.edit_note_feature.presentation.components.alertBoxes.AlertDialogBoxEnterPasswordToUnlock
 import com.pzbapps.squiggly.edit_note_feature.presentation.components.alertBoxes.AlertDialogBoxPassword
 import com.pzbapps.squiggly.main_screen.domain.model.Note
-import com.pzbapps.squiggly.reminder_feature.scheduleReminder
 import com.pzbapps.squiggly.settings_feature.screen.presentation.components.LoadingDialogBox
 import com.pzbapps.squiggly.settings_feature.screen.presentation.components.YouNeedToLoginFirst
 import kotlinx.coroutines.CoroutineScope
@@ -69,8 +62,6 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
-import java.util.Calendar
 import java.util.Stack
 import kotlin.collections.ArrayList
 

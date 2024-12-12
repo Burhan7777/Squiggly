@@ -37,7 +37,7 @@ import com.pzbapps.squiggly.common.domain.usecase.ShowFIrebaseMaintenanceAlertBo
 import com.pzbapps.squiggly.common.domain.usecase.ShowFirebaseOtherPurposesAlertBox
 import com.pzbapps.squiggly.common.domain.usecase.ShowFirebaseUpdateAlertBox
 import com.pzbapps.squiggly.common.domain.utils.Constant
-import com.pzbapps.squiggly.common.presentation.components.ShowFirebaseDialogBox
+import com.pzbapps.squiggly.common.presentation.alertboxes.ShowFirebaseDialogBox
 import com.pzbapps.squiggly.main_screen.domain.model.Note
 import com.pzbapps.squiggly.ui.theme.ScribbleTheme
 import dagger.hilt.android.AndroidEntryPoint

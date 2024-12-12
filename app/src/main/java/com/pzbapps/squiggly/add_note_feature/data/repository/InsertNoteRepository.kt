@@ -8,20 +8,25 @@ import javax.inject.Inject
 
 class InsertNoteRepository @Inject constructor(private val noteDatabase: NoteDatabase) {
 
-    suspend fun insertNote(note: Note):Long {
-       return noteDatabase.getDao().insertNote(note)
+    suspend fun insertNote(note: Note): Long {
+        return noteDatabase.getDao().insertNote(note)
     }
 
     suspend fun addNoteBook(notebook: NoteBook) {
         noteDatabase.getDao().addNoteBook(notebook)
     }
 
-    suspend fun addTag(tag: Tag){
+    suspend fun addTag(tag: Tag) {
         noteDatabase.getDao().addTag(tag)
     }
 
     suspend fun getAllNoteBooks(): List<NoteBook> {
         return noteDatabase.getDao().getAllNoteBooks()
+    }
+
+    suspend fun getAllTags(): List<Tag> {
+        return noteDatabase.getDao().getAllTags()
+
     }
 
 

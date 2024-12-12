@@ -1,4 +1,4 @@
-package com.pzbapps.squiggly.common.presentation.components
+package com.pzbapps.squiggly.common.presentation.alertboxes
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.CornerSize
@@ -8,19 +8,27 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.pzbapps.squiggly.common.presentation.FontFamily
 
-
 @Composable
-fun AlertDialogBoxTrialEnded(
+fun ShowFirebaseDialogBox(
+    title: String,
+    body: String,
+    confirmButtonText: String,
+    onClick: () -> Unit,
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
-    androidx.compose.material3.AlertDialog(onDismissRequest = {
-        onDismiss()
-    },
+
+    var scope = rememberCoroutineScope()
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = {
+            onDismiss()
+        },
         shape = MaterialTheme.shapes.medium.copy(
             topStart = CornerSize(15.dp),
             topEnd = CornerSize(15.dp),
@@ -32,9 +40,17 @@ fun AlertDialogBoxTrialEnded(
                      Icon(imageVector = Icons.Filled.Delete, contentDescription = "Delete")
               }*/
 
+        title = {
+            Text(
+                text = title,
+                fontFamily = FontFamily.fontFamilyBold,
+                fontSize = 20.sp,
+                color = MaterialTheme.colors.onPrimary
+            )
+        },
         text = {
             Text(
-                text = " Great !!! You stuck with the app and completed your 30 days trial period. I hope you loved the app so far and would continue to use it. App now requires a one time payment of $1 and app will be yours forever with the current functionality. Please ignore if already bought",
+                text = body,
                 fontFamily = FontFamily.fontFamilyRegular,
                 color = MaterialTheme.colors.onPrimary
             )
@@ -42,7 +58,7 @@ fun AlertDialogBoxTrialEnded(
         confirmButton = {
             Button(
                 onClick = {
-                    onDismiss()
+                    onClick()
                 },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.onPrimary,
@@ -55,7 +71,7 @@ fun AlertDialogBoxTrialEnded(
                     bottomEnd = CornerSize(15.dp),
                 )
             ) {
-                Text(text = "Buy App", fontFamily = FontFamily.fontFamilyRegular)
+                Text(text = confirmButtonText, fontFamily = FontFamily.fontFamilyRegular)
             }
         },
         dismissButton = {

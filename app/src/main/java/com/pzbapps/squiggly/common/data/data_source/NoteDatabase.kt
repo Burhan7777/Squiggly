@@ -10,7 +10,7 @@ import com.pzbapps.squiggly.common.domain.utils.ConverterBoolean
 import com.pzbapps.squiggly.common.domain.utils.ConverterString
 import com.pzbapps.squiggly.main_screen.domain.model.Note
 
-@Database(entities = [Note::class, NoteBook::class, DummyTable::class, Tag::class], version = 22)
+@Database(entities = [Note::class, NoteBook::class, DummyTable::class, Tag::class], version = 24)
 @TypeConverters(ConverterBoolean::class, ConverterString::class)
 abstract class NoteDatabase : RoomDatabase() {
 

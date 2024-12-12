@@ -4,14 +4,12 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.ColorLens
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -31,9 +29,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.font.FontListFontFamily
-import androidx.compose.ui.text.font.GenericFontFamily
-import androidx.compose.ui.text.font.LoadedFontFamily
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -46,11 +41,10 @@ import com.pzbapps.squiggly.add_note_feature.presentation.components.BottomSheet
 import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
-import com.pzbapps.squiggly.common.presentation.components.AlertDialogBoxTrialEnded
+import com.pzbapps.squiggly.common.presentation.alertboxes.AlertDialogBoxTrialEnded
 import com.pzbapps.squiggly.common.presentation.fontsbottomsheet.FontBottomSheet
 import com.pzbapps.squiggly.common.presentation.textcolorsbottomsheet.TextColorBottomSheet
 import com.pzbapps.squiggly.main_screen.domain.model.Note
-import com.pzbapps.squiggly.ui.theme.white
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
@@ -82,6 +76,7 @@ fun MainStructureAddNote(
     var boldText = remember { mutableStateOf(false) }
     var underlineText = remember { mutableStateOf(false) }
     var italicText = remember { mutableStateOf(false) }
+    val listOfSelectedTags = remember { mutableStateOf(ArrayList<String>()) } // THESE ARE THE TAGS SELECTED BY THE USER IN ADD NOTE FEATURE AND WILL BE ADDED TO THE "LIST_OF_TAGS" IN THE NOTE TABLE
 
     var showDiscardNoteAlertBox = rememberSaveable { mutableStateOf(false) }
 
@@ -507,7 +502,7 @@ fun MainStructureAddNote(
                         Icon(
                             imageVector = Icons.Filled.Check,
                             contentDescription = "Save",
-                            tint =MaterialTheme.colors.onPrimary
+                            tint = MaterialTheme.colors.onPrimary
                         )
                     }
                     if (showTrialEndedDialogBox.value) {
@@ -557,6 +552,7 @@ fun MainStructureAddNote(
                     showSavedText,
                     backgroundColor,
                     fontFamily,
+                    listOfSelectedTags
 //                notebook,
 //                notebookFromDB)
                 )
@@ -594,7 +590,11 @@ fun MainStructureAddNote(
                 }
             }
             if (showBottomSheet.value) {
-                AddNoteBottomSheet(showBottomSheet = showBottomSheet, backgroundColor,activity = activity)
+                AddNoteBottomSheet(
+                    showBottomSheet = showBottomSheet,
+                    backgroundColor,
+                    activity = activity
+                )
             }
             if (showTextColorBottomSheet.value) {
                 TextColorBottomSheet(showTextColorBottomSheet, richTextState)
