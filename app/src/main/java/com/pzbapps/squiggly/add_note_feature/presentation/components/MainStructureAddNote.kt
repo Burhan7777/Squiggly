@@ -211,7 +211,8 @@ fun MainStructureAddNote(
                     notebook = notebookState.value,
                     color = backgroundColor.value.toArgb(),
                     timeStamp = System.currentTimeMillis(),
-                    font = fontFamilyString.value
+                    font = fontFamilyString.value,
+                    tags = listOfSelectedTags.toCollection(ArrayList())
                 )
                 viewModel.insertNote(note)
             } else {
@@ -222,7 +223,8 @@ fun MainStructureAddNote(
                     notebook = notebookState.value,
                     color = 0,
                     timeStamp = System.currentTimeMillis(),
-                    font = fontFamilyString.value
+                    font = fontFamilyString.value,
+                    tags = listOfSelectedTags.toCollection(ArrayList())
                 )
                 viewModel.insertNote(note)
             }
@@ -248,7 +250,8 @@ fun MainStructureAddNote(
                         notebook = notebookState.value,
                         color = backgroundColor.value.toArgb(),
                         timeStamp = System.currentTimeMillis(),
-                        font = fontFamilyString.value
+                        font = fontFamilyString.value,
+                        tags = listOfSelectedTags.toCollection(ArrayList())
                     )
                     viewModel.updateNote(updatedNote)
                 } else {
@@ -260,7 +263,8 @@ fun MainStructureAddNote(
                         notebook = notebookState.value,
                         color = 0,
                         timeStamp = System.currentTimeMillis(),
-                        font = fontFamilyString.value
+                        font = fontFamilyString.value,
+                        tags = listOfSelectedTags.toCollection(ArrayList())
                     )
                     viewModel.updateNote(updatedNote)
                 }
@@ -292,7 +296,8 @@ fun MainStructureAddNote(
                         notebook = notebookState.value,
                         color = backgroundColor.value.toArgb(),
                         timeStamp = System.currentTimeMillis(),
-                        font = fontFamilyString.value
+                        font = fontFamilyString.value,
+                        tags = listOfSelectedTags.toCollection(ArrayList())
                     )
                     viewModel.updateNote(updatedNote)
                 } else {
@@ -304,7 +309,8 @@ fun MainStructureAddNote(
                         notebook = notebookState.value,
                         color = 0,
                         timeStamp = System.currentTimeMillis(),
-                        font = fontFamilyString.value
+                        font = fontFamilyString.value,
+                        tags = listOfSelectedTags.toCollection(ArrayList())
                     )
                     viewModel.updateNote(updatedNote)
                 }
@@ -333,7 +339,8 @@ fun MainStructureAddNote(
                     notebook = notebookState.value,
                     color = backgroundColor.value.toArgb(),
                     timeStamp = System.currentTimeMillis(),
-                    font = fontFamilyString.value
+                    font = fontFamilyString.value,
+                    tags = listOfSelectedTags.toCollection(ArrayList())
                 )
                 print("not equal")
                 viewModel.updateNote(updatedNote)
@@ -346,7 +353,8 @@ fun MainStructureAddNote(
                     notebook = notebookState.value,
                     color = 0,
                     timeStamp = System.currentTimeMillis(),
-                    font = fontFamilyString.value
+                    font = fontFamilyString.value,
+                    tags = listOfSelectedTags.toCollection(ArrayList())
                 )
                 print("equal")
                 viewModel.updateNote(updatedNote)
@@ -390,7 +398,8 @@ fun MainStructureAddNote(
                                     locked = false,
                                     timeModified = System.currentTimeMillis(),
                                     color = backgroundColor.value.toArgb(),
-                                    font = fontFamilyString.value
+                                    font = fontFamilyString.value,
+                                    tags = listOfSelectedTags.toCollection(ArrayList())
 
                                 )
                                 viewModel.updateNote(note2)
@@ -406,7 +415,8 @@ fun MainStructureAddNote(
                                     locked = false,
                                     timeModified = System.currentTimeMillis(),
                                     color = 0,
-                                    font = fontFamilyString.value
+                                    font = fontFamilyString.value,
+                                    tags = listOfSelectedTags.toCollection(ArrayList())
 
                                 )
                                 viewModel.updateNote(note2)
@@ -470,7 +480,8 @@ fun MainStructureAddNote(
                                     deletedNote = false,
                                     locked = false,
                                     timeModified = System.currentTimeMillis(),
-                                    font = fontFamilyString.value
+                                    font = fontFamilyString.value,
+                                    tags = listOfSelectedTags.toCollection(ArrayList())
 
                                 )
                                 viewModel.updateNote(note2)
@@ -486,7 +497,8 @@ fun MainStructureAddNote(
                                     deletedNote = false,
                                     locked = false,
                                     timeModified = System.currentTimeMillis(),
-                                    font = fontFamilyString.value
+                                    font = fontFamilyString.value,
+                                    tags = listOfSelectedTags.toCollection(ArrayList())
 
                                 )
                                 viewModel.updateNote(note2)

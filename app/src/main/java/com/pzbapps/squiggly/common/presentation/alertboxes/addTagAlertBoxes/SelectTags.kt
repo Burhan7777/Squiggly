@@ -179,7 +179,6 @@ fun SelectTags(
             androidx.compose.material.OutlinedButton(
                 onClick = {
                     onDismiss()
-                    listOfSelectedTags.clear()
                 },
                 shape = androidx.compose.material.MaterialTheme.shapes.medium.copy(
                     topStart = CornerSize(15.dp),

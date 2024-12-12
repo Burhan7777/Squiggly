@@ -31,6 +31,8 @@ fun EditNoteScreen(
         mutableStateOf("")
     }
 
+    viewModel.getAllTags()
+
     notesId.intValue = -1
 
 //      Log.i("mutable", note.value.title)

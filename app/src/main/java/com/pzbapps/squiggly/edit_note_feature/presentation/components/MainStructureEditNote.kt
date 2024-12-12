@@ -200,6 +200,9 @@ fun MainStructureEditNote(
 
     var showFontBottomSheet = remember { mutableStateOf(false) }
 
+    var listOfSelectedTags = remember { mutableStateListOf<String>() }
+
+
     when (fontFamily.value) {
         FontFamily.fontFamilyRegular -> fontFamilyString.value = FontFamily.lufgaRegular
         FontFamily.fontFamilyBold -> fontFamilyString.value = FontFamily.lufgaBold
@@ -231,12 +234,17 @@ fun MainStructureEditNote(
         }
     }
 
+    LaunchedEffect(Unit) {
+        listOfSelectedTags.addAll(note.value.tags)
+    }
+
     LaunchedEffect(key1 = Unit) {
         viewModel.getNoteById(id)
         var noteFromDb = viewModel.getNoteById
         pinnedOrNot.value = noteFromDb.value.notePinned
         backgroundColor.value = noteFromDb.value.color
         fontFamilyString.value = noteFromDb.value.font
+        //  println(listOfSelectedTags.size)
         when (fontFamilyString.value) {
             FontFamily.lufgaRegular -> fontFamily.value = FontFamily.fontFamilyRegular
             FontFamily.lufgaBold -> fontFamily.value = FontFamily.fontFamilyBold
@@ -379,7 +387,8 @@ fun MainStructureEditNote(
                             timeModified = System.currentTimeMillis(),
                             notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
                             color = backgroundColor.value,
-                            font = fontFamilyString.value
+                            font = fontFamilyString.value,
+                            tags = listOfSelectedTags.toCollection(ArrayList())
 
                         )
                         viewModel.updateNote(note!!)
@@ -416,7 +425,8 @@ fun MainStructureEditNote(
 //                listOfBulletPointNotes = convertedBulletPoints,
                             listOfCheckedNotes = converted,
                             listOfCheckedBoxes = mutableListOfCheckBoxes.value,
-                            color = backgroundColor.value
+                            color = backgroundColor.value,
+                            tags = listOfSelectedTags.toCollection(ArrayList())
 
                         )
                         viewModel.updateNote(note!!)
@@ -450,7 +460,8 @@ fun MainStructureEditNote(
                             timeModified = System.currentTimeMillis(),
                             notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
                             listOfBulletPointNotes = convertedBulletPoints,
-                            color = backgroundColor.value
+                            color = backgroundColor.value,
+                            tags = listOfSelectedTags.toCollection(ArrayList())
 
 
                         )
@@ -495,7 +506,8 @@ fun MainStructureEditNote(
                 notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
                 listOfCheckedNotes = converted,
                 listOfCheckedBoxes = mutableListOfCheckBoxes.value,
-                color = backgroundColor.value
+                color = backgroundColor.value,
+                tags = listOfSelectedTags.toCollection(ArrayList())
             )
             viewModel.updateNote(note1)
         }
@@ -520,7 +532,8 @@ fun MainStructureEditNote(
                 //timeStamp = System.currentTimeMillis(),
                 notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
                 listOfBulletPointNotes = convertedBulletPoints,
-                color = backgroundColor.value
+                color = backgroundColor.value,
+                tags = listOfSelectedTags.toCollection(ArrayList())
             )
             viewModel.updateNote(note1)
         }
@@ -547,7 +560,8 @@ fun MainStructureEditNote(
                     timeModified = System.currentTimeMillis(),
                     notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
                     reminder = reminder,
-                    font = fontFamilyString.value
+                    font = fontFamilyString.value,
+                    tags = listOfSelectedTags.toCollection(ArrayList())
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
@@ -611,7 +625,8 @@ fun MainStructureEditNote(
                     notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
                     reminder = reminder,
                     color = backgroundColor.value,
-                    font = fontFamilyString.value
+                    font = fontFamilyString.value,
+                    tags = listOfSelectedTags.toCollection(ArrayList())
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
@@ -686,7 +701,8 @@ fun MainStructureEditNote(
                             notePinned = pinned,
                             reminder = reminder,
                             color = backgroundColor.value,
-                            font = fontFamilyString.value
+                            font = fontFamilyString.value,
+                            tags = listOfSelectedTags.toCollection(ArrayList())
                         )
                         viewModel.updateNote(note)
                         Toast.makeText(context, "Note has been updated", Toast.LENGTH_SHORT)
@@ -908,7 +924,8 @@ fun MainStructureEditNote(
                             notePinned = pinned,
                             reminder = reminder,
                             color = backgroundColor.value,
-                            font = fontFamilyString.value
+                            font = fontFamilyString.value,
+                            tags = listOfSelectedTags.toCollection(ArrayList())
                         )
                         viewModel.updateNote(note)
                         scope.launch {
@@ -1073,7 +1090,8 @@ fun MainStructureEditNote(
                     systemTime,
                     timeInString,
                     backgroundColor,
-                    fontFamily
+                    fontFamily,
+                    listOfSelectedTags
                 )
             }
             if (mutableListOfCheckboxTexts.size == 0 && mutableListOfBulletPoints.size == 0 && !hideFormattingTextBarWhenTitleIsInFocus.value) {

@@ -6,17 +6,22 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.ChipDefaults
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Clear
@@ -44,6 +49,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -55,6 +61,8 @@ import com.pzbapps.squiggly.common.domain.utils.Constant
 import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
+import com.pzbapps.squiggly.common.presentation.alertboxes.addTagAlertBoxes.AddTag
+import com.pzbapps.squiggly.common.presentation.alertboxes.addTagAlertBoxes.SelectTags
 import com.pzbapps.squiggly.main_screen.domain.model.Note
 import com.pzbapps.squiggly.reminder_feature.cancelReminder
 import kotlinx.coroutines.Dispatchers
@@ -68,7 +76,7 @@ import java.util.Locale
 
 @OptIn(
     ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class,
-    ExperimentalLayoutApi::class
+    ExperimentalLayoutApi::class, ExperimentalMaterialApi::class
 )
 @Composable
 fun NoteContent(
@@ -98,7 +106,8 @@ fun NoteContent(
     systemTime: MutableLongState,
     timeInString: MutableState<String>,
     backgroundColor: MutableState<Int>,
-    fontFamily: MutableState<androidx.compose.ui.text.font.FontFamily>
+    fontFamily: MutableState<androidx.compose.ui.text.font.FontFamily>,
+    listOfSelectedTags: SnapshotStateList<String>
 ) {
 
     var dialogOpen = remember {
@@ -108,6 +117,11 @@ fun NoteContent(
     var notebookText = remember {
         mutableStateOf("")
     }
+
+    val showSelectTagAlertBox = remember { mutableStateOf(false) }
+
+    val showAddTagAlertBox = remember { mutableStateOf(false) }
+
     var formattedTime = remember { mutableStateOf("") }
     LaunchedEffect(true) {
         systemTime.longValue = System.currentTimeMillis()
@@ -206,6 +220,18 @@ fun NoteContent(
             modifier = Modifier
                 .padding(bottom = if (imeVisible) WindowInsets.ime.getBottom((LocalDensity.current)).dp + 100.dp else 0.dp)
         ) {
+
+            if (showSelectTagAlertBox.value) {
+                SelectTags(viewModel.tags, listOfSelectedTags, viewModel, showAddTagAlertBox) {
+                    showSelectTagAlertBox.value = false
+                }
+            }
+
+            if (showAddTagAlertBox.value) {
+                AddTag(viewModel) {
+                    showAddTagAlertBox.value = false
+                }
+            }
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -236,6 +262,63 @@ fun NoteContent(
                 },
                 textStyle = TextStyle(fontFamily = fontFamily.value, fontSize = 18.sp)
             )
+            Text(
+                "Tags",
+                color = MaterialTheme.colors.onPrimary.copy(alpha = 0.5f),
+                fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic,
+                modifier = Modifier.padding(start = 10.dp)
+            )
+            LazyRow(
+            ) {
+                items(listOfSelectedTags) { item ->
+                    androidx.compose.material.Chip(onClick = {}, modifier = Modifier.padding(5.dp),
+                        colors = ChipDefaults.chipColors(
+                            backgroundColor = MaterialTheme.colors.onPrimary,
+                        ),
+                        leadingIcon = {
+                            androidx.compose.material3.Icon(
+                                imageVector = Icons.Filled.Clear,
+                                contentDescription = "Remove from list",
+                                tint = MaterialTheme.colors.onSecondary,
+                                modifier = Modifier.clickable {
+                                    listOfSelectedTags.remove(item)
+                                }
+                            )
+                        }
+                    ) {
+                        Text(
+                            item,
+                            color = MaterialTheme.colors.onSecondary,
+                            fontFamily = FontFamily.fontFamilyRegular
+                        )
+                    }
+                }
+                item {
+                    androidx.compose.material.Chip(
+                        modifier = Modifier.padding(5.dp),
+                        colors = ChipDefaults.chipColors(
+                            backgroundColor = MaterialTheme.colors.primaryVariant,
+                            contentColor = MaterialTheme.colors.onPrimary
+                        ),
+                        onClick = {
+                            showSelectTagAlertBox.value = true
+
+                        },
+                        leadingIcon = {
+                            androidx.compose.material3.Icon(
+                                imageVector = Icons.Filled.Add,
+                                contentDescription = "Add Tag",
+                                tint = MaterialTheme.colors.onPrimary
+                            )
+                        }) {
+                        Text(
+                            text = "Add Tag",
+                            color = MaterialTheme.colors.onPrimary,
+                            fontFamily = FontFamily.fontFamilyRegular
+                        )
+                    }
+                }
+            }
             if (systemTime.longValue < time.longValue) {
                 Card(
                     modifier = Modifier
@@ -326,6 +409,19 @@ fun NoteContent(
             modifier = Modifier
                 .padding(bottom = if (imeVisible) WindowInsets.ime.getBottom((LocalDensity.current)).dp else 0.dp)
         ) {
+
+            if (showSelectTagAlertBox.value) {
+                SelectTags(viewModel.tags, listOfSelectedTags, viewModel, showAddTagAlertBox) {
+                    showSelectTagAlertBox.value = false
+                }
+            }
+
+            if (showAddTagAlertBox.value) {
+                AddTag(viewModel) {
+                    showAddTagAlertBox.value = false
+                }
+            }
+
             LazyColumn(state = lazyListState, modifier = Modifier.fillMaxSize()) {
                 itemsIndexed(listOfNotes) { index, note ->
                     if (index >= focusRequesters.size) {
@@ -350,6 +446,59 @@ fun NoteContent(
                             }
                         })
 
+                }
+                item{
+                    LazyRow(
+                    ) {
+                        items(listOfSelectedTags) { item ->
+                            androidx.compose.material.Chip(onClick = {}, modifier = Modifier.padding(5.dp),
+                                colors = ChipDefaults.chipColors(
+                                    backgroundColor = MaterialTheme.colors.onPrimary,
+                                ),
+                                leadingIcon = {
+                                    androidx.compose.material3.Icon(
+                                        imageVector = Icons.Filled.Clear,
+                                        contentDescription = "Remove from list",
+                                        tint = MaterialTheme.colors.onSecondary,
+                                        modifier = Modifier.clickable {
+                                            listOfSelectedTags.remove(item)
+                                        }
+                                    )
+                                }
+                            ) {
+                                Text(
+                                    item,
+                                    color = MaterialTheme.colors.onSecondary,
+                                    fontFamily = FontFamily.fontFamilyRegular
+                                )
+                            }
+                        }
+                        item {
+                            androidx.compose.material.Chip(
+                                modifier = Modifier.padding(5.dp),
+                                colors = ChipDefaults.chipColors(
+                                    backgroundColor = MaterialTheme.colors.primaryVariant,
+                                    contentColor = MaterialTheme.colors.onPrimary
+                                ),
+                                onClick = {
+                                    showSelectTagAlertBox.value = true
+
+                                },
+                                leadingIcon = {
+                                    androidx.compose.material3.Icon(
+                                        imageVector = Icons.Filled.Add,
+                                        contentDescription = "Add Tag",
+                                        tint = MaterialTheme.colors.onPrimary
+                                    )
+                                }) {
+                                Text(
+                                    text = "Add Tag",
+                                    color = MaterialTheme.colors.onPrimary,
+                                    fontFamily = FontFamily.fontFamilyRegular
+                                )
+                            }
+                        }
+                    }
                 }
                 item {
                     if (systemTime.longValue < time.longValue) {
@@ -450,6 +599,19 @@ fun NoteContent(
             modifier = Modifier
                 .padding(bottom = if (imeVisible) WindowInsets.ime.getBottom((LocalDensity.current)).dp else 0.dp)
         ) {
+
+            if (showSelectTagAlertBox.value) {
+                SelectTags(viewModel.tags, listOfSelectedTags, viewModel, showAddTagAlertBox) {
+                    showSelectTagAlertBox.value = false
+                }
+            }
+
+            if (showAddTagAlertBox.value) {
+                AddTag(viewModel) {
+                    showAddTagAlertBox.value = false
+                }
+            }
+
             LazyColumn(state = lazyListState, modifier = Modifier.fillMaxSize()) {
                 itemsIndexed(listOfBulletPointNotes) { index, note ->
                     if (index >= focusRequesters.size) {
@@ -474,6 +636,59 @@ fun NoteContent(
                         }
                     )
 
+                }
+                item{
+                    LazyRow(
+                    ) {
+                        items(listOfSelectedTags) { item ->
+                            androidx.compose.material.Chip(onClick = {}, modifier = Modifier.padding(5.dp),
+                                colors = ChipDefaults.chipColors(
+                                    backgroundColor = MaterialTheme.colors.onPrimary,
+                                ),
+                                leadingIcon = {
+                                    androidx.compose.material3.Icon(
+                                        imageVector = Icons.Filled.Clear,
+                                        contentDescription = "Remove from list",
+                                        tint = MaterialTheme.colors.onSecondary,
+                                        modifier = Modifier.clickable {
+                                            listOfSelectedTags.remove(item)
+                                        }
+                                    )
+                                }
+                            ) {
+                                Text(
+                                    item,
+                                    color = MaterialTheme.colors.onSecondary,
+                                    fontFamily = FontFamily.fontFamilyRegular
+                                )
+                            }
+                        }
+                        item {
+                            androidx.compose.material.Chip(
+                                modifier = Modifier.padding(5.dp),
+                                colors = ChipDefaults.chipColors(
+                                    backgroundColor = MaterialTheme.colors.primaryVariant,
+                                    contentColor = MaterialTheme.colors.onPrimary
+                                ),
+                                onClick = {
+                                    showSelectTagAlertBox.value = true
+
+                                },
+                                leadingIcon = {
+                                    androidx.compose.material3.Icon(
+                                        imageVector = Icons.Filled.Add,
+                                        contentDescription = "Add Tag",
+                                        tint = MaterialTheme.colors.onPrimary
+                                    )
+                                }) {
+                                Text(
+                                    text = "Add Tag",
+                                    color = MaterialTheme.colors.onPrimary,
+                                    fontFamily = FontFamily.fontFamilyRegular
+                                )
+                            }
+                        }
+                    }
                 }
                 item {
                     if (systemTime.longValue < time.longValue) {
