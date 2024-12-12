@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -76,7 +77,8 @@ fun MainStructureAddNote(
     var boldText = remember { mutableStateOf(false) }
     var underlineText = remember { mutableStateOf(false) }
     var italicText = remember { mutableStateOf(false) }
-    val listOfSelectedTags = remember { mutableStateOf(ArrayList<String>()) } // THESE ARE THE TAGS SELECTED BY THE USER IN ADD NOTE FEATURE AND WILL BE ADDED TO THE "LIST_OF_TAGS" IN THE NOTE TABLE
+    val listOfSelectedTags =
+        remember { mutableStateListOf<String>() } // THESE ARE THE TAGS SELECTED BY THE USER IN ADD NOTE FEATURE AND WILL BE ADDED TO THE "LIST_OF_TAGS" IN THE NOTE TABLE
 
     var showDiscardNoteAlertBox = rememberSaveable { mutableStateOf(false) }
 

@@ -5,6 +5,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.ButtonDefaults
@@ -18,6 +20,7 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -39,6 +42,7 @@ import com.mohamedrejeb.richeditor.model.RichTextState
 import com.mohamedrejeb.richeditor.ui.material3.RichTextEditor
 import com.mohamedrejeb.richeditor.ui.material3.RichTextEditorDefaults
 import com.pzbapps.squiggly.common.data.Model.NoteBook
+import com.pzbapps.squiggly.common.data.Model.Tag
 import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.common.presentation.alertboxes.addTagAlertBoxes.AddTag
@@ -64,7 +68,7 @@ fun NoteContent(
     showSavedText: MutableState<Boolean>,
     backgroundColor: MutableState<Color>,
     fontFamily: MutableState<androidx.compose.ui.text.font.FontFamily>,
-    listOFSelectedTags: MutableState<ArrayList<String>>
+    listOFSelectedTags: SnapshotStateList<String>
 //    notebook: MutableState<ArrayList<String>>,
 //    notebookFromDB: MutableState<ArrayList<NoteBook>>
 ) {
@@ -80,6 +84,8 @@ fun NoteContent(
 
     val showSelectTagAlertBox = remember { mutableStateOf(false) }
     val showAddTagAlertBox = remember { mutableStateOf(false) }
+
+    var filteredList = remember { mutableStateListOf<Tag>() }
 
     var notebook by remember {
         mutableStateOf("")
@@ -111,6 +117,7 @@ fun NoteContent(
         delay(1000)
         showSavedText.value = false
     }
+
 
 
 //    val listOfNoteBooks = viewModel.getNoteBooks.observeAsState().value
@@ -253,21 +260,22 @@ fun NoteContent(
             fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic,
             modifier = Modifier.padding(start = 10.dp)
         )
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(3.dp)
+        LazyRow(
         ) {
-            listOFSelectedTags.value.forEach { item ->
+            items(listOFSelectedTags) { item ->
                 androidx.compose.material.Chip(onClick = {}, modifier = Modifier.padding(5.dp),
                     colors = ChipDefaults.chipColors(
                         backgroundColor = MaterialTheme.colors.onPrimary,
                     ),
                     leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Filled.Clear,
-                                contentDescription = "Remove from list",
-                                tint = MaterialTheme.colors.onSecondary
-                            )
+                        Icon(
+                            imageVector = Icons.Filled.Clear,
+                            contentDescription = "Remove from list",
+                            tint = MaterialTheme.colors.onSecondary,
+                            modifier = Modifier.clickable {
+                                listOFSelectedTags.remove(item)
+                            }
+                        )
                     }
                 ) {
                     Text(
@@ -277,25 +285,30 @@ fun NoteContent(
                     )
                 }
             }
-            androidx.compose.material.Chip(
-                modifier = Modifier.padding(5.dp),
-                colors = ChipDefaults.chipColors(
-                    backgroundColor = MaterialTheme.colors.primaryVariant,
-                    contentColor = MaterialTheme.colors.onPrimary
-                ),
-                onClick = { showSelectTagAlertBox.value = true },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Filled.Add,
-                        contentDescription = "Add Tag",
-                        tint = MaterialTheme.colors.onPrimary
+            item {
+                androidx.compose.material.Chip(
+                    modifier = Modifier.padding(5.dp),
+                    colors = ChipDefaults.chipColors(
+                        backgroundColor = MaterialTheme.colors.primaryVariant,
+                        contentColor = MaterialTheme.colors.onPrimary
+                    ),
+                    onClick = {
+                        showSelectTagAlertBox.value = true
+
+                    },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Filled.Add,
+                            contentDescription = "Add Tag",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    }) {
+                    Text(
+                        text = "Add Tag",
+                        color = MaterialTheme.colors.onPrimary,
+                        fontFamily = FontFamily.fontFamilyRegular
                     )
-                }) {
-                Text(
-                    text = "Add Tag",
-                    color = MaterialTheme.colors.onPrimary,
-                    fontFamily = FontFamily.fontFamilyRegular
-                )
+                }
             }
         }
     }

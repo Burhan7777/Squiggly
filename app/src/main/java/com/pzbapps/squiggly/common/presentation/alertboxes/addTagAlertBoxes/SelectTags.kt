@@ -50,7 +50,7 @@ import java.io.FileOutputStream
 @Composable
 fun SelectTags(
     lisOfTags: SnapshotStateList<Tag>,
-    listOfSelectedTags: MutableState<ArrayList<String>>,
+    listOfSelectedTags: SnapshotStateList<String>,
     viewModel: MainActivityViewModel,
     showAddTagAlertBox: MutableState<Boolean>,
     onDismiss: () -> Unit
@@ -93,11 +93,22 @@ fun SelectTags(
                 if (lisOfTags.isNotEmpty()) {
                     LazyColumn(modifier = Modifier.height(150.dp)) {
                         items(lisOfTags) { item ->
+                            var checkboxBoolean = false
+                            if (listOfSelectedTags.contains(item.name)) {
+                                checkboxBoolean = true
+                            }
+                            var checkbox = remember { mutableStateOf(checkboxBoolean) }
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                var checkbox = remember { mutableStateOf(false) }
                                 Checkbox(
                                     checked = checkbox.value,
-                                    onCheckedChange = { checkbox.value = it },
+                                    onCheckedChange = {
+                                        checkbox.value = it
+                                        if (checkbox.value) {
+                                            listOfSelectedTags.add(item.name)
+                                        } else {
+                                            listOfSelectedTags.remove(item.name)
+                                        }
+                                    },
                                     colors = CheckboxDefaults.colors(
                                         checkedColor = MaterialTheme.colors.onPrimary,
                                         uncheckedColor = MaterialTheme.colors.onPrimary
@@ -114,9 +125,9 @@ fun SelectTags(
                                         .clickable {
                                             checkbox.value = !checkbox.value
                                             if (checkbox.value) {
-                                                listOfSelectedTags.value.add(item.name)
+                                                listOfSelectedTags.add(item.name)
                                             } else {
-                                                listOfSelectedTags.value.remove(item.name)
+                                                listOfSelectedTags.remove(item.name)
                                             }
                                         }
 
@@ -144,7 +155,9 @@ fun SelectTags(
             }
         }, confirmButton = {
             androidx.compose.material.OutlinedButton(
-                onClick = { onDismiss() },
+                onClick = {
+                    onDismiss()
+                },
                 shape = androidx.compose.material.MaterialTheme.shapes.medium.copy(
                     topStart = CornerSize(15.dp),
                     topEnd = CornerSize(15.dp),
@@ -164,7 +177,10 @@ fun SelectTags(
             }
         }, dismissButton = {
             androidx.compose.material.OutlinedButton(
-                onClick = { onDismiss() },
+                onClick = {
+                    onDismiss()
+                    listOfSelectedTags.clear()
+                },
                 shape = androidx.compose.material.MaterialTheme.shapes.medium.copy(
                     topStart = CornerSize(15.dp),
                     topEnd = CornerSize(15.dp),
