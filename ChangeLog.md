@@ -9,6 +9,8 @@ v4.0.0 - rc
 4) Advance Search.
 5) Fixes the background color choices on system default theme.
 6) Budget Planner.
+7) Checks if tag already exists.
+8) Checks if notebook already exists.
 
 v3.3.0-beta
 ---------------------------

@@ -4,12 +4,18 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.ChipDefaults
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -21,14 +27,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.pzbapps.squiggly.add_note_feature.presentation.components.MainMenu
 import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
+import com.pzbapps.squiggly.common.presentation.alertboxes.addTagAlertBoxes.AddTag
+import com.pzbapps.squiggly.common.presentation.alertboxes.addTagAlertBoxes.SelectTags
 
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun BulletPointNote(
     viewModel: MainActivityViewModel,
@@ -38,7 +47,8 @@ fun BulletPointNote(
     mutableListOfBulletPointsNotes: SnapshotStateList<MutableState<String>>,
     count: MutableState<Int>,
     mutableListConverted: ArrayList<String>,
-    backgroundColor: MutableState<Color>
+    backgroundColor: MutableState<Color>,
+    listOfSelectedTags: SnapshotStateList<String>
 ) {
 
     var dialogOpen = remember {
@@ -65,6 +75,9 @@ fun BulletPointNote(
 
     viewModel.getNoteBook()
 
+    val showSelectTagAlertBox = remember { mutableStateOf(false) }
+    val showAddTagAlertBox = remember { mutableStateOf(false) }
+
 
     viewModel.getNoteBook()
     val notebooks: ArrayList<String> =
@@ -79,6 +92,18 @@ fun BulletPointNote(
             .fillMaxSize()
             .background(backgroundColor.value)
     ) {
+
+        if (showSelectTagAlertBox.value) {
+            SelectTags(viewModel.tags, listOfSelectedTags, viewModel, showAddTagAlertBox) {
+                showSelectTagAlertBox.value = false
+            }
+        }
+
+        if (showAddTagAlertBox.value) {
+            AddTag(viewModel) {
+                showAddTagAlertBox.value = false
+            }
+        }
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(0.dp),
@@ -156,7 +181,7 @@ fun BulletPointNote(
             modifier = Modifier
                 .padding(bottom = if (imeVisible) WindowInsets.ime.getBottom((LocalDensity.current)).dp else 0.dp)
         ) {
-            LazyColumn(state = lazyListState, modifier = Modifier.fillMaxSize()) {
+            LazyColumn(state = lazyListState) {
                 itemsIndexed(mutableListOfBulletPointsNotes) { indexed, item ->
                     if (indexed >= focusRequesters.size) {
                         focusRequesters.add(FocusRequester())
@@ -178,6 +203,63 @@ fun BulletPointNote(
                             }
                         }
                     )
+                }
+            }
+            Text(
+                "Tags",
+                color = MaterialTheme.colors.onPrimary.copy(alpha = 0.5f),
+                fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic,
+                modifier = Modifier.padding(start = 10.dp)
+            )
+            LazyRow(
+            ) {
+                items(listOfSelectedTags) { item ->
+                    androidx.compose.material.Chip(onClick = {}, modifier = Modifier.padding(5.dp),
+                        colors = ChipDefaults.chipColors(
+                            backgroundColor = MaterialTheme.colors.onPrimary,
+                        ),
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Filled.Clear,
+                                contentDescription = "Remove from list",
+                                tint = MaterialTheme.colors.onSecondary,
+                                modifier = Modifier.clickable {
+                                    listOfSelectedTags.remove(item)
+                                }
+                            )
+                        }
+                    ) {
+                        Text(
+                            item,
+                            color = MaterialTheme.colors.onSecondary,
+                            fontFamily = FontFamily.fontFamilyRegular
+                        )
+                    }
+                }
+                item {
+                    androidx.compose.material.Chip(
+                        modifier = Modifier.padding(5.dp),
+                        colors = ChipDefaults.chipColors(
+                            backgroundColor = MaterialTheme.colors.primaryVariant,
+                            contentColor = MaterialTheme.colors.onPrimary
+                        ),
+                        onClick = {
+                            showSelectTagAlertBox.value = true
+
+                        },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Filled.Add,
+                                contentDescription = "Add Tag",
+                                tint = MaterialTheme.colors.onPrimary
+                            )
+                        }) {
+                        Text(
+                            text = "Add Tag",
+                            color = MaterialTheme.colors.onPrimary,
+                            fontFamily = FontFamily.fontFamilyRegular
+                        )
+                    }
                 }
             }
         }
