@@ -14,7 +14,7 @@ import androidx.navigation.NavHostController
 import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
-import com.pzbapps.squiggly.main_screen.presentation.components.AlertDialogBoxEnterPasswordToOpenLockedNotes
+import com.pzbapps.squiggly.main_screen.presentation.components.alertboxes.AlertDialogBoxEnterPasswordToOpenLockedNotes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

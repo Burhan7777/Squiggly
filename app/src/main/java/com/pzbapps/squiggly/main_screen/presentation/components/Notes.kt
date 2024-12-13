@@ -19,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -48,7 +49,8 @@ fun Notes(
     viewModel: MainActivityViewModel,
     activity: MainActivity,
     navHostController: NavHostController,
-    showGridOrLinearNotes: MutableState<Boolean>
+    showGridOrLinearNotes: MutableState<Boolean>,
+    showEditTagsAlertBox: MutableState<Boolean>,
 ) {
 
     val fontFamilyExtraLight = Font(R.font.lufgaextralight).toFontFamily()
@@ -62,6 +64,8 @@ fun Notes(
     var scope = rememberCoroutineScope()
     var listOfNotesFromDB = remember { mutableStateListOf<Note>() }
     var listOfPinnedNotes = SnapshotStateList<Note>()
+
+
 
     viewModel.getAllTags()
     var listOfTags = viewModel.tags
@@ -119,12 +123,28 @@ fun Notes(
                         color = MaterialTheme.colors.onPrimary,
                         modifier = Modifier.padding(horizontal = 10.dp)
                     )
-                    Text(
-                        "Tags",
-                        color = MaterialTheme.colors.onPrimary.copy(alpha = 0.5f),
-                        fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic,
-                        modifier = Modifier.padding(start = 10.dp)
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            "Tags",
+                            color = MaterialTheme.colors.onPrimary.copy(alpha = 0.5f),
+                            fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic,
+                            modifier = Modifier.padding(start = 10.dp),
+                        )
+                        Icon(
+                            imageVector = Icons.Filled.Edit,
+                            contentDescription = "Edit tags",
+                            tint = MaterialTheme.colors.onPrimary.copy(alpha = 0.5f),
+                            modifier = Modifier
+                                .size(16.dp)
+                                .clickable {
+                                    showEditTagsAlertBox.value = true
+                                }
+                        )
+                    }
                     LazyRow(
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -302,12 +322,28 @@ fun Notes(
                         color = MaterialTheme.colors.onPrimary,
                         modifier = Modifier.padding(horizontal = 10.dp)
                     )
-                    Text(
-                        "Tags",
-                        color = MaterialTheme.colors.onPrimary.copy(alpha = 0.5f),
-                        fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic,
-                        modifier = Modifier.padding(start = 10.dp)
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            "Tags",
+                            color = MaterialTheme.colors.onPrimary.copy(alpha = 0.5f),
+                            fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic,
+                            modifier = Modifier.padding(start = 10.dp),
+                        )
+                        Icon(
+                            imageVector = Icons.Filled.Edit,
+                            contentDescription = "Edit tags",
+                            tint = MaterialTheme.colors.onPrimary.copy(alpha = 0.5f),
+                            modifier = Modifier
+                                .size(16.dp)
+                                .clickable {
+                                    showEditTagsAlertBox.value = true
+                                }
+                        )
+                    }
                     LazyRow(
                         modifier = Modifier.fillMaxWidth()
                     ) {

@@ -1,6 +1,6 @@
 package com.pzbapps.squiggly.trash_bin_feature.presentation.components
 
-import com.pzbapps.squiggly.main_screen.presentation.components.AlertDialogBoxEnterPasswordToOpenLockedNotes
+import com.pzbapps.squiggly.main_screen.presentation.components.alertboxes.AlertDialogBoxEnterPasswordToOpenLockedNotes
 
 
 import androidx.compose.foundation.background

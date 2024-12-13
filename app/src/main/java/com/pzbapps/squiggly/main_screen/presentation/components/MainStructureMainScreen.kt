@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -34,7 +33,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions
 import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions.RESULT_FORMAT_JPEG
-import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions.RESULT_FORMAT_PDF
 import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions.SCANNER_MODE_FULL
 import com.google.mlkit.vision.documentscanner.GmsDocumentScanning
 import com.google.mlkit.vision.documentscanner.GmsDocumentScanningResult
@@ -45,7 +43,9 @@ import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.common.presentation.Screens
 import com.pzbapps.squiggly.edit_note_feature.domain.usecase.checkIfUserHasCreatedPassword
-import com.pzbapps.squiggly.main_screen.domain.usecase.cameraPermissionHandle
+import com.pzbapps.squiggly.main_screen.presentation.components.alertboxes.AlertDialogBoxEnterPasswordToOpenLockedNotes
+import com.pzbapps.squiggly.main_screen.presentation.components.alertboxes.DeleteTagAlertBox
+import com.pzbapps.squiggly.main_screen.presentation.components.alertboxes.EditTagsAlertBox
 import com.pzbapps.squiggly.main_screen.textrecognition.SelectScriptDialogBox
 import com.pzbapps.squiggly.main_screen.textrecognition.ShowRecognizedText
 import com.pzbapps.squiggly.main_screen.textrecognition.TextRecognition
@@ -90,6 +90,11 @@ fun MainStructureMainScreen(
     var showTextRecognitionDialogBox = remember { mutableStateOf(false) }
 
     var selectedScript = remember { mutableStateOf("") }
+
+    val showEditTagsAlertBox = remember { mutableStateOf(false) }
+    val showDeleteTagAlertBox = remember { mutableStateOf(false) }
+
+    viewModel.getAllTags() // WE GET THE TAGS TO DISPLAY THEM IN EDIT TAG ALERT BOX
 
     val options = GmsDocumentScannerOptions.Builder()
         .setScannerMode(SCANNER_MODE_FULL)
@@ -466,7 +471,24 @@ fun MainStructureMainScreen(
                 if (showProgressBarOfExtractingText.value) {
                     LoadingDialogBox(mutableStateOf("Extracting text"))
                 }
-                Notes(viewModel, activity, navHostController, viewModel.showGridOrLinearNotes)
+                if (showEditTagsAlertBox.value) {
+                    EditTagsAlertBox(viewModel.tags, showDeleteTagAlertBox) {
+                        showEditTagsAlertBox.value = false
+                    }
+
+                }
+                if (showDeleteTagAlertBox.value) {
+                    DeleteTagAlertBox {
+                        showDeleteTagAlertBox.value = false
+                    }
+                }
+                Notes(
+                    viewModel,
+                    activity,
+                    navHostController,
+                    viewModel.showGridOrLinearNotes,
+                    showEditTagsAlertBox
+                )
             }
         }
     }

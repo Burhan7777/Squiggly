@@ -11,6 +11,7 @@ v4.0.0 - rc
 6) Budget Planner.
 7) Checks if tag already exists.
 8) Checks if notebook already exists.
+9) Add fonts to bullet points and checkbox.
 
 v3.3.0-beta
 ---------------------------

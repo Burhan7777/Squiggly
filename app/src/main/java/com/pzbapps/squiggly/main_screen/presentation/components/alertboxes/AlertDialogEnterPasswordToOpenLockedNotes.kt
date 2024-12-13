@@ -1,4 +1,4 @@
-package com.pzbapps.squiggly.main_screen.presentation.components
+package com.pzbapps.squiggly.main_screen.presentation.components.alertboxes
 
 
 import android.widget.Toast

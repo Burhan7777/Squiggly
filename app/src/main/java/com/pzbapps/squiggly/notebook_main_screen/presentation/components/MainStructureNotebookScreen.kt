@@ -25,7 +25,7 @@ import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.common.presentation.Screens
 import com.pzbapps.squiggly.main_screen.domain.model.Note
-import com.pzbapps.squiggly.main_screen.presentation.components.AlertDialogBoxEnterPasswordToOpenLockedNotes
+import com.pzbapps.squiggly.main_screen.presentation.components.alertboxes.AlertDialogBoxEnterPasswordToOpenLockedNotes
 import com.pzbapps.squiggly.notebook_main_screen.presentation.components.alertboxes.DeleteAllNotesToo
 import com.pzbapps.squiggly.notebook_main_screen.presentation.components.alertboxes.DeleteNotebookAlertBox
 import com.pzbapps.squiggly.notebook_main_screen.presentation.components.alertboxes.UnlockNotes
