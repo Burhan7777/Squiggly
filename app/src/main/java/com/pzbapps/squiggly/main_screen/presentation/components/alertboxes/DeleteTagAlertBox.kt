@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
@@ -27,9 +28,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pzbapps.squiggly.common.presentation.FontFamily
+import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 
 @Composable
-fun DeleteTagAlertBox(onDismiss: () -> Unit) {
+fun DeleteTagAlertBox(
+    viewModel: MainActivityViewModel,
+    tag: String,
+    showProgressBarOfDeletingTag: MutableState<Boolean>,
+    onDismiss: () -> Unit
+) {
     androidx.compose.material3.AlertDialog(
         onDismissRequest = { onDismiss() },
         shape = androidx.compose.material.MaterialTheme.shapes.medium.copy(
@@ -49,7 +56,7 @@ fun DeleteTagAlertBox(onDismiss: () -> Unit) {
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    "Are you sure you want to remove this tag from all notes ?",
+                    "Are you sure you want to delete tag? This will NOT delete notes associated with it",
                     fontSize = 15.sp,
                     fontFamily = FontFamily.fontFamilyRegular,
                     color = MaterialTheme.colors.onPrimary
@@ -58,6 +65,21 @@ fun DeleteTagAlertBox(onDismiss: () -> Unit) {
         }, confirmButton = {
             androidx.compose.material.OutlinedButton(
                 onClick = {
+                    showProgressBarOfDeletingTag.value = true
+                    viewModel.getAllNotes()
+                    var listOfNotes = viewModel.listOfNotes
+                    for (note in listOfNotes) {
+                        var tags = note.tags
+                        if (tags.contains(tag)) {
+                            tags.remove(tag)
+                        }
+                        var note = note.copy(tags = tags)
+                        viewModel.deleteTag(tag)
+                        viewModel.updateNote(note)
+                    }
+                    showProgressBarOfDeletingTag.value = false
+                    viewModel.getAllTags()
+                    viewModel.tags.removeAll { it.name == tag }
                     onDismiss()
                 },
                 shape = androidx.compose.material.MaterialTheme.shapes.medium.copy(
@@ -79,6 +101,7 @@ fun DeleteTagAlertBox(onDismiss: () -> Unit) {
         }, dismissButton = {
             androidx.compose.material.OutlinedButton(
                 onClick = {
+
                     onDismiss()
                 },
                 shape = androidx.compose.material.MaterialTheme.shapes.medium.copy(

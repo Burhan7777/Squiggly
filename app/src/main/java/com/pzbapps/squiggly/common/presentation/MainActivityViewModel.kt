@@ -407,5 +407,11 @@ class MainActivityViewModel @Inject constructor(
         }
     }
 
+    fun deleteTag(tag: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            insertNoteRepository.deleteTag(tag)
+        }
+    }
+
 
 }

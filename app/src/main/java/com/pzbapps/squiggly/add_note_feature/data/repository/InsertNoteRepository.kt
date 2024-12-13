@@ -29,5 +29,9 @@ class InsertNoteRepository @Inject constructor(private val noteDatabase: NoteDat
 
     }
 
+    suspend fun deleteTag(tag: String) {
+        noteDatabase.getDao().deleteTag(tag)
+    }
+
 
 }

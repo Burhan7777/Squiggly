@@ -46,6 +46,7 @@ import com.pzbapps.squiggly.common.presentation.FontFamily
 fun EditTagsAlertBox(
     listOfTags: List<Tag>,
     showDeleteTagAlertBox: MutableState<Boolean>,
+    tag: MutableState<String>,
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
@@ -83,7 +84,10 @@ fun EditTagsAlertBox(
                                 )
 
                                 IconButton(
-                                    onClick = { showDeleteTagAlertBox.value = true },
+                                    onClick = {
+                                        showDeleteTagAlertBox.value = true
+                                        tag.value = item.name
+                                    },
                                     modifier = Modifier.align(Alignment.CenterEnd)
                                 ) {
                                     Icon(

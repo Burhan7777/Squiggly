@@ -93,8 +93,12 @@ fun MainStructureMainScreen(
 
     val showEditTagsAlertBox = remember { mutableStateOf(false) }
     val showDeleteTagAlertBox = remember { mutableStateOf(false) }
-
+    val showProgressOfRemovingTag = remember { mutableStateOf(false) }
     viewModel.getAllTags() // WE GET THE TAGS TO DISPLAY THEM IN EDIT TAG ALERT BOX
+
+    val tag =
+        remember { mutableStateOf("") } // WE GET THE SELECTED TAG TO REMOVE IT. ITS PASSED TO NOTE
+    // AND SET THEIR IN THE ONCLICK OF THE DELETE BUTTON IN EDIT TAG ALERT BOX
 
     val options = GmsDocumentScannerOptions.Builder()
         .setScannerMode(SCANNER_MODE_FULL)
@@ -472,22 +476,25 @@ fun MainStructureMainScreen(
                     LoadingDialogBox(mutableStateOf("Extracting text"))
                 }
                 if (showEditTagsAlertBox.value) {
-                    EditTagsAlertBox(viewModel.tags, showDeleteTagAlertBox) {
+                    EditTagsAlertBox(viewModel.tags, showDeleteTagAlertBox, tag) {
                         showEditTagsAlertBox.value = false
                     }
 
                 }
                 if (showDeleteTagAlertBox.value) {
-                    DeleteTagAlertBox {
+                    DeleteTagAlertBox(viewModel, tag.value, showProgressOfRemovingTag) {
                         showDeleteTagAlertBox.value = false
                     }
+                }
+                if (showProgressOfRemovingTag.value) {
+                    LoadingDialogBox(mutableStateOf("Removing tag"))
                 }
                 Notes(
                     viewModel,
                     activity,
                     navHostController,
                     viewModel.showGridOrLinearNotes,
-                    showEditTagsAlertBox
+                    showEditTagsAlertBox,
                 )
             }
         }

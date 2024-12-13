@@ -39,6 +39,9 @@ interface Dao {
     @Upsert
     suspend fun addTag(tag: Tag)
 
+    @Query("DELETE FROM tags where name= :tag")
+    suspend fun deleteTag(tag: String)
+
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateNotebook(notebook: NoteBook)
 
