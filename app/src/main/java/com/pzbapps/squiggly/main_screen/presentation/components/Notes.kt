@@ -2,26 +2,39 @@ package com.pzbapps.squiggly.main_screen.presentation.components
 
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.material.ChipDefaults
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.toFontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.pzbapps.squiggly.R
+import com.pzbapps.squiggly.common.data.Model.Tag
 import com.pzbapps.squiggly.common.domain.utils.Constant
 import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.common.presentation.MainActivity
@@ -29,6 +42,7 @@ import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.main_screen.domain.model.Note
 
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun Notes(
     viewModel: MainActivityViewModel,
@@ -48,6 +62,9 @@ fun Notes(
     var scope = rememberCoroutineScope()
     var listOfNotesFromDB = remember { mutableStateListOf<Note>() }
     var listOfPinnedNotes = SnapshotStateList<Note>()
+
+    viewModel.getAllTags()
+    var listOfTags = viewModel.tags
     val prefs: SharedPreferences = activity.getSharedPreferences(Constant.SORT_ORDER, MODE_PRIVATE)
     val name = prefs.getString(Constant.SORT_ORDER_KEY, Constant.SORT_ORDER_VALUE_1)
     if (name == Constant.SORT_ORDER_VALUE_1) {
@@ -102,6 +119,41 @@ fun Notes(
                         color = MaterialTheme.colors.onPrimary,
                         modifier = Modifier.padding(horizontal = 10.dp)
                     )
+
+                    Text(
+                        "Tags",
+                        color = MaterialTheme.colors.onPrimary.copy(alpha = 0.5f),
+                        fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic,
+                        modifier = Modifier.padding(start = 10.dp)
+                    )
+                    LazyRow(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        items(viewModel.tags) { item ->
+                            androidx.compose.material.Chip(onClick = {},
+                                modifier = Modifier.padding(5.dp),
+                                colors = ChipDefaults.chipColors(
+                                    backgroundColor = MaterialTheme.colors.onPrimary,
+                                ),
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Filled.Clear,
+                                        contentDescription = "Remove from list",
+                                        tint = MaterialTheme.colors.onSecondary,
+                                        modifier = Modifier.clickable {
+
+                                        }
+                                    )
+                                }
+                            ) {
+                                Text(
+                                    item.name,
+                                    color = MaterialTheme.colors.onSecondary,
+                                    fontFamily = FontFamily.fontFamilyRegular
+                                )
+                            }
+                        }
+                    }
                 }
             }
 
@@ -177,6 +229,64 @@ fun Notes(
                         color = MaterialTheme.colors.onPrimary,
                         modifier = Modifier.padding(horizontal = 10.dp)
                     )
+                    Text(
+                        "Tags",
+                        color = MaterialTheme.colors.onPrimary.copy(alpha = 0.5f),
+                        fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic,
+                        modifier = Modifier.padding(start = 10.dp)
+                    )
+                    LazyRow(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        itemsIndexed(viewModel.tags) { index, item ->
+                            androidx.compose.material.Chip(onClick = {
+                                if (!viewModel.selectedTags.contains(index)) {
+                                    viewModel.selectedTags.add(index)
+                                } else {
+                                    viewModel.selectedTags.remove(index)
+                                }
+                                if(viewModel.selectedTags.isEmpty()){
+                                    viewModel.filteredNotesByTag.clear()
+                                }
+                                if (viewModel.selectedTags.contains(index)) {
+                                    viewModel.filteredNotesByTag.addAll(listOfNotesFromDB.filter {
+                                        it.tags.contains(
+                                            item.name
+                                        )
+                                    })
+                                } else {
+                                    viewModel.filteredNotesByTag.removeAll(listOfNotesFromDB.filter {
+                                        it.tags.contains(
+                                            item.name
+                                        )
+                                    })
+                                }
+                            },
+                                modifier = Modifier.padding(5.dp),
+                                colors = ChipDefaults.chipColors(
+                                    backgroundColor = if (viewModel.selectedTags.contains(index)) MaterialTheme.colors.onPrimary else MaterialTheme.colors.primaryVariant,
+                                ),
+                                leadingIcon = {
+                                    if (viewModel.selectedTags.contains(index)) {
+                                        Icon(
+                                            imageVector = Icons.Filled.Check,
+                                            contentDescription = "Filter notes by tag",
+                                            tint = MaterialTheme.colors.onSecondary,
+                                            modifier = Modifier.clickable {
+
+                                            }
+                                        )
+                                    }
+                                }
+                            ) {
+                                Text(
+                                    item.name,
+                                    color = if (viewModel.selectedTags.contains(index)) MaterialTheme.colors.onSecondary else MaterialTheme.colors.onPrimary,
+                                    fontFamily = FontFamily.fontFamilyRegular
+                                )
+                            }
+                        }
+                    }
 //                    if (listOfNotesFromDB.isEmpty()) {
 //                        val composiion by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.empty))
 //                        var isPlaying = remember { mutableStateOf(true) }
@@ -234,10 +344,18 @@ fun Notes(
                     }
                 }
             }
-            items(
-                listOfNotesFromDB ?: emptyList()
-            ) { note ->
-                SingleItemNoteList(note = note, navHostController, scope)
+            if (viewModel.filteredNotesByTag.isEmpty()) {
+                items(
+                    listOfNotesFromDB ?: emptyList()
+                ) { note ->
+                    SingleItemNoteList(note = note, navHostController, scope)
+                }
+            } else {
+                items(
+                    viewModel.filteredNotesByTag ?: emptyList()
+                ) { note ->
+                    SingleItemNoteList(note = note, navHostController, scope)
+                }
             }
 
 

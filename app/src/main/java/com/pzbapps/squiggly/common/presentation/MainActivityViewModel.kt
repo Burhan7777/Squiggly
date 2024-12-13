@@ -91,6 +91,13 @@ class MainActivityViewModel @Inject constructor(
 
     var tags =
         mutableStateListOf<Tag>() // GETS ALL TAGS FROM THE DATABASE USED IN ADD NOTES OF ALL FEATURES AND EDIT NOTES AND ALSO CHECKBOXES AND BULLET-POINTS
+
+     var filteredNotesByTag=   mutableStateListOf<Note>() // FILTERS NOTES IN MAIN SCREEN BY TAGS. I PUT IT IN
+         // VIEWMODEL BECAUSE WHEN WE NAVIGATE TO PARTICULAR NOTE AND MOVE BACK THIS LIST  IS EMPTY AGAIN.
+        // SO BASICALLY SAVING THE STATE.
+
+    var selectedTags = mutableStateListOf<Int>() // SAVES THE INDEXES OF THE TAGS DISPLAYED IN ROW IN MAIN SCREEN SO
+    // THEY CAN SURVIVE BEING UNSELECTED BY SCROLLING.
     var getNote = mutableStateOf(Note())
         private set
 
