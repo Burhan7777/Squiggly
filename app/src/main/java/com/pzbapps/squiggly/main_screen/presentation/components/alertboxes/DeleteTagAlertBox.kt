@@ -56,7 +56,7 @@ fun DeleteTagAlertBox(
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    "Are you sure you want to delete tag? This will NOT delete notes associated with it",
+                    "Are you sure you want to delete this tag? This will NOT delete notes associated with it.",
                     fontSize = 15.sp,
                     fontFamily = FontFamily.fontFamilyRegular,
                     color = MaterialTheme.colors.onPrimary

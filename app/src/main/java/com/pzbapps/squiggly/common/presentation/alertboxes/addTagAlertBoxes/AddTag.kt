@@ -85,6 +85,14 @@ fun AddTag(viewModel: MainActivityViewModel, onDismiss: () -> Unit) {
             Button(
                 onClick = {
                     val tag = Tag(name = tagName.value)
+                    viewModel.getAllTags()
+                    val tags = viewModel.tags
+                    for (tag in tags) {
+                        if (tag.name == tagName.value) {
+                            Toast.makeText(context, "Tag already exists", Toast.LENGTH_SHORT).show()
+                            return@Button
+                        }
+                    }
                     viewModel.addTag(tag)
                     viewModel.getAllTags()
                     onDismiss()
