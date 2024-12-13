@@ -119,7 +119,6 @@ fun NoteContent(
     }
 
 
-
 //    val listOfNoteBooks = viewModel.getNoteBooks.observeAsState().value
 //    Log.i("notebooks", listOfNoteBooks?.size.toString())
 
@@ -224,90 +223,93 @@ fun NoteContent(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-        }
-        RichTextEditor(
-            state = richStateText,
-            colors = RichTextEditorDefaults.richTextEditorColors(
-                containerColor = backgroundColor.value,
-                cursorColor = MaterialTheme.colors.onPrimary,
-                textColor = MaterialTheme.colors.onPrimary,
-                unfocusedIndicatorColor = backgroundColor.value,
-                focusedIndicatorColor = backgroundColor.value,
-                selectionColors = TextSelectionColors(
-                    handleColor = MaterialTheme.colors.onPrimary,
-                    backgroundColor = Color.Gray
-                )
-
-            ),
-            placeholder = {
-                Text(
-                    text = "Note",
-                    fontSize = 18.sp,
-                    fontFamily = FontFamily.fontFamilyBold,
-                    color = MaterialTheme.colors.onPrimary,
-                    modifier = Modifier.alpha(0.5f)
-                )
-            },
-            textStyle = TextStyle(
-                fontFamily = fontFamily.value,
-                fontSize = 18.sp
-            )
-        )
-
-        Text(
-            "Tags",
-            color = MaterialTheme.colors.onPrimary.copy(alpha = 0.5f),
-            fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic,
-            modifier = Modifier.padding(start = 10.dp)
-        )
-        LazyRow(
-        ) {
-            items(listOFSelectedTags) { item ->
-                androidx.compose.material.Chip(onClick = {}, modifier = Modifier.padding(5.dp),
-                    colors = ChipDefaults.chipColors(
-                        backgroundColor = MaterialTheme.colors.onPrimary,
-                    ),
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Filled.Clear,
-                            contentDescription = "Remove from list",
-                            tint = MaterialTheme.colors.onSecondary,
-                            modifier = Modifier.clickable {
-                                listOFSelectedTags.remove(item)
-                            }
-                        )
-                    }
-                ) {
-                    Text(
-                        item,
-                        color = MaterialTheme.colors.onSecondary,
-                        fontFamily = FontFamily.fontFamilyRegular
-                    )
-                }
-            }
             item {
-                androidx.compose.material.Chip(
-                    modifier = Modifier.padding(5.dp),
-                    colors = ChipDefaults.chipColors(
-                        backgroundColor = MaterialTheme.colors.primaryVariant,
-                        contentColor = MaterialTheme.colors.onPrimary
-                    ),
-                    onClick = {
-                        showSelectTagAlertBox.value = true
-
-                    },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Filled.Add,
-                            contentDescription = "Add Tag",
-                            tint = MaterialTheme.colors.onPrimary
+                RichTextEditor(
+                    state = richStateText,
+                    colors = RichTextEditorDefaults.richTextEditorColors(
+                        containerColor = backgroundColor.value,
+                        cursorColor = MaterialTheme.colors.onPrimary,
+                        textColor = MaterialTheme.colors.onPrimary,
+                        unfocusedIndicatorColor = backgroundColor.value,
+                        focusedIndicatorColor = backgroundColor.value,
+                        selectionColors = TextSelectionColors(
+                            handleColor = MaterialTheme.colors.onPrimary,
+                            backgroundColor = Color.Gray
                         )
-                    }) {
-                    Text(
-                        text = "Add Tag",
-                        color = MaterialTheme.colors.onPrimary,
-                        fontFamily = FontFamily.fontFamilyRegular
+
+                    ),
+                    placeholder = {
+                        Text(
+                            text = "Note",
+                            fontSize = 18.sp,
+                            fontFamily = FontFamily.fontFamilyBold,
+                            color = MaterialTheme.colors.onPrimary,
+                            modifier = Modifier.alpha(0.5f)
+                        )
+                    },
+                    textStyle = TextStyle(
+                        fontFamily = fontFamily.value,
+                        fontSize = 18.sp
                     )
+                )
+
+                Text(
+                    "Tags",
+                    color = MaterialTheme.colors.onPrimary.copy(alpha = 0.5f),
+                    fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic,
+                    modifier = Modifier.padding(start = 10.dp)
+                )
+                LazyRow(
+                ) {
+                    items(listOFSelectedTags) { item ->
+                        androidx.compose.material.Chip(onClick = {},
+                            modifier = Modifier.padding(5.dp),
+                            colors = ChipDefaults.chipColors(
+                                backgroundColor = MaterialTheme.colors.onPrimary,
+                            ),
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Filled.Clear,
+                                    contentDescription = "Remove from list",
+                                    tint = MaterialTheme.colors.onSecondary,
+                                    modifier = Modifier.clickable {
+                                        listOFSelectedTags.remove(item)
+                                    }
+                                )
+                            }
+                        ) {
+                            Text(
+                                item,
+                                color = MaterialTheme.colors.onSecondary,
+                                fontFamily = FontFamily.fontFamilyRegular
+                            )
+                        }
+                    }
+                    item {
+                        androidx.compose.material.Chip(
+                            modifier = Modifier.padding(5.dp),
+                            colors = ChipDefaults.chipColors(
+                                backgroundColor = MaterialTheme.colors.primaryVariant,
+                                contentColor = MaterialTheme.colors.onPrimary
+                            ),
+                            onClick = {
+                                showSelectTagAlertBox.value = true
+
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Filled.Add,
+                                    contentDescription = "Add Tag",
+                                    tint = MaterialTheme.colors.onPrimary
+                                )
+                            }) {
+                            Text(
+                                text = "Add Tag",
+                                color = MaterialTheme.colors.onPrimary,
+                                fontFamily = FontFamily.fontFamilyRegular
+                            )
+                        }
+                    }
                 }
             }
         }
