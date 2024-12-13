@@ -245,9 +245,8 @@ fun Notes(
                                 } else {
                                     viewModel.selectedTags.remove(index)
                                 }
-                                if(viewModel.selectedTags.isEmpty()){
-                                    viewModel.filteredNotesByTag.clear()
-                                }
+
+
                                 if (viewModel.selectedTags.contains(index)) {
                                     viewModel.filteredNotesByTag.addAll(listOfNotesFromDB.filter {
                                         it.tags.contains(
@@ -261,6 +260,12 @@ fun Notes(
                                         )
                                     })
                                 }
+
+                                if (viewModel.selectedTags.isEmpty()) {
+                                    viewModel.filteredNotesByTag.clear()
+                                }
+
+                                println(viewModel.selectedTags)
                             },
                                 modifier = Modifier.padding(5.dp),
                                 colors = ChipDefaults.chipColors(
@@ -273,7 +278,34 @@ fun Notes(
                                             contentDescription = "Filter notes by tag",
                                             tint = MaterialTheme.colors.onSecondary,
                                             modifier = Modifier.clickable {
+                                                if (!viewModel.selectedTags.contains(index)) {
+                                                    viewModel.selectedTags.add(index)
+                                                } else {
+                                                    viewModel.selectedTags.remove(index)
+                                                }
 
+
+                                                if (viewModel.selectedTags.contains(index)) {
+                                                    viewModel.filteredNotesByTag.addAll(
+                                                        listOfNotesFromDB.filter {
+                                                            it.tags.contains(
+                                                                item.name
+                                                            )
+                                                        })
+                                                } else {
+                                                    viewModel.filteredNotesByTag.removeAll(
+                                                        listOfNotesFromDB.filter {
+                                                            it.tags.contains(
+                                                                item.name
+                                                            )
+                                                        })
+                                                }
+
+                                                if (viewModel.selectedTags.isEmpty()) {
+                                                    viewModel.filteredNotesByTag.clear()
+                                                }
+
+                                                println(viewModel.selectedTags)
                                             }
                                         )
                                     }
@@ -344,7 +376,18 @@ fun Notes(
                     }
                 }
             }
-            if (viewModel.filteredNotesByTag.isEmpty()) {
+            if (viewModel.filteredNotesByTag.isEmpty() && viewModel.selectedTags.isNotEmpty()) {
+                item {
+                    Text(
+                        "This tag has no notes.",
+                        fontFamily = FontFamily.fontFamilyRegular,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colors.onPrimary
+                    )
+                }
+            } else if (viewModel.filteredNotesByTag.isEmpty()) {
                 items(
                     listOfNotesFromDB ?: emptyList()
                 ) { note ->
