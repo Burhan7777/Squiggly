@@ -7,6 +7,8 @@ v4.0.0 - rc
 2) Adds transition between screens.
 3) Fixes password dialog box if password entered is empty . It saves "enter password".
 4) Advance Search.
+5) Fixes the background color choices on system default theme.
+6) Budget Planner.
 
 v3.3.0-beta
 ---------------------------

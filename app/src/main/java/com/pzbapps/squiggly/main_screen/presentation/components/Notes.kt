@@ -119,7 +119,6 @@ fun Notes(
                         color = MaterialTheme.colors.onPrimary,
                         modifier = Modifier.padding(horizontal = 10.dp)
                     )
-
                     Text(
                         "Tags",
                         color = MaterialTheme.colors.onPrimary.copy(alpha = 0.5f),
@@ -129,26 +128,81 @@ fun Notes(
                     LazyRow(
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        items(viewModel.tags) { item ->
-                            androidx.compose.material.Chip(onClick = {},
+                        itemsIndexed(viewModel.tags) { index, item ->
+                            androidx.compose.material.Chip(onClick = {
+                                if (!viewModel.selectedTags.contains(index)) {
+                                    viewModel.selectedTags.add(index)
+                                } else {
+                                    viewModel.selectedTags.remove(index)
+                                }
+
+
+                                if (viewModel.selectedTags.contains(index)) {
+                                    viewModel.filteredNotesByTag.addAll(listOfNotesFromDB.filter {
+                                        it.tags.contains(
+                                            item.name
+                                        )
+                                    })
+                                } else {
+                                    viewModel.filteredNotesByTag.removeAll(listOfNotesFromDB.filter {
+                                        it.tags.contains(
+                                            item.name
+                                        )
+                                    })
+                                }
+
+                                if (viewModel.selectedTags.isEmpty()) {
+                                    viewModel.filteredNotesByTag.clear()
+                                }
+
+                            },
                                 modifier = Modifier.padding(5.dp),
                                 colors = ChipDefaults.chipColors(
-                                    backgroundColor = MaterialTheme.colors.onPrimary,
+                                    backgroundColor = if (viewModel.selectedTags.contains(index)) MaterialTheme.colors.onPrimary else MaterialTheme.colors.primaryVariant,
                                 ),
                                 leadingIcon = {
-                                    Icon(
-                                        imageVector = Icons.Filled.Clear,
-                                        contentDescription = "Remove from list",
-                                        tint = MaterialTheme.colors.onSecondary,
-                                        modifier = Modifier.clickable {
+                                    if (viewModel.selectedTags.contains(index)) {
+                                        Icon(
+                                            imageVector = Icons.Filled.Check,
+                                            contentDescription = "Filter notes by tag",
+                                            tint = MaterialTheme.colors.onSecondary,
+                                            modifier = Modifier.clickable {
+                                                if (!viewModel.selectedTags.contains(index)) {
+                                                    viewModel.selectedTags.add(index)
+                                                } else {
+                                                    viewModel.selectedTags.remove(index)
+                                                }
 
-                                        }
-                                    )
+
+                                                if (viewModel.selectedTags.contains(index)) {
+                                                    viewModel.filteredNotesByTag.addAll(
+                                                        listOfNotesFromDB.filter {
+                                                            it.tags.contains(
+                                                                item.name
+                                                            )
+                                                        })
+                                                } else {
+                                                    viewModel.filteredNotesByTag.removeAll(
+                                                        listOfNotesFromDB.filter {
+                                                            it.tags.contains(
+                                                                item.name
+                                                            )
+                                                        })
+                                                }
+
+                                                if (viewModel.selectedTags.isEmpty()) {
+                                                    viewModel.filteredNotesByTag.clear()
+                                                }
+
+                                                println(viewModel.selectedTags)
+                                            }
+                                        )
+                                    }
                                 }
                             ) {
                                 Text(
                                     item.name,
-                                    color = MaterialTheme.colors.onSecondary,
+                                    color = if (viewModel.selectedTags.contains(index)) MaterialTheme.colors.onSecondary else MaterialTheme.colors.onPrimary,
                                     fontFamily = FontFamily.fontFamilyRegular
                                 )
                             }
@@ -205,10 +259,29 @@ fun Notes(
                     }
                 }
             }
-            items(
-                items = listOfNotesFromDB ?: emptyList()
-            ) { note ->
-                SingleItemNoteList(note = note, navHostController, scope)
+            if (viewModel.filteredNotesByTag.isEmpty() && viewModel.selectedTags.isNotEmpty()) {
+                item {
+                    Text(
+                        "This tag has no notes.",
+                        fontFamily = FontFamily.fontFamilyRegular,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colors.onPrimary
+                    )
+                }
+            } else if (viewModel.filteredNotesByTag.isEmpty()) {
+                items(
+                    listOfNotesFromDB ?: emptyList()
+                ) { note ->
+                    SingleItemNoteList(note = note, navHostController, scope)
+                }
+            } else {
+                items(
+                    viewModel.filteredNotesByTag ?: emptyList()
+                ) { note ->
+                    SingleItemNoteList(note = note, navHostController, scope)
+                }
             }
         }
     } else {
@@ -265,7 +338,6 @@ fun Notes(
                                     viewModel.filteredNotesByTag.clear()
                                 }
 
-                                println(viewModel.selectedTags)
                             },
                                 modifier = Modifier.padding(5.dp),
                                 colors = ChipDefaults.chipColors(
