@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -84,6 +85,10 @@ fun MainStructureAddNoteLockedScreen(
         remember { mutableStateOf<TextFieldValue>(TextFieldValue(annotatedString.value)) }
 
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    val listOfSelectedTags =
+        remember { mutableStateListOf<String>() } // THESE ARE THE TAGS SELECTED BY THE USER
+    // IN ADD NOTE FEATURE AND WILL BE ADDED TO THE "LIST_OF_TAGS" IN THE NOTE TABLE
 
 
     var boldSelection = remember { mutableStateOf(false) }
@@ -207,7 +212,8 @@ fun MainStructureAddNoteLockedScreen(
                     timeStamp = System.currentTimeMillis(),
                     locked = true,
                     color = backgroundColor.value.toArgb(),
-                    font = fontFamilyString.value
+                    font = fontFamilyString.value,
+                    tags = listOfSelectedTags.toCollection(ArrayList())
                 )
                 viewModel.insertNote(note)
             } else {
@@ -219,7 +225,8 @@ fun MainStructureAddNoteLockedScreen(
                     timeStamp = System.currentTimeMillis(),
                     locked = true,
                     color = 0,
-                    font = fontFamilyString.value
+                    font = fontFamilyString.value,
+                    tags = listOfSelectedTags.toCollection(ArrayList())
                 )
                 viewModel.insertNote(note)
             }
@@ -245,7 +252,8 @@ fun MainStructureAddNoteLockedScreen(
                         timeStamp = System.currentTimeMillis(),
                         locked = true,
                         color = backgroundColor.value.toArgb(),
-                        font = fontFamilyString.value
+                        font = fontFamilyString.value,
+                        tags = listOfSelectedTags.toCollection(ArrayList())
                     )
                     viewModel.updateNote(updatedNote)
                 } else {
@@ -258,7 +266,8 @@ fun MainStructureAddNoteLockedScreen(
                         timeStamp = System.currentTimeMillis(),
                         locked = true,
                         color = 0,
-                        font = fontFamilyString.value
+                        font = fontFamilyString.value,
+                        tags = listOfSelectedTags.toCollection(ArrayList())
                     )
                     viewModel.updateNote(updatedNote)
                 }
@@ -289,7 +298,8 @@ fun MainStructureAddNoteLockedScreen(
                         timeStamp = System.currentTimeMillis(),
                         locked = true,
                         color = backgroundColor.value.toArgb(),
-                        font = fontFamilyString.value
+                        font = fontFamilyString.value,
+                        tags = listOfSelectedTags.toCollection(ArrayList())
                     )
                     viewModel.updateNote(updatedNote)
                 } else {
@@ -302,7 +312,8 @@ fun MainStructureAddNoteLockedScreen(
                         timeStamp = System.currentTimeMillis(),
                         locked = true,
                         color = 0,
-                        font = fontFamilyString.value
+                        font = fontFamilyString.value,
+                        tags = listOfSelectedTags.toCollection(ArrayList())
                     )
                     viewModel.updateNote(updatedNote)
                 }
@@ -328,7 +339,8 @@ fun MainStructureAddNoteLockedScreen(
                     timeStamp = System.currentTimeMillis(),
                     locked = true,
                     color = backgroundColor.value.toArgb(),
-                    font = fontFamilyString.value
+                    font = fontFamilyString.value,
+                    tags = listOfSelectedTags.toCollection(ArrayList())
                 )
                 viewModel.updateNote(updatedNote)
             } else {
@@ -341,7 +353,8 @@ fun MainStructureAddNoteLockedScreen(
                     timeStamp = System.currentTimeMillis(),
                     locked = true,
                     color = 0,
-                    font = fontFamilyString.value
+                    font = fontFamilyString.value,
+                    tags = listOfSelectedTags.toCollection(ArrayList())
                 )
                 viewModel.updateNote(updatedNote)
             }
@@ -376,7 +389,8 @@ fun MainStructureAddNoteLockedScreen(
                                     notebook = notebookState.value,
                                     locked = true,
                                     color = backgroundColor.value.toArgb(),
-                                    font = fontFamilyString.value
+                                    font = fontFamilyString.value,
+                                    tags = listOfSelectedTags.toCollection(ArrayList())
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
@@ -392,7 +406,8 @@ fun MainStructureAddNoteLockedScreen(
                                     notebook = notebookState.value,
                                     locked = true,
                                     color = 0,
-                                    font = fontFamilyString.value
+                                    font = fontFamilyString.value,
+                                    tags = listOfSelectedTags.toCollection(ArrayList())
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
@@ -434,7 +449,8 @@ fun MainStructureAddNoteLockedScreen(
                                     notebook = notebookState.value,
                                     locked = true,
                                     color = backgroundColor.value.toArgb(),
-                                    font = fontFamilyString.value
+                                    font = fontFamilyString.value,
+                                    tags = listOfSelectedTags.toCollection(ArrayList())
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
@@ -450,7 +466,8 @@ fun MainStructureAddNoteLockedScreen(
                                     notebook = notebookState.value,
                                     locked = true,
                                     color = 0,
-                                    font = fontFamilyString.value
+                                    font = fontFamilyString.value,
+                                    tags = listOfSelectedTags.toCollection(ArrayList())
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
@@ -515,7 +532,8 @@ fun MainStructureAddNoteLockedScreen(
                     richTextState.value,
                     hideFormattingTextBarWhileTitleIsInFocus,
                     backgroundColor,
-                    fontFamily
+                    fontFamily,
+                    listOfSelectedTags
 //                notebook,
 //                notebookFromDB)
                 )

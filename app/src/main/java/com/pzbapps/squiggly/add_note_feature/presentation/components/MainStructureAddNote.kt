@@ -78,7 +78,8 @@ fun MainStructureAddNote(
     var underlineText = remember { mutableStateOf(false) }
     var italicText = remember { mutableStateOf(false) }
     val listOfSelectedTags =
-        remember { mutableStateListOf<String>() } // THESE ARE THE TAGS SELECTED BY THE USER IN ADD NOTE FEATURE AND WILL BE ADDED TO THE "LIST_OF_TAGS" IN THE NOTE TABLE
+        remember { mutableStateListOf<String>() } // THESE ARE THE TAGS SELECTED BY THE USER
+    // IN ADD NOTE FEATURE AND WILL BE ADDED TO THE "LIST_OF_TAGS" IN THE NOTE TABLE
 
     var showDiscardNoteAlertBox = rememberSaveable { mutableStateOf(false) }
 
