@@ -272,7 +272,6 @@ fun NoteContent(
                         fontFamily = fontFamily.value,
                         fontSize = 18.sp
                     ),
-                    modifier = Modifier.fillMaxWidth()
                 )
 
                 // Automatic scrolling when text changes

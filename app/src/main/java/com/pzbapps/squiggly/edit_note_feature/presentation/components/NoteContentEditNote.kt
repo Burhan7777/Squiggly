@@ -255,7 +255,7 @@ fun NoteContent(
                 if (!showTags.value) {
                     richEditorMaxHeight = maxHeight - 80.dp // Leave space for Tags
                 } else {
-                    richEditorMaxHeight = maxHeight -20.dp
+                    richEditorMaxHeight = maxHeight - 20.dp
                 }
                 // Scrollable RichTextEditor
                 Column(
@@ -418,7 +418,7 @@ fun NoteContent(
             }
         }
     } else if (listOfNotes.size > 0 && listOfBulletPointNotes.size == 0) {
-        androidx.compose.material3.TextField(
+        androidx.compose.material.TextField(
             value = title,
             onValueChange = { onChangeTitle(it) },
             placeholder = {
@@ -430,13 +430,12 @@ fun NoteContent(
                     modifier = Modifier.alpha(0.5f)
                 )
             },
-            colors = androidx.compose.material3.TextFieldDefaults.textFieldColors(
-                containerColor = Color(backgroundColor.value),
+            colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
+                backgroundColor = Color(backgroundColor.value),
                 focusedIndicatorColor = Color(backgroundColor.value),
                 unfocusedIndicatorColor = Color(backgroundColor.value),
                 cursorColor = MaterialTheme.colors.onPrimary,
-                focusedTextColor = MaterialTheme.colors.onPrimary,
-                unfocusedTextColor = MaterialTheme.colors.onPrimary
+                textColor = MaterialTheme.colors.onPrimary,
             ),
             textStyle = TextStyle(fontFamily = FontFamily.fontFamilyBold, fontSize = 25.sp)
         )
@@ -617,7 +616,7 @@ fun NoteContent(
         val imeVisible = WindowInsets.isImeVisible
 
         val lazyListState = rememberLazyListState()
-        androidx.compose.material3.TextField(
+        androidx.compose.material.TextField(
             value = title,
             onValueChange = { onChangeTitle(it) },
             placeholder = {
@@ -629,13 +628,13 @@ fun NoteContent(
                     modifier = Modifier.alpha(0.5f)
                 )
             },
-            colors = androidx.compose.material3.TextFieldDefaults.textFieldColors(
-                containerColor = Color(backgroundColor.value),
+            colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
+                backgroundColor = Color(backgroundColor.value),
                 focusedIndicatorColor = Color(backgroundColor.value),
                 unfocusedIndicatorColor = Color(backgroundColor.value),
                 cursorColor = MaterialTheme.colors.onPrimary,
-                focusedTextColor = MaterialTheme.colors.onPrimary,
-                unfocusedTextColor = MaterialTheme.colors.onPrimary
+                textColor = MaterialTheme.colors.onPrimary
+
             ),
             textStyle = TextStyle(fontFamily = FontFamily.fontFamilyBold, fontSize = 25.sp)
         )

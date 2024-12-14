@@ -142,7 +142,7 @@ dependencies {
     implementation "androidx.compose.runtime:runtime-livedata:1.6.8"
 
     //RICHEDITOR
-    implementation("com.mohamedrejeb.richeditor:richeditor-compose:1.0.0-rc09")
+    implementation("com.mohamedrejeb.richeditor:richeditor-compose:1.0.0-rc10")
 
     //WORK MANAGER
     implementation "androidx.work:work-runtime-ktx:2.7.1"

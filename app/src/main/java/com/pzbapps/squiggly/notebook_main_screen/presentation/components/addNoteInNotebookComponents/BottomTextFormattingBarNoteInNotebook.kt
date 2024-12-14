@@ -36,8 +36,6 @@ import androidx.compose.material.icons.filled.FormatSize
 import androidx.compose.material.icons.filled.FormatUnderlined
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Redo
-import androidx.compose.material.icons.filled.TextDecrease
-import androidx.compose.material.icons.filled.TextIncrease
 import androidx.compose.material.icons.filled.Undo
 
 import androidx.compose.runtime.Composable
@@ -92,7 +90,7 @@ fun BottomTextFormattingBarNoteInNotebook(
                     }
                 }) {
                     Icon(
-                        imageVector = Icons.Filled.TextDecrease,
+                        imageVector = Icons.Filled.FormatSize,
                         contentDescription = "Decrease font size",
                         tint = MaterialTheme.colors.onPrimary
                     )
@@ -117,7 +115,7 @@ fun BottomTextFormattingBarNoteInNotebook(
                     )
                 }) {
                     Icon(
-                        imageVector = Icons.Filled.TextIncrease,
+                        imageVector = Icons.Filled.FormatSize,
                         contentDescription = "increase  font size",
                         tint = MaterialTheme.colors.onPrimary
                     )
