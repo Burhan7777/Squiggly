@@ -569,7 +569,8 @@ fun MainStructureAddNote(
                     showSavedText,
                     backgroundColor,
                     fontFamily,
-                    listOfSelectedTags
+                    listOfSelectedTags,
+                    showTags
 //                notebook,
 //                notebookFromDB)
                 )

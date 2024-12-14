@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.text.selection.TextSelectionColors
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.ChipDefaults
 import androidx.compose.material.ExperimentalMaterialApi
@@ -35,6 +37,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -68,7 +71,8 @@ fun NoteContent(
     showSavedText: MutableState<Boolean>,
     backgroundColor: MutableState<Color>,
     fontFamily: MutableState<androidx.compose.ui.text.font.FontFamily>,
-    listOFSelectedTags: SnapshotStateList<String>
+    listOFSelectedTags: SnapshotStateList<String>,
+    showTags: MutableState<Boolean>
 //    notebook: MutableState<ArrayList<String>>,
 //    notebookFromDB: MutableState<ArrayList<NoteBook>>
 ) {
@@ -215,15 +219,33 @@ fun NoteContent(
             }
     )
 
+    val scrollState = rememberScrollState()
+    val imePadding =
+        if (imeVisible) WindowInsets.ime.getBottom(LocalDensity.current).dp + 50.dp else 0.dp
+
     Column(
         modifier = Modifier
-            .padding(bottom = if (imeVisible) WindowInsets.ime.getBottom((LocalDensity.current)).dp + 100.dp else 0.dp)
+            .fillMaxSize()
+            .padding(bottom = imePadding)
     ) {
-        LazyColumn(
+        // RichTextEditor and Tags Section with dynamic spacing
+        BoxWithConstraints(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            item {
+            var richEditorMaxHeight: Dp = 0.dp
+            if (!showTags.value) {
+                richEditorMaxHeight = maxHeight - 80.dp // Leave space for Tags
+            } else {
+                richEditorMaxHeight = maxHeight - 20.dp
+            }
+            // Scrollable RichTextEditor
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(scrollState)
+                    .heightIn(max = richEditorMaxHeight) // Ensure space for Tags initially
+            ) {
                 RichTextEditor(
                     state = richStateText,
                     colors = RichTextEditorDefaults.richTextEditorColors(
@@ -236,7 +258,6 @@ fun NoteContent(
                             handleColor = MaterialTheme.colors.onPrimary,
                             backgroundColor = Color.Gray
                         )
-
                     ),
                     placeholder = {
                         Text(
@@ -250,19 +271,44 @@ fun NoteContent(
                     textStyle = TextStyle(
                         fontFamily = fontFamily.value,
                         fontSize = 18.sp
-                    )
+                    ),
+                    modifier = Modifier.fillMaxWidth()
                 )
 
+                // Automatic scrolling when text changes
+                LaunchedEffect(richStateText.annotatedString.text) {
+                    scrollState.animateScrollTo(scrollState.maxValue)
+                }
+            }
+        }
+
+        // Spacer to dynamically adjust the layout
+//        Spacer(
+//            modifier = Modifier
+//                .weight(if (scrollState.maxValue > 0) 0f else 1f) // Take up remaining space if not scrollable
+//        )
+
+        // Tags Section - Initially below RichTextEditor, moves to bottom when RichTextEditor scrolls
+        if (!showTags.value) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp)
+            ) {
                 Text(
                     "Tags",
                     color = MaterialTheme.colors.onPrimary.copy(alpha = 0.5f),
-                    fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic,
+                    fontWeight = FontWeight.Bold,
+                    fontStyle = FontStyle.Italic,
                     modifier = Modifier.padding(start = 10.dp)
                 )
+
                 LazyRow(
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     items(listOFSelectedTags) { item ->
-                        androidx.compose.material.Chip(onClick = {},
+                        androidx.compose.material.Chip(
+                            onClick = {},
                             modifier = Modifier.padding(5.dp),
                             colors = ChipDefaults.chipColors(
                                 backgroundColor = MaterialTheme.colors.onPrimary,
@@ -294,7 +340,6 @@ fun NoteContent(
                             ),
                             onClick = {
                                 showSelectTagAlertBox.value = true
-
                             },
                             leadingIcon = {
                                 Icon(
@@ -302,7 +347,8 @@ fun NoteContent(
                                     contentDescription = "Add Tag",
                                     tint = MaterialTheme.colors.onPrimary
                                 )
-                            }) {
+                            }
+                        ) {
                             Text(
                                 text = "Add Tag",
                                 color = MaterialTheme.colors.onPrimary,
