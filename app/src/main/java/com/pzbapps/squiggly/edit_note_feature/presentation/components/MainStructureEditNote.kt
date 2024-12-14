@@ -202,6 +202,8 @@ fun MainStructureEditNote(
 
     var listOfSelectedTags = remember { mutableStateListOf<String>() }
 
+    val showTags = remember { mutableStateOf(false) }
+
 
     when (fontFamily.value) {
         FontFamily.fontFamilyRegular -> fontFamilyString.value = FontFamily.lufgaRegular
@@ -1091,7 +1093,8 @@ fun MainStructureEditNote(
                     timeInString,
                     backgroundColor,
                     fontFamily,
-                    listOfSelectedTags
+                    listOfSelectedTags,
+                    showTags
                 )
             }
             if (mutableListOfCheckboxTexts.size == 0 && mutableListOfBulletPoints.size == 0 && !hideFormattingTextBarWhenTitleIsInFocus.value) {
@@ -1123,7 +1126,8 @@ fun MainStructureEditNote(
                         currentContent = currentContent,
                         showBottomSheet = showBottomSheet,
                         showTextColorBottomSheet = showTextColorBottomSheet,
-                        showFontBottomSheet = showFontBottomSheet
+                        showFontBottomSheet = showFontBottomSheet,
+                        showTags = showTags
                     )
                 }
             }

@@ -52,6 +52,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -109,7 +110,8 @@ fun NoteContent(
     timeInString: MutableState<String>,
     backgroundColor: MutableState<Int>,
     fontFamily: MutableState<androidx.compose.ui.text.font.FontFamily>,
-    listOfSelectedTags: SnapshotStateList<String>
+    listOfSelectedTags: SnapshotStateList<String>,
+    showTags: MutableState<Boolean>
 ) {
 
     var dialogOpen = remember {
@@ -249,8 +251,12 @@ fun NoteContent(
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                val richEditorMaxHeight = maxHeight - 80.dp // Leave space for Tags
-
+                var richEditorMaxHeight: Dp = 0.dp
+                if (!showTags.value) {
+                    richEditorMaxHeight = maxHeight - 80.dp // Leave space for Tags
+                } else {
+                    richEditorMaxHeight = maxHeight -20.dp
+                }
                 // Scrollable RichTextEditor
                 Column(
                     modifier = Modifier
@@ -296,112 +302,114 @@ fun NoteContent(
                     .fillMaxWidth()
                     .padding(bottom = 16.dp)
             ) {
-                Text(
-                    "Tags",
-                    color = MaterialTheme.colors.onPrimary.copy(alpha = 0.5f),
-                    fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic,
-                    modifier = Modifier.padding(start = 10.dp)
-                )
-                LazyRow(
-                ) {
-                    items(listOfSelectedTags) { item ->
-                        androidx.compose.material.Chip(onClick = {},
-                            modifier = Modifier.padding(5.dp),
-                            colors = ChipDefaults.chipColors(
-                                backgroundColor = MaterialTheme.colors.onPrimary,
-                            ),
-                            leadingIcon = {
-                                androidx.compose.material3.Icon(
-                                    imageVector = Icons.Filled.Clear,
-                                    contentDescription = "Remove from list",
-                                    tint = MaterialTheme.colors.onSecondary,
-                                    modifier = Modifier.clickable {
-                                        listOfSelectedTags.remove(item)
-                                    }
+                if (!showTags.value) {
+                    Text(
+                        "Tags",
+                        color = MaterialTheme.colors.onPrimary.copy(alpha = 0.5f),
+                        fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic,
+                        modifier = Modifier.padding(start = 10.dp)
+                    )
+                    LazyRow(
+                    ) {
+                        items(listOfSelectedTags) { item ->
+                            androidx.compose.material.Chip(onClick = {},
+                                modifier = Modifier.padding(5.dp),
+                                colors = ChipDefaults.chipColors(
+                                    backgroundColor = MaterialTheme.colors.onPrimary,
+                                ),
+                                leadingIcon = {
+                                    androidx.compose.material3.Icon(
+                                        imageVector = Icons.Filled.Clear,
+                                        contentDescription = "Remove from list",
+                                        tint = MaterialTheme.colors.onSecondary,
+                                        modifier = Modifier.clickable {
+                                            listOfSelectedTags.remove(item)
+                                        }
+                                    )
+                                }
+                            ) {
+                                Text(
+                                    item,
+                                    color = MaterialTheme.colors.onSecondary,
+                                    fontFamily = FontFamily.fontFamilyRegular
                                 )
                             }
-                        ) {
-                            Text(
-                                item,
-                                color = MaterialTheme.colors.onSecondary,
-                                fontFamily = FontFamily.fontFamilyRegular
-                            )
                         }
-                    }
-                    item {
-                        androidx.compose.material.Chip(
-                            modifier = Modifier.padding(5.dp),
-                            colors = ChipDefaults.chipColors(
-                                backgroundColor = MaterialTheme.colors.primaryVariant,
-                                contentColor = MaterialTheme.colors.onPrimary
-                            ),
-                            onClick = {
-                                showSelectTagAlertBox.value = true
-
-                            },
-                            leadingIcon = {
-                                androidx.compose.material3.Icon(
-                                    imageVector = Icons.Filled.Add,
-                                    contentDescription = "Add Tag",
-                                    tint = MaterialTheme.colors.onPrimary
-                                )
-                            }) {
-                            Text(
-                                text = "Add Tag",
-                                color = MaterialTheme.colors.onPrimary,
-                                fontFamily = FontFamily.fontFamilyRegular
-                            )
-                        }
-                        if (systemTime.longValue < time.longValue) {
-                            Card(
-                                modifier = Modifier
-                                    .wrapContentWidth()
-                                    .wrapContentHeight()
-                                    .padding(30.dp)
-                                    .clickable {
-                                        addReminder(
-                                            activity,
-                                            note,
-                                            title,
-                                            showMenu,
-                                            notificationLauncher,
-                                            viewModel,
-                                            time,
-                                            systemTime,
-                                            mutableStateOf(false),
-                                            timeInString
-                                        )
-                                    },
-                                shape = RoundedCornerShape(20.dp),
-                                colors = CardDefaults.cardColors(
-                                    containerColor = MaterialTheme.colors.primaryVariant,
+                        item {
+                            androidx.compose.material.Chip(
+                                modifier = Modifier.padding(5.dp),
+                                colors = ChipDefaults.chipColors(
+                                    backgroundColor = MaterialTheme.colors.primaryVariant,
                                     contentColor = MaterialTheme.colors.onPrimary
-                                )
-                            ) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    modifier = Modifier.padding(10.dp)
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Filled.Alarm,
-                                        contentDescription = "Alarm",
+                                ),
+                                onClick = {
+                                    showSelectTagAlertBox.value = true
+
+                                },
+                                leadingIcon = {
+                                    androidx.compose.material3.Icon(
+                                        imageVector = Icons.Filled.Add,
+                                        contentDescription = "Add Tag",
                                         tint = MaterialTheme.colors.onPrimary
                                     )
-                                    Spacer(modifier = Modifier.width(3.dp))
+                                }) {
+                                Text(
+                                    text = "Add Tag",
+                                    color = MaterialTheme.colors.onPrimary,
+                                    fontFamily = FontFamily.fontFamilyRegular
+                                )
+                            }
+                        }
+                    }
+                    if (systemTime.longValue < time.longValue) {
+                        Card(
+                            modifier = Modifier
+                                .wrapContentWidth()
+                                .wrapContentHeight()
+                                .padding(30.dp)
+                                .clickable {
+                                    addReminder(
+                                        activity,
+                                        note,
+                                        title,
+                                        showMenu,
+                                        notificationLauncher,
+                                        viewModel,
+                                        time,
+                                        systemTime,
+                                        mutableStateOf(false),
+                                        timeInString
+                                    )
+                                },
+                            shape = RoundedCornerShape(20.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colors.primaryVariant,
+                                contentColor = MaterialTheme.colors.onPrimary
+                            )
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.padding(10.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.Alarm,
+                                    contentDescription = "Alarm",
+                                    tint = MaterialTheme.colors.onPrimary
+                                )
+                                Spacer(modifier = Modifier.width(3.dp))
 
-                                    Text(if (timeInString.value == "") formattedTime.value else timeInString.value)
-                                    Spacer(modifier = Modifier.width(3.dp))
-                                    IconButton(onClick = {
-                                        cancelReminder(activity, note.value.id)
-                                        updateReminderInDB(viewModel, note)
-                                        time.longValue = 0
-                                    }) {
-                                        Icon(
-                                            imageVector = Icons.Filled.Clear,
-                                            contentDescription = "Cancel the alarm",
-                                            tint = MaterialTheme.colors.onPrimary
-                                        )
-                                    }
+                                Text(if (timeInString.value == "") formattedTime.value else timeInString.value)
+                                Spacer(modifier = Modifier.width(3.dp))
+                                IconButton(onClick = {
+                                    cancelReminder(activity, note.value.id)
+                                    updateReminderInDB(viewModel, note)
+                                    time.longValue = 0
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Clear,
+                                        contentDescription = "Cancel the alarm",
+                                        tint = MaterialTheme.colors.onPrimary
+                                    )
                                 }
                             }
                         }

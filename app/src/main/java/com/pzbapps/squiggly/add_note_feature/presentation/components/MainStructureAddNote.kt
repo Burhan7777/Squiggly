@@ -81,6 +81,8 @@ fun MainStructureAddNote(
         remember { mutableStateListOf<String>() } // THESE ARE THE TAGS SELECTED BY THE USER
     // IN ADD NOTE FEATURE AND WILL BE ADDED TO THE "LIST_OF_TAGS" IN THE NOTE TABLE
 
+    val showTags = remember { mutableStateOf(false) }
+
     var showDiscardNoteAlertBox = rememberSaveable { mutableStateOf(false) }
 
     var generatedNoteId = rememberSaveable { mutableStateOf<Long>(0) }
@@ -600,7 +602,8 @@ fun MainStructureAddNote(
                         currentContent = currentContent,
                         showBottomSheet = showBottomSheet,
                         showTextColorBottomSheet = showTextColorBottomSheet,
-                        showFontBottomSheet = showFontBottomSheet
+                        showFontBottomSheet = showFontBottomSheet,
+                        showTags = showTags
                     )
                 }
             }

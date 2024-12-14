@@ -40,9 +40,13 @@ import androidx.compose.material.icons.filled.Redo
 import androidx.compose.material.icons.filled.TextDecrease
 import androidx.compose.material.icons.filled.TextIncrease
 import androidx.compose.material.icons.filled.Undo
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -77,8 +81,11 @@ fun BottomTextFormattingBar(
     currentContent: MutableState<String>,
     showBottomSheet: MutableState<Boolean>,
     showTextColorBottomSheet: MutableState<Boolean>,
-    showFontBottomSheet: MutableState<Boolean>
+    showFontBottomSheet: MutableState<Boolean>,
+    showTags: MutableState<Boolean>
 ) {
+
+    var showAndHideIcon = remember { mutableStateOf(true) }
     Column(modifier = Modifier.imePadding()) {
 
         if (showFontSize.value) {
@@ -132,6 +139,25 @@ fun BottomTextFormattingBar(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.horizontalScroll(rememberScrollState())
         ) {
+            IconButton(onClick =
+            {
+                showAndHideIcon.value = !showAndHideIcon.value
+                showTags.value = !showTags.value
+            }) {
+                if (showAndHideIcon.value) {
+                    Icon(
+                        imageVector = Icons.Filled.Visibility,
+                        contentDescription = "Tags visible",
+                        tint = MaterialTheme.colors.onPrimary
+                    )
+                } else {
+                    Icon(
+                        imageVector = Icons.Filled.VisibilityOff,
+                        contentDescription = "Tags hidden",
+                        tint = MaterialTheme.colors.onPrimary
+                    )
+                }
+            }
             IconButton(onClick = {
                 var analytics = Firebase.analytics
                 var bundle = Bundle()
