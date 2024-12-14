@@ -216,62 +216,65 @@ fun CheckboxNote(
                         }
                     )
                 }
-            }
-        }
-        Text(
-            "Tags",
-            color = MaterialTheme.colors.onPrimary.copy(alpha = 0.5f),
-            fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic,
-            modifier = Modifier.padding(start = 10.dp)
-        )
-        LazyRow(
-        ) {
-            items(listOfSelectedTags) { item ->
-                androidx.compose.material.Chip(onClick = {}, modifier = Modifier.padding(5.dp),
-                    colors = ChipDefaults.chipColors(
-                        backgroundColor = MaterialTheme.colors.onPrimary,
-                    ),
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Filled.Clear,
-                            contentDescription = "Remove from list",
-                            tint = MaterialTheme.colors.onSecondary,
-                            modifier = Modifier.clickable {
-                                listOfSelectedTags.remove(item)
+                item {
+                    Text(
+                        "Tags",
+                        color = MaterialTheme.colors.onPrimary.copy(alpha = 0.5f),
+                        fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic,
+                        modifier = Modifier.padding(start = 10.dp)
+                    )
+                    LazyRow(
+                    ) {
+                        items(listOfSelectedTags) { item ->
+                            androidx.compose.material.Chip(onClick = {},
+                                modifier = Modifier.padding(5.dp),
+                                colors = ChipDefaults.chipColors(
+                                    backgroundColor = MaterialTheme.colors.onPrimary,
+                                ),
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Filled.Clear,
+                                        contentDescription = "Remove from list",
+                                        tint = MaterialTheme.colors.onSecondary,
+                                        modifier = Modifier.clickable {
+                                            listOfSelectedTags.remove(item)
+                                        }
+                                    )
+                                }
+                            ) {
+                                Text(
+                                    item,
+                                    color = MaterialTheme.colors.onSecondary,
+                                    fontFamily = FontFamily.fontFamilyRegular
+                                )
                             }
-                        )
-                    }
-                ) {
-                    Text(
-                        item,
-                        color = MaterialTheme.colors.onSecondary,
-                        fontFamily = FontFamily.fontFamilyRegular
-                    )
-                }
-            }
-            item {
-                androidx.compose.material.Chip(
-                    modifier = Modifier.padding(5.dp),
-                    colors = ChipDefaults.chipColors(
-                        backgroundColor = MaterialTheme.colors.primaryVariant,
-                        contentColor = MaterialTheme.colors.onPrimary
-                    ),
-                    onClick = {
-                        showSelectTagAlertBox.value = true
+                        }
+                        item {
+                            androidx.compose.material.Chip(
+                                modifier = Modifier.padding(5.dp),
+                                colors = ChipDefaults.chipColors(
+                                    backgroundColor = MaterialTheme.colors.primaryVariant,
+                                    contentColor = MaterialTheme.colors.onPrimary
+                                ),
+                                onClick = {
+                                    showSelectTagAlertBox.value = true
 
-                    },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Filled.Add,
-                            contentDescription = "Add Tag",
-                            tint = MaterialTheme.colors.onPrimary
-                        )
-                    }) {
-                    Text(
-                        text = "Add Tag",
-                        color = MaterialTheme.colors.onPrimary,
-                        fontFamily = FontFamily.fontFamilyRegular
-                    )
+                                },
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Filled.Add,
+                                        contentDescription = "Add Tag",
+                                        tint = MaterialTheme.colors.onPrimary
+                                    )
+                                }) {
+                                Text(
+                                    text = "Add Tag",
+                                    color = MaterialTheme.colors.onPrimary,
+                                    fontFamily = FontFamily.fontFamilyRegular
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
