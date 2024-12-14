@@ -214,7 +214,6 @@ fun Notes(
                                                     viewModel.filteredNotesByTag.clear()
                                                 }
 
-                                                println(viewModel.selectedTags)
                                             }
                                         )
                                     }
