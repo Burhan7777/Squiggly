@@ -92,6 +92,10 @@ fun MainStructureBulletPointsNotebook(
 
     var showDiscardNoteAlertBox = remember { mutableStateOf(false) }
 
+    val listOfSelectedTags =
+        remember { mutableStateListOf<String>() } // THESE ARE THE TAGS SELECTED BY THE USER IN ADD NOTE BULLET_POINT
+    // FEATURE AND WILL BE ADDED TO THE "LIST_OF_TAGS" IN THE NOTE TABLE
+
     LaunchedEffect(key1 = true) {
         if (mutableListOfBulletPointsNotes.isEmpty()) {
             mutableListOfBulletPointsNotes.add(mutableStateOf(""))
@@ -115,7 +119,8 @@ fun MainStructureBulletPointsNotebook(
                     timeModified = System.currentTimeMillis(),
                     notebook = notebook,
                     timeStamp = System.currentTimeMillis(),
-                    color = backgroundColor.value.toArgb()
+                    color = backgroundColor.value.toArgb(),
+                    tags = listOfSelectedTags.toCollection(ArrayList())
 //            listOfCheckedNotes = mutableListConverted,
 //            listOfCheckedBoxes = mutableListOfCheckBoxes,
 
@@ -128,7 +133,8 @@ fun MainStructureBulletPointsNotebook(
                     timeModified = System.currentTimeMillis(),
                     notebook = notebook,
                     timeStamp = System.currentTimeMillis(),
-                    color = 0
+                    color = 0,
+                    tags = listOfSelectedTags.toCollection(ArrayList())
 //            listOfCheckedNotes = mutableListConverted,
 //            listOfCheckedBoxes = mutableListOfCheckBoxes,
 
@@ -169,7 +175,8 @@ fun MainStructureBulletPointsNotebook(
                 timeStamp = System.currentTimeMillis(),
                 notebook = notebook,
                 listOfBulletPointNotes = mutableListConverted,
-                color = backgroundColor.value.toArgb()
+                color = backgroundColor.value.toArgb(),
+                tags = listOfSelectedTags.toCollection(ArrayList())
             )
             viewModel.updateNote(note1)
         } else {
@@ -180,7 +187,8 @@ fun MainStructureBulletPointsNotebook(
                 timeStamp = System.currentTimeMillis(),
                 notebook = notebook,
                 listOfBulletPointNotes = mutableListConverted,
-                color = 0
+                color = 0,
+                tags = listOfSelectedTags.toCollection(ArrayList())
             )
             viewModel.updateNote(note1)
         }
@@ -215,7 +223,8 @@ fun MainStructureBulletPointsNotebook(
                             timeStamp = System.currentTimeMillis(),
                             notebook = notebook,
                             listOfBulletPointNotes = mutableListConverted,
-                            color = backgroundColor.value.toArgb()
+                            color = backgroundColor.value.toArgb(),
+                            tags = listOfSelectedTags.toCollection(ArrayList())
                         )
                         viewModel.updateNote(note1)
                     } else {
@@ -226,7 +235,8 @@ fun MainStructureBulletPointsNotebook(
                             timeStamp = System.currentTimeMillis(),
                             notebook = notebook,
                             listOfBulletPointNotes = mutableListConverted,
-                            color = 0
+                            color = 0,
+                            tags = listOfSelectedTags.toCollection(ArrayList())
                         )
                         viewModel.updateNote(note1)
                     }
@@ -269,7 +279,8 @@ fun MainStructureBulletPointsNotebook(
                                     listOfBulletPointNotes = mutableListConverted,
                                     timeStamp = System.currentTimeMillis(),
                                     timeModified = System.currentTimeMillis(),
-                                    color = backgroundColor.value.toArgb()
+                                    color = backgroundColor.value.toArgb(),
+                                    tags = listOfSelectedTags.toCollection(ArrayList())
                                 )
                                 viewModel.updateNote(note)
                             } else {
@@ -280,7 +291,8 @@ fun MainStructureBulletPointsNotebook(
                                     listOfBulletPointNotes = mutableListConverted,
                                     timeStamp = System.currentTimeMillis(),
                                     timeModified = System.currentTimeMillis(),
-                                    color = 0
+                                    color = 0,
+                                    tags = listOfSelectedTags.toCollection(ArrayList())
                                 )
                                 viewModel.updateNote(note)
                             }
@@ -341,7 +353,8 @@ fun MainStructureBulletPointsNotebook(
                                     listOfBulletPointNotes = mutableListConverted,
                                     timeStamp = System.currentTimeMillis(),
                                     timeModified = System.currentTimeMillis(),
-                                    color = backgroundColor.value.toArgb()
+                                    color = backgroundColor.value.toArgb(),
+                                    tags = listOfSelectedTags.toCollection(ArrayList())
                                 )
                                 viewModel.updateNote(note)
                             } else {
@@ -352,7 +365,8 @@ fun MainStructureBulletPointsNotebook(
                                     listOfBulletPointNotes = mutableListConverted,
                                     timeStamp = System.currentTimeMillis(),
                                     timeModified = System.currentTimeMillis(),
-                                    color = 0
+                                    color = 0,
+                                    tags = listOfSelectedTags.toCollection(ArrayList())
                                 )
                                 viewModel.updateNote(note)
                             }
@@ -416,7 +430,8 @@ fun MainStructureBulletPointsNotebook(
                 mutableListOfBulletPointsNotes,
                 count,
                 mutableListConverted,
-                backgroundColor
+                backgroundColor,
+                listOfSelectedTags
             )
         }
     }
