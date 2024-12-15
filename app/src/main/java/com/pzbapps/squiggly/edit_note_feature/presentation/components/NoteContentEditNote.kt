@@ -49,9 +49,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -111,7 +114,8 @@ fun NoteContent(
     backgroundColor: MutableState<Int>,
     fontFamily: MutableState<androidx.compose.ui.text.font.FontFamily>,
     listOfSelectedTags: SnapshotStateList<String>,
-    showTags: MutableState<Boolean>
+    showTags: MutableState<Boolean>,
+    query: String
 ) {
 
     var dialogOpen = remember {
@@ -223,6 +227,28 @@ fun NoteContent(
         val scrollState = rememberScrollState()
         val imePadding =
             if (imeVisible) WindowInsets.ime.getBottom(LocalDensity.current).dp + 50.dp else 0.dp
+
+
+        LaunchedEffect(query) {
+            val plainText =
+                richStateText.value.toText()
+            val index = plainText.indexOf(query, ignoreCase = true)
+            println(query)
+            println(plainText)
+            println("INDEX OF QUERY:$index")
+            if (index >= 0) {
+                // Highlight the text
+                val highlightedText = buildString {
+                    append(plainText.substring(0, index))
+                    append("<span style='background-color:gray;'>")
+                    append(plainText.substring(index, index + query.length))
+                    append("</span>")
+                    append(plainText.substring(index + query.length))
+                }
+                // Set the highlighted HTML content
+                richStateText.value.setHtml(highlightedText)
+            }
+        }
 
         Column(
             modifier = Modifier

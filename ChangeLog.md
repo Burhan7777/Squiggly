@@ -1,17 +1,17 @@
 -------------------------- CHANGE LOG------------------------
 
 
-v4.0.0 - rc
+v4.0.0 - beta
 ---------------------------
 1) Adds tags.
-2) Adds transition between screens.
-3) Fixes password dialog box if password entered is empty . It saves "enter password".
-4) Advance Search.
-5) Fixes the background color choices on system default theme.
-6) Budget Planner.
-7) Checks if tag already exists.
-8) Checks if notebook already exists.
-9) Add fonts to bullet points and checkbox.
+2) Fixes password dialog box if password entered is empty . It saves "enter password".
+3) Advance Search.
+4) Fixes the background color choices on system default theme. 
+5) Checks if tag already exists. 
+6) Checks if notebook already exists. 
+7) Add fonts to bullet points and checkbox. 
+8) Restore files should be in latest first (sort by date). 
+9) Check with different devices before launching the app to check migration.. (Abuji, mummy, sadaf, baji , daeda).
 
 v3.3.0-beta
 ---------------------------

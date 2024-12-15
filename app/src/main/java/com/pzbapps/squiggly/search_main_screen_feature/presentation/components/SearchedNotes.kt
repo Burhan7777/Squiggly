@@ -27,7 +27,7 @@ fun SearchedNotes(
     //val searchArchiveResult = viewModel.getArchiveSearchResult.observeAsState().value
     val filteredNotes = ArrayList<Note>()
     //viewModel.getAllNotes()
-    viewModel.listOfNotesLiveData.observe(activity) {notes->
+    viewModel.listOfNotesLiveData.observe(activity) { notes ->
         for (i in notes) {
             if (i.title.lowercase().contains(queryText) || i.content.lowercase()
                     .contains(queryText)
@@ -67,7 +67,7 @@ fun SearchedNotes(
         items(
             filteredNotes ?: emptyList()
         ) { note ->
-            SingleItemSearchNoteList(note = note, navHostController)
+            SingleItemSearchNoteList(note = note, navHostController, queryText)
         }
 //        items(
 //            searchArchiveResult ?: emptyList()

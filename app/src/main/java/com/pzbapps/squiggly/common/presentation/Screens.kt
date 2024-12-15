@@ -6,9 +6,13 @@ const val AUTH_GRAPH = "auth_graph"
 sealed class Screens(val route: String) {
     object HomeScreen : Screens("home_screen")
     object AddNoteScreen : Screens("add_note_screen")
-    object EditNoteScreen : Screens("edit_note_screen/{id}/{screen}") {
+    object EditNoteScreen : Screens("edit_note_screen/{id}/{screen}?query={query}") {
         fun editNoteWithId(id: Int, screen: String): String {
-            return "edit_note_screen/$id/$screen"
+            return "edit_note_screen/$id/$screen "
+        }
+
+        fun editNoteWithSearchQuery(id: Int, screen: String, query: String): String {
+            return "edit_note_screen/$id/$screen?query=$query"
         }
     }
 
@@ -66,9 +70,10 @@ sealed class Screens(val route: String) {
             return "bullet_points_notebook/$notebook"
         }
     }
-    object CheckBoxLockedNotesMainScreen:Screens("checkbox_locked_notes_main_screen")
-    object BulletPointsLockedNotesMainScreen:Screens("bullet_points_locked_notes_main_screen")
-    object PrivacyPolicy:Screens("privacy_policy")
-    object FeedbackScreen:Screens("feedback_screen")
-    object ReportBugScreen:Screens("report_bug_screen")
+
+    object CheckBoxLockedNotesMainScreen : Screens("checkbox_locked_notes_main_screen")
+    object BulletPointsLockedNotesMainScreen : Screens("bullet_points_locked_notes_main_screen")
+    object PrivacyPolicy : Screens("privacy_policy")
+    object FeedbackScreen : Screens("feedback_screen")
+    object ReportBugScreen : Screens("report_bug_screen")
 }

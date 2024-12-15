@@ -33,7 +33,7 @@ import com.pzbapps.squiggly.common.presentation.Screens
 import com.pzbapps.squiggly.main_screen.domain.model.Note
 
 @Composable
-fun SingleItemSearchNoteList(note: Note, navHostController: NavHostController) {
+fun SingleItemSearchNoteList(note: Note, navHostController: NavHostController, query: String) {
 
     var richTextState = rememberRichTextState()
     var contentText = richTextState.setHtml(note.content).annotatedString.text
@@ -75,9 +75,10 @@ fun SingleItemSearchNoteList(note: Note, navHostController: NavHostController) {
                 )
                 .clickable {
                     navHostController.navigate(
-                        Screens.EditNoteScreen.editNoteWithId(
+                        Screens.EditNoteScreen.editNoteWithSearchQuery(
                             note.id,
-                            Constant.HOME
+                            Constant.HOME,
+                            query
                         )
                     )
                 },
@@ -87,7 +88,7 @@ fun SingleItemSearchNoteList(note: Note, navHostController: NavHostController) {
                 bottomStart = CornerSize(10.dp),
                 bottomEnd = CornerSize(10.dp),
             ),
-         //   elevation = CardDefaults.cardElevation(15.dp),
+            //   elevation = CardDefaults.cardElevation(15.dp),
             colors = CardDefaults.cardColors(
                 containerColor = Color(note.color),
                 contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
@@ -141,7 +142,7 @@ fun SingleItemSearchNoteList(note: Note, navHostController: NavHostController) {
                 bottomStart = CornerSize(10.dp),
                 bottomEnd = CornerSize(10.dp),
             ),
-          //  elevation = CardDefaults.cardElevation(15.dp),
+            //  elevation = CardDefaults.cardElevation(15.dp),
             colors = CardDefaults.cardColors(
                 containerColor = Color(note.color),
                 contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
@@ -259,7 +260,7 @@ fun SingleItemSearchNoteList(note: Note, navHostController: NavHostController) {
                 bottomStart = CornerSize(10.dp),
                 bottomEnd = CornerSize(10.dp),
             ),
-        //    elevation = CardDefaults.cardElevation(15.dp),
+            //    elevation = CardDefaults.cardElevation(15.dp),
             colors = CardDefaults.cardColors(
                 containerColor = Color(note.color),
                 contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
@@ -312,7 +313,7 @@ fun SingleItemSearchNoteList(note: Note, navHostController: NavHostController) {
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Image(
-                                    painterResource(id =com.pzbapps.squiggly. R.drawable.bullet_point),
+                                    painterResource(id = com.pzbapps.squiggly.R.drawable.bullet_point),
                                     contentDescription = "Bullet Point",
                                     colorFilter = ColorFilter.tint(androidx.compose.material.MaterialTheme.colors.onPrimary)
                                 )

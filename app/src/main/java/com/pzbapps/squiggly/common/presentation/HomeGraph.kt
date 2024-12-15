@@ -1,6 +1,10 @@
 package com.pzbapps.squiggly.common.presentation
 
 import android.util.Log
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.MutableState
 import androidx.navigation.*
@@ -56,6 +60,7 @@ fun NavGraphBuilder.homeGraph(
             Screens.AddNoteScreen.route
         ) {
             AddNoteScreen(navController, viewModel, activity)
+
         }
         composable(
             Screens.EditNoteScreen.route,
@@ -63,16 +68,19 @@ fun NavGraphBuilder.homeGraph(
                 type = NavType.IntType
             }, navArgument("screen") {
                 type = NavType.StringType
+            }, navArgument("query") {
+                type = NavType.StringType
+                defaultValue = ""
             }
             )) {
-            Log.i("notesId", it.arguments!!.getString("id").toString())
             EditNoteScreen(
                 navHostController = navController,
                 viewModel = viewModel,
                 activity = activity,
                 id = it.arguments!!.getInt("id")!!,
                 screen = it.arguments!!.getString("screen")!!,
-                noteId
+                noteId,
+                query = it.arguments!!.getString("query")!!
             )
         }
         composable(route = Screens.SettingsScreen.route) {

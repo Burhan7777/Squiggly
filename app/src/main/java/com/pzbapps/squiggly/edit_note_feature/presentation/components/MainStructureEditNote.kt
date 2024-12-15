@@ -74,7 +74,8 @@ fun MainStructureEditNote(
     id: Int,
     activity: MainActivity,
     screen: String,
-    notesid: MutableIntState
+    notesid: MutableIntState,
+    query: String
 ) {
     var context = LocalContext.current
 
@@ -1094,7 +1095,8 @@ fun MainStructureEditNote(
                     backgroundColor,
                     fontFamily,
                     listOfSelectedTags,
-                    showTags
+                    showTags,
+                    query
                 )
             }
             if (mutableListOfCheckboxTexts.size == 0 && mutableListOfBulletPoints.size == 0 && !hideFormattingTextBarWhenTitleIsInFocus.value) {
