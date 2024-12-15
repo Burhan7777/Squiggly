@@ -84,6 +84,10 @@ fun MainStructureCheckBoxNotebook(
         )
     }
 
+    val listOfSelectedTags =
+        remember { mutableStateListOf<String>() } // THESE ARE THE TAGS SELECTED BY THE USER IN ADD NOTE CHECKBOX
+    // FEATURE AND WILL BE ADDED TO THE "LIST_OF_TAGS" IN THE NOTE TABLE
+
     var showDiscardNoteAlertBox = remember { mutableStateOf(false) }
 
     val backgroundColor1 = MaterialTheme.colors.primary
@@ -119,7 +123,8 @@ fun MainStructureCheckBoxNotebook(
                     timeModified = System.currentTimeMillis(),
                     notebook = notebook,
                     timeStamp = System.currentTimeMillis(),
-                    color = backgroundColor.value.toArgb()
+                    color = backgroundColor.value.toArgb(),
+                    tags = listOfSelectedTags.toCollection(ArrayList())
 //            listOfCheckedNotes = mutableListConverted,
 //            listOfCheckedBoxes = mutableListOfCheckBoxes,
 
@@ -132,7 +137,8 @@ fun MainStructureCheckBoxNotebook(
                     timeModified = System.currentTimeMillis(),
                     notebook = notebook,
                     timeStamp = System.currentTimeMillis(),
-                    color = 0
+                    color = 0,
+                    tags = listOfSelectedTags.toCollection(ArrayList())
 //            listOfCheckedNotes = mutableListConverted,
 //            listOfCheckedBoxes = mutableListOfCheckBoxes,
 
@@ -173,7 +179,8 @@ fun MainStructureCheckBoxNotebook(
                 notebook = notebook,
                 listOfCheckedNotes = mutableListConverted,
                 listOfCheckedBoxes = mutableListOfCheckBoxes,
-                color = backgroundColor.value.toArgb()
+                color = backgroundColor.value.toArgb(),
+                tags = listOfSelectedTags.toCollection(ArrayList())
             )
             viewModel.updateNote(note1)
         } else {
@@ -185,7 +192,8 @@ fun MainStructureCheckBoxNotebook(
                 notebook = notebook,
                 listOfCheckedNotes = mutableListConverted,
                 listOfCheckedBoxes = mutableListOfCheckBoxes,
-                color = 0
+                color = 0,
+                tags = listOfSelectedTags.toCollection(ArrayList())
             )
             viewModel.updateNote(note1)
         }
@@ -225,7 +233,8 @@ fun MainStructureCheckBoxNotebook(
                             notebook = notebook,
                             listOfCheckedNotes = mutableListConverted,
                             listOfCheckedBoxes = mutableListOfCheckBoxes,
-                            color = backgroundColor.value.toArgb()
+                            color = backgroundColor.value.toArgb(),
+                            tags = listOfSelectedTags.toCollection(ArrayList())
                         )
                         viewModel.updateNote(note1)
                     } else {
@@ -237,7 +246,8 @@ fun MainStructureCheckBoxNotebook(
                             notebook = notebook,
                             listOfCheckedNotes = mutableListConverted,
                             listOfCheckedBoxes = mutableListOfCheckBoxes,
-                            color = 0
+                            color = 0,
+                            tags = listOfSelectedTags.toCollection(ArrayList())
                         )
                         viewModel.updateNote(note1)
                     }
@@ -281,7 +291,8 @@ fun MainStructureCheckBoxNotebook(
                                     listOfCheckedBoxes = mutableListOfCheckBoxes,
                                     timeStamp = System.currentTimeMillis(),
                                     timeModified = System.currentTimeMillis(),
-                                    color = backgroundColor.value.toArgb()
+                                    color = backgroundColor.value.toArgb(),
+                                    tags = listOfSelectedTags.toCollection(ArrayList())
                                 )
                                 viewModel.updateNote(note)
                             } else {
@@ -293,7 +304,8 @@ fun MainStructureCheckBoxNotebook(
                                     listOfCheckedBoxes = mutableListOfCheckBoxes,
                                     timeStamp = System.currentTimeMillis(),
                                     timeModified = System.currentTimeMillis(),
-                                    color = 0
+                                    color = 0,
+                                    tags = listOfSelectedTags.toCollection(ArrayList())
                                 )
                                 viewModel.updateNote(note)
                             }
@@ -355,7 +367,8 @@ fun MainStructureCheckBoxNotebook(
                                     listOfCheckedBoxes = mutableListOfCheckBoxes,
                                     timeStamp = System.currentTimeMillis(),
                                     timeModified = System.currentTimeMillis(),
-                                    color = backgroundColor.value.toArgb()
+                                    color = backgroundColor.value.toArgb(),
+                                    tags = listOfSelectedTags.toCollection(ArrayList())
                                 )
                                 viewModel.updateNote(note)
                             } else {
@@ -367,7 +380,8 @@ fun MainStructureCheckBoxNotebook(
                                     listOfCheckedBoxes = mutableListOfCheckBoxes,
                                     timeStamp = System.currentTimeMillis(),
                                     timeModified = System.currentTimeMillis(),
-                                    color = 0
+                                    color = 0,
+                                    tags = listOfSelectedTags.toCollection(ArrayList())
                                 )
                                 viewModel.updateNote(note)
                             }
@@ -432,7 +446,8 @@ fun MainStructureCheckBoxNotebook(
                 mutableListOfCheckBoxes,
                 count,
                 mutableListConverted,
-                backgroundColor
+                backgroundColor,
+                listOfSelectedTags
             )
         }
     }
