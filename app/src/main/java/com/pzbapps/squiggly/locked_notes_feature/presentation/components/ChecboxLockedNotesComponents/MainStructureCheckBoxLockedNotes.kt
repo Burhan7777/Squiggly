@@ -58,7 +58,7 @@ fun MainStructureCheckBoxLockedNotes(
     viewModel: MainActivityViewModel,
     notebookState: MutableState<String>,
     title: MutableState<String>,
-    activity: MainActivity
+    activity: MainActivity,
 ) {
     var context = LocalContext.current
 
@@ -106,6 +106,10 @@ fun MainStructureCheckBoxLockedNotes(
 
     }
 
+    val listOfSelectedTags =
+        remember { mutableStateListOf<String>() } // THESE ARE THE TAGS SELECTED BY THE USER IN ADD NOTE CHECKBOX
+    // FEATURE AND WILL BE ADDED TO THE "LIST_OF_TAGS" IN THE NOTE TABLE
+
     var showDiscardNoteAlertBox = remember { mutableStateOf(false) }
 
     if (generatedNoteId.value.toInt() == 0) {
@@ -118,7 +122,8 @@ fun MainStructureCheckBoxLockedNotes(
                     notebook = notebookState.value,
                     timeStamp = System.currentTimeMillis(),
                     locked = true,
-                    color = backgroundColor.value.toArgb()
+                    color = backgroundColor.value.toArgb(),
+                    tags = listOfSelectedTags.toCollection(ArrayList())
 //            listOfCheckedNotes = mutableListConverted,
 //            listOfCheckedBoxes = mutableListOfCheckBoxes,
 
@@ -132,7 +137,8 @@ fun MainStructureCheckBoxLockedNotes(
                     notebook = notebookState.value,
                     timeStamp = System.currentTimeMillis(),
                     locked = true,
-                    color = 0
+                    color = 0,
+                    tags = listOfSelectedTags.toCollection(ArrayList())
 //            listOfCheckedNotes = mutableListConverted,
 //            listOfCheckedBoxes = mutableListOfCheckBoxes,
 
@@ -175,7 +181,8 @@ fun MainStructureCheckBoxLockedNotes(
                 listOfCheckedNotes = mutableListConverted,
                 listOfCheckedBoxes = mutableListOfCheckBoxes,
                 locked = true,
-                color = backgroundColor.value.toArgb()
+                color = backgroundColor.value.toArgb(),
+                tags = listOfSelectedTags.toCollection(ArrayList())
             )
             viewModel.updateNote(note1)
         } else {
@@ -188,7 +195,8 @@ fun MainStructureCheckBoxLockedNotes(
                 listOfCheckedNotes = mutableListConverted,
                 listOfCheckedBoxes = mutableListOfCheckBoxes,
                 locked = true,
-                color = 0
+                color = 0,
+                tags = listOfSelectedTags.toCollection(ArrayList())
             )
             viewModel.updateNote(note1)
         }
@@ -229,7 +237,8 @@ fun MainStructureCheckBoxLockedNotes(
                             listOfCheckedNotes = mutableListConverted,
                             listOfCheckedBoxes = mutableListOfCheckBoxes,
                             locked = true,
-                            color = backgroundColor.value.toArgb()
+                            color = backgroundColor.value.toArgb(),
+                            tags = listOfSelectedTags.toCollection(ArrayList())
                         )
                         viewModel.updateNote(note1)
                     } else {
@@ -242,7 +251,8 @@ fun MainStructureCheckBoxLockedNotes(
                             listOfCheckedNotes = mutableListConverted,
                             listOfCheckedBoxes = mutableListOfCheckBoxes,
                             locked = true,
-                            color = 0
+                            color = 0,
+                            tags = listOfSelectedTags.toCollection(ArrayList())
                         )
                         viewModel.updateNote(note1)
                     }
@@ -288,7 +298,8 @@ fun MainStructureCheckBoxLockedNotes(
                                     timeStamp = System.currentTimeMillis(),
                                     locked = true,
                                     timeModified = System.currentTimeMillis(),
-                                    color = backgroundColor.value.toArgb()
+                                    color = backgroundColor.value.toArgb(),
+                                    tags = listOfSelectedTags.toCollection(ArrayList())
                                 )
                                 viewModel.updateNote(note)
                             } else {
@@ -300,7 +311,8 @@ fun MainStructureCheckBoxLockedNotes(
                                     timeStamp = System.currentTimeMillis(),
                                     locked = true,
                                     timeModified = System.currentTimeMillis(),
-                                    color = 0
+                                    color = 0,
+                                    tags = listOfSelectedTags.toCollection(ArrayList())
                                 )
                                 viewModel.updateNote(note)
                             }
@@ -362,7 +374,8 @@ fun MainStructureCheckBoxLockedNotes(
                                     timeStamp = System.currentTimeMillis(),
                                     locked = true,
                                     timeModified = System.currentTimeMillis(),
-                                    color = backgroundColor.value.toArgb()
+                                    color = backgroundColor.value.toArgb(),
+                                    tags = listOfSelectedTags.toCollection(ArrayList())
                                 )
                                 viewModel.updateNote(note)
                             } else {
@@ -374,7 +387,8 @@ fun MainStructureCheckBoxLockedNotes(
                                     timeStamp = System.currentTimeMillis(),
                                     locked = true,
                                     timeModified = System.currentTimeMillis(),
-                                    color = 0
+                                    color = 0,
+                                    tags = listOfSelectedTags.toCollection(ArrayList())
                                 )
                                 viewModel.updateNote(note)
                             }
@@ -438,7 +452,9 @@ fun MainStructureCheckBoxLockedNotes(
                 mutableListOfCheckboxTexts,
                 mutableListOfCheckBoxes,
                 count,
-                backgroundColor
+                backgroundColor,
+                listOfSelectedTags,
+                mutableListConverted
             )
         }
     }

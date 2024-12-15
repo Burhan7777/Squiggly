@@ -40,7 +40,9 @@ fun SingleRowCheckBoxLockedNotes(
     mutableListOfCheckBoxes: ArrayList<Boolean>,
     index: Int,
     count: MutableState<Int>,
-    backgroundColor: MutableState<Color>
+    backgroundColor: MutableState<Color>,
+    focusRequester: FocusRequester,
+    onDelete: () -> Unit
 ) {
     var checkBox = rememberSaveable { mutableStateOf(false) }
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -50,10 +52,6 @@ fun SingleRowCheckBoxLockedNotes(
         mutableListOfCheckBoxes[index] = checkBox.value
     }
 
-    val focusRequester = remember { FocusRequester() }
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-    }
     Row(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
@@ -104,7 +102,9 @@ fun SingleRowCheckBoxLockedNotes(
                     }
                 },
             trailingIcon = {
-                IconButton(onClick = { mutableList.removeAt(index) }) {
+                IconButton(onClick = {
+                    onDelete()
+                    mutableListOfCheckBoxes.removeAt(index) }) {
                     Icon(
                         imageVector = Icons.Filled.Clear,
                         contentDescription = "Clear checkbox",
