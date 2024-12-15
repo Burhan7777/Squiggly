@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -119,6 +120,12 @@ fun MainStructureAddNoteInNotebook(
 
     var fontFamilyString = remember { mutableStateOf("") }
 
+    val listOfSelectedTags =
+        remember { mutableStateListOf<String>() } // THESE ARE THE TAGS SELECTED BY THE USER
+    // IN ADD NOTE FEATURE AND WILL BE ADDED TO THE "LIST_OF_TAGS" IN THE NOTE TABLE
+
+    val showTags = remember { mutableStateOf(false) }
+
     when (fontFamily.value) {
         FontFamily.fontFamilyRegular -> fontFamilyString.value = FontFamily.lufgaRegular
         FontFamily.fontFamilyBold -> fontFamilyString.value = FontFamily.lufgaBold
@@ -207,7 +214,8 @@ fun MainStructureAddNoteInNotebook(
                     notebook = notebookName,
                     timeStamp = System.currentTimeMillis(),
                     color = backgroundColor.value.toArgb(),
-                    font = fontFamilyString.value
+                    font = fontFamilyString.value,
+                    tags = listOfSelectedTags.toCollection(ArrayList())
                 )
                 viewModel.insertNote(note)
             } else {
@@ -218,7 +226,8 @@ fun MainStructureAddNoteInNotebook(
                     notebook = notebookName,
                     timeStamp = System.currentTimeMillis(),
                     color = 0,
-                    font = fontFamilyString.value
+                    font = fontFamilyString.value,
+                    tags = listOfSelectedTags.toCollection(ArrayList())
                 )
                 viewModel.insertNote(note)
             }
@@ -243,7 +252,8 @@ fun MainStructureAddNoteInNotebook(
                         notebook = notebookName,
                         timeStamp = System.currentTimeMillis(),
                         color = backgroundColor.value.toArgb(),
-                        font = fontFamilyString.value
+                        font = fontFamilyString.value,
+                        tags = listOfSelectedTags.toCollection(ArrayList())
                     )
                     viewModel.updateNote(updatedNote)
                 } else {
@@ -255,7 +265,8 @@ fun MainStructureAddNoteInNotebook(
                         notebook = notebookName,
                         timeStamp = System.currentTimeMillis(),
                         color = 0,
-                        font = fontFamilyString.value
+                        font = fontFamilyString.value,
+                        tags = listOfSelectedTags.toCollection(ArrayList())
                     )
                     viewModel.updateNote(updatedNote)
                 }
@@ -285,7 +296,8 @@ fun MainStructureAddNoteInNotebook(
                         notebook = notebookName,
                         timeStamp = System.currentTimeMillis(),
                         color = backgroundColor.value.toArgb(),
-                        font = fontFamilyString.value
+                        font = fontFamilyString.value,
+                        tags = listOfSelectedTags.toCollection(ArrayList())
                     )
                     viewModel.updateNote(updatedNote)
                 } else {
@@ -297,7 +309,8 @@ fun MainStructureAddNoteInNotebook(
                         notebook = notebookName,
                         timeStamp = System.currentTimeMillis(),
                         color = 0,
-                        font = fontFamilyString.value
+                        font = fontFamilyString.value,
+                        tags = listOfSelectedTags.toCollection(ArrayList())
                     )
                     viewModel.updateNote(updatedNote)
                 }
@@ -322,7 +335,8 @@ fun MainStructureAddNoteInNotebook(
                     notebook = notebookName,
                     timeStamp = System.currentTimeMillis(),
                     color = backgroundColor.value.toArgb(),
-                    font = fontFamilyString.value
+                    font = fontFamilyString.value,
+                    tags = listOfSelectedTags.toCollection(ArrayList())
                 )
                 viewModel.updateNote(updatedNote)
             } else {
@@ -334,7 +348,8 @@ fun MainStructureAddNoteInNotebook(
                     notebook = notebookName,
                     timeStamp = System.currentTimeMillis(),
                     color = 0,
-                    font = fontFamilyString.value
+                    font = fontFamilyString.value,
+                    tags = listOfSelectedTags.toCollection(ArrayList())
                 )
                 viewModel.updateNote(updatedNote)
             }
@@ -367,7 +382,8 @@ fun MainStructureAddNoteInNotebook(
                                     notebook = notebookName,
                                     timeStamp = System.currentTimeMillis(),
                                     color = backgroundColor.value.toArgb(),
-                                    font = fontFamilyString.value
+                                    font = fontFamilyString.value,
+                                    tags = listOfSelectedTags.toCollection(ArrayList())
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
@@ -383,7 +399,8 @@ fun MainStructureAddNoteInNotebook(
                                     notebook = notebookName,
                                     timeStamp = System.currentTimeMillis(),
                                     color = 0,
-                                    font = fontFamilyString.value
+                                    font = fontFamilyString.value,
+                                    tags = listOfSelectedTags.toCollection(ArrayList())
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
@@ -425,7 +442,8 @@ fun MainStructureAddNoteInNotebook(
                                     notebook = notebookName,
                                     timeStamp = System.currentTimeMillis(),
                                     color = backgroundColor.value.toArgb(),
-                                    font = fontFamilyString.value
+                                    font = fontFamilyString.value,
+                                    tags = listOfSelectedTags.toCollection(ArrayList())
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
@@ -441,7 +459,8 @@ fun MainStructureAddNoteInNotebook(
                                     notebook = notebookName,
                                     timeStamp = System.currentTimeMillis(),
                                     color = 0,
-                                    font = fontFamilyString.value
+                                    font = fontFamilyString.value,
+                                    tags = listOfSelectedTags.toCollection(ArrayList())
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
@@ -515,7 +534,9 @@ fun MainStructureAddNoteInNotebook(
                     richTextState.value,
                     hideFormattingTextBarWhenTitleIsInFocus,
                     backgroundColor,
-                    fontFamily
+                    fontFamily,
+                    listOfSelectedTags,
+                    showTags
 //                notebook,
 //                notebookFromDB)
                 )
@@ -547,7 +568,8 @@ fun MainStructureAddNoteInNotebook(
                         currentContent = currentContent,
                         showBottomSheet = showBottomSheet,
                         showTextColorBottomSheet = showTextColorBottomSheet,
-                        showFontBottomSheet = showFontBottomSheet
+                        showFontBottomSheet = showFontBottomSheet,
+                        showTags = showTags
                     )
                 }
             }
