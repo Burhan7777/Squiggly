@@ -26,9 +26,12 @@ import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.common.presentation.Screens
 import com.pzbapps.squiggly.main_screen.domain.model.Note
 import com.pzbapps.squiggly.main_screen.presentation.components.alertboxes.AlertDialogBoxEnterPasswordToOpenLockedNotes
+import com.pzbapps.squiggly.main_screen.presentation.components.alertboxes.DeleteTagAlertBox
+import com.pzbapps.squiggly.main_screen.presentation.components.alertboxes.EditTagsAlertBox
 import com.pzbapps.squiggly.notebook_main_screen.presentation.components.alertboxes.DeleteAllNotesToo
 import com.pzbapps.squiggly.notebook_main_screen.presentation.components.alertboxes.DeleteNotebookAlertBox
 import com.pzbapps.squiggly.notebook_main_screen.presentation.components.alertboxes.UnlockNotes
+import com.pzbapps.squiggly.settings_feature.screen.presentation.components.LoadingDialogBox
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -66,6 +69,16 @@ fun MainStructureNotebookScreen(
 //        remember { SnapshotStateList<Note>() } // CONSISTS OF LOCKED NOTES OF A PARTICULAR NOTEBOOK
 
     val scope = rememberCoroutineScope()
+
+    val showEditTagsAlertBox = remember { mutableStateOf(false) }
+    val showDeleteTagAlertBox = remember { mutableStateOf(false) }
+    val showProgressOfRemovingTag = remember { mutableStateOf(false) }
+    viewModel.getAllTags() // WE GET THE TAGS TO DISPLAY THEM IN EDIT TAG ALERT BOX
+
+    val tag =
+        remember { mutableStateOf("") } // WE GET THE SELECTED TAG TO REMOVE IT. ITS PASSED TO NOTE
+    // AND SET THEIR IN THE ONCLICK OF THE DELETE BUTTON IN EDIT TAG ALERT BOX
+
 
 
 //    if (selectedItem.value == 0) selectedNote.value = 100000
@@ -350,12 +363,27 @@ fun MainStructureNotebookScreen(
                     showUnlockDialogBox.value = false
                 }
             }
+            if (showEditTagsAlertBox.value) {
+                EditTagsAlertBox(viewModel.tags, showDeleteTagAlertBox, tag) {
+                    showEditTagsAlertBox.value = false
+                }
+
+            }
+            if (showDeleteTagAlertBox.value) {
+                DeleteTagAlertBox(viewModel, tag.value, showProgressOfRemovingTag) {
+                    showDeleteTagAlertBox.value = false
+                }
+            }
+            if (showProgressOfRemovingTag.value) {
+                LoadingDialogBox(mutableStateOf("Removing tag"))
+            }
             NotesNotebook(
                 viewModel,
                 activity,
                 navHostController,
                 title,
                 showUnlockDialogBox,
+                showEditTagsAlertBox,
             )
         }
     }
