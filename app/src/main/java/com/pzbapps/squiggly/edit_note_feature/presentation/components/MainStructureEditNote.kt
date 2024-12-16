@@ -382,6 +382,9 @@ fun MainStructureEditNote(
         DisposableEffect(lifecycleOwner) {
             val observer = LifecycleEventObserver { _, event ->
                 if (event == Lifecycle.Event.ON_STOP) {
+                    var formattedText =
+                        removeHighlights(richStateText.value.toHtml())
+                    richStateText.value.setHtml(formattedText)
                     // Trigger autosave when app goes to background (onStop)
                     viewModel.getNoteById(note.value.id)
                     activity.lifecycleScope.launch {
@@ -451,6 +454,9 @@ fun MainStructureEditNote(
         DisposableEffect(lifecycleOwner) {
             val observer = LifecycleEventObserver { _, event ->
                 if (event == Lifecycle.Event.ON_STOP) {
+                    var formattedText =
+                        removeHighlights(richStateText.value.toHtml())
+                    richStateText.value.setHtml(formattedText)
                     convertMutableStateIntoString(
                         mutableListOfBulletPoints,
                         convertedBulletPoints
@@ -546,6 +552,9 @@ fun MainStructureEditNote(
 
     var remember = rememberCoroutineScope()
     BackHandler {
+        var formattedText =
+            removeHighlights(richStateText.value.toHtml())
+        richStateText.value.setHtml(formattedText)
         var analytics = com.google.firebase.ktx.Firebase.analytics
         var bundle = Bundle()
         bundle.putString("back_handler_triggered_edit_notes", "back_handler_triggered_edit_notes")
@@ -619,6 +628,9 @@ fun MainStructureEditNote(
     LaunchedEffect(isTyping) {
         if (!isTyping) {
             delay(2000) // Wait for 2 seconds after typing stops
+            var formattedText =
+                removeHighlights(richStateText.value.toHtml())
+            richStateText.value.setHtml(formattedText)
             if (richStateText.value.annotatedString.text != lastContent.value) {
                 viewModel.getNoteById(note.value.id)
                 val noteFromDb = viewModel.getNoteById.value
@@ -670,6 +682,9 @@ fun MainStructureEditNote(
                 ),
                 navigationIcon = {
                     IconButton(onClick = {
+                        var formattedText =
+                            removeHighlights(richStateText.value.toHtml())
+                        richStateText.value.setHtml(formattedText)
                         notesid.intValue = -1
                         var analytics = com.google.firebase.ktx.Firebase.analytics
                         var bundle = Bundle()
@@ -893,7 +908,6 @@ fun MainStructureEditNote(
                     IconButton(onClick = {
                         var formattedText =
                             removeHighlights(richStateText.value.toHtml())
-                        println("HTML:${richStateText.value.toHtml()}")
                         richStateText.value.setHtml(formattedText)
                         var analytics = com.google.firebase.ktx.Firebase.analytics
                         var bundle = Bundle()
