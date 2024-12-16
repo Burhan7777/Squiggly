@@ -36,6 +36,7 @@ import androidx.navigation.NavHostController
 import com.google.firebase.Firebase
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.auth.auth
+import com.mohamedrejeb.richeditor.model.RichTextState
 import com.mohamedrejeb.richeditor.model.rememberRichTextState
 import com.pzbapps.squiggly.add_note_feature.presentation.components.BottomSheet.AddNoteBottomSheet
 import com.pzbapps.squiggly.add_note_feature.presentation.components.BottomTextFormattingBar
@@ -204,6 +205,7 @@ fun MainStructureEditNote(
     var listOfSelectedTags = remember { mutableStateListOf<String>() }
 
     val showTags = remember { mutableStateOf(false) }
+
 
 
     when (fontFamily.value) {
@@ -889,6 +891,7 @@ fun MainStructureEditNote(
                         )
                     }
                     IconButton(onClick = {
+                        //var formattedText = removeHighlights(richStateText.value.annotatedString.text)
                         var analytics = com.google.firebase.ktx.Firebase.analytics
                         var bundle = Bundle()
                         bundle.putString(
@@ -915,7 +918,7 @@ fun MainStructureEditNote(
                         var note = Note(
                             id,
                             title,
-                            richStateText.value.toHtml(),
+                           richStateText.value.toHtml(),
                             archived,
                             locked = lockedOrNote,
                             listOfCheckedNotes = converted,
@@ -1232,6 +1235,8 @@ fun MainStructureEditNote(
     if (showFontBottomSheet.value) {
         FontBottomSheet(showFontBottomSheet, richStateText, fontFamily)
     }
+
+
 }
 
 fun convertMutableStateIntoString(
@@ -1385,6 +1390,14 @@ fun pinOrUnpinNote(
         }
     }
 }
+
+//fun removeHighlights(text: String): String {
+//    // Regex to remove only spans with background-color:yellow
+//    return text.replace(Regex("<span[^>]*background-color:gray[^>]*>(.*?)</span>", RegexOption.DOT_MATCHES_ALL)) {
+//        it.groupValues[1] // Keep the inner text without the surrounding span
+//    }
+//}
+
 
 
 

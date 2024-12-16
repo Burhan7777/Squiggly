@@ -8,7 +8,7 @@ sealed class Screens(val route: String) {
     object AddNoteScreen : Screens("add_note_screen")
     object EditNoteScreen : Screens("edit_note_screen/{id}/{screen}?query={query}") {
         fun editNoteWithId(id: Int, screen: String): String {
-            return "edit_note_screen/$id/$screen "
+            return "edit_note_screen/$id/$screen?query=\" \" "
         }
 
         fun editNoteWithSearchQuery(id: Int, screen: String, query: String): String {

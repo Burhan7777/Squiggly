@@ -229,26 +229,30 @@ fun NoteContent(
             if (imeVisible) WindowInsets.ime.getBottom(LocalDensity.current).dp + 50.dp else 0.dp
 
 
+
         LaunchedEffect(query) {
-            val plainText =
-                richStateText.value.toText()
-            val index = plainText.indexOf(query, ignoreCase = true)
-            println(query)
-            println(plainText)
-            println("INDEX OF QUERY:$index")
-            if (index >= 0) {
-                // Highlight the text
+            if (query.length > 1) {
+                val text = richStateText.value.annotatedString.text
                 val highlightedText = buildString {
-                    append(plainText.substring(0, index))
-                    append("<span style='background-color:gray;'>")
-                    append(plainText.substring(index, index + query.length))
-                    append("</span>")
-                    append(plainText.substring(index + query.length))
+                    var currentIndex = 0
+                    while (currentIndex < text.length) {
+                        val index = text.indexOf(query, currentIndex, ignoreCase = true)
+                        if (index == -1) {
+                            append(text.substring(currentIndex)) // Append remaining text
+                            break
+                        } else {
+                            append(text.substring(currentIndex, index)) // Append text before match
+                            append("<span style='background-color:gray;'>") // Highlight match
+                            append(text.substring(index, index + query.length))
+                            append("</span>")
+                            currentIndex = index + query.length // Move forward
+                        }
+                    }
                 }
-                // Set the highlighted HTML content
-                richStateText.value.setHtml(highlightedText)
+                richStateText.value.setHtml(highlightedText) // Apply highlighted text
             }
         }
+
 
         Column(
             modifier = Modifier
