@@ -104,9 +104,10 @@ fun SingleItemNoteList(note: Note, navHostController: NavHostController, scope: 
                 )
                 .clickable {
                     navHostController.navigate(
-                        Screens.EditNoteScreen.editNoteWithId(
+                        Screens.EditNoteScreen.editNoteWithSearchQuery(
                             note.id,
-                            Constant.HOME
+                            Constant.HOME,
+                            ""
                         )
                     )
                     Log.i("title", note.title)

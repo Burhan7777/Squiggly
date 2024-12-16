@@ -891,7 +891,9 @@ fun MainStructureEditNote(
                         )
                     }
                     IconButton(onClick = {
-                        //var formattedText = removeHighlights(richStateText.value.annotatedString.text)
+                        var formattedText =
+                            removeHighlights(richStateText.value.annotatedString.text)
+                        richStateText.value.setHtml(formattedText)
                         var analytics = com.google.firebase.ktx.Firebase.analytics
                         var bundle = Bundle()
                         bundle.putString(
@@ -918,7 +920,7 @@ fun MainStructureEditNote(
                         var note = Note(
                             id,
                             title,
-                           richStateText.value.toHtml(),
+                            richStateText.value.toHtml(),
                             archived,
                             locked = lockedOrNote,
                             listOfCheckedNotes = converted,
@@ -1391,12 +1393,17 @@ fun pinOrUnpinNote(
     }
 }
 
-//fun removeHighlights(text: String): String {
-//    // Regex to remove only spans with background-color:yellow
-//    return text.replace(Regex("<span[^>]*background-color:gray[^>]*>(.*?)</span>", RegexOption.DOT_MATCHES_ALL)) {
-//        it.groupValues[1] // Keep the inner text without the surrounding span
-//    }
-//}
+fun removeHighlights(text: String): String {
+    // Regex to remove only spans with background-color:yellow
+    return text.replace(
+        Regex(
+            "<span[^>]*background-color:gray[^>]*>(.*?)</span>",
+            RegexOption.DOT_MATCHES_ALL
+        )
+    ) {
+        it.groupValues[1] // Keep the inner text without the surrounding span
+    }
+}
 
 
 
