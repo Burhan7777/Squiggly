@@ -232,7 +232,7 @@ fun NoteContent(
 
         LaunchedEffect(query) {
             if (query.length > 1) {
-                val text = richStateText.value.annotatedString.text
+                val text = richStateText.value.toHtml()
                 val highlightedText = buildString {
                     var currentIndex = 0
                     while (currentIndex < text.length) {

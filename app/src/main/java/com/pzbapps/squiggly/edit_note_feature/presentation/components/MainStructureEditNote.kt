@@ -892,7 +892,8 @@ fun MainStructureEditNote(
                     }
                     IconButton(onClick = {
                         var formattedText =
-                            removeHighlights(richStateText.value.annotatedString.text)
+                            removeHighlights(richStateText.value.toHtml())
+                        println("HTML:${richStateText.value.toHtml()}")
                         richStateText.value.setHtml(formattedText)
                         var analytics = com.google.firebase.ktx.Firebase.analytics
                         var bundle = Bundle()
@@ -1393,17 +1394,34 @@ fun pinOrUnpinNote(
     }
 }
 
+
 fun removeHighlights(text: String): String {
-    // Regex to remove only spans with background-color:yellow
+    // Regex to remove spans with background style (rgba)
     return text.replace(
-        Regex(
-            "<span[^>]*background-color:gray[^>]*>(.*?)</span>",
-            RegexOption.DOT_MATCHES_ALL
-        )
+        Regex("""<span[^>]*background\s*:\s*rgba\(\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d(\.\d)?)\s*\);?[^>]*>(.*?)</span>""", RegexOption.DOT_MATCHES_ALL)
     ) {
-        it.groupValues[1] // Keep the inner text without the surrounding span
+        it.groupValues[6] // Correctly retrieve the inner content of the span
     }
 }
+
+fun decodeHtml(text: String): String {
+    return text.replace("&lt;", "<")
+        .replace("&gt;", ">")
+        .replace("&amp;", "&")
+}
+
+fun encodeHtml(text: String): String {
+    return text.replace("<", "&lt;")
+        .replace(">", "&gt;")
+        .replace("&", "&amp;")
+}
+
+fun removeHighlightsWithEscaping(text: String): String {
+    val decodedText = decodeHtml(text) // Decode HTML
+    val cleanedText = removeHighlights(decodedText) // Remove highlights
+    return encodeHtml(cleanedText) // Re-encode HTML
+}
+
 
 
 
