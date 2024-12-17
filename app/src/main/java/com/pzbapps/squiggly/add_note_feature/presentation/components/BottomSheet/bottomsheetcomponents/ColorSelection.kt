@@ -30,9 +30,17 @@ fun ColorSelection(
     if (result == Constant.DARK_THEME) {
         listOfColorsFinal =
             listOfColors.filter { !it.name.contains("white") }.toCollection(ArrayList())
-    } else {
+    } else if (result == Constant.LIGHT_THEME) {
         listOfColorsFinal =
             listOfColors.filter { !it.name.contains("black") }.toCollection(ArrayList())
+    } else if (result == Constant.SYSTEM_DEFAULT) {
+        if (isSystemInDarkTheme()) {
+            listOfColorsFinal =
+                listOfColors.filter { !it.name.contains("white") }.toCollection(ArrayList())
+        } else {
+            listOfColorsFinal =
+                listOfColors.filter { !it.name.contains("black") }.toCollection(ArrayList())
+        }
     }
     LazyVerticalGrid(columns = GridCells.Fixed(count = 4)) {
         items(listOfColorsFinal) { colorList ->
