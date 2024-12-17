@@ -2,6 +2,7 @@ package com.pzbapps.squiggly.edit_note_feature.presentation.components
 
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -15,6 +16,7 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.ChipDefaults
 import androidx.compose.material.ExperimentalMaterialApi
@@ -46,6 +48,8 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -71,6 +75,7 @@ import com.pzbapps.squiggly.common.presentation.alertboxes.addTagAlertBoxes.AddT
 import com.pzbapps.squiggly.common.presentation.alertboxes.addTagAlertBoxes.SelectTags
 import com.pzbapps.squiggly.main_screen.domain.model.Note
 import com.pzbapps.squiggly.reminder_feature.cancelReminder
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -230,6 +235,7 @@ fun NoteContent(
 
 
 
+
         LaunchedEffect(query) {
             if (query.length > 1) {
                 val text = richStateText.value.toHtml()
@@ -259,6 +265,9 @@ fun NoteContent(
                 .fillMaxSize()
                 .padding(bottom = imePadding)
         ) {
+
+            // Buttons overlay on top of the current word
+
 
             if (showSelectTagAlertBox.value) {
                 SelectTags(
@@ -320,7 +329,7 @@ fun NoteContent(
                         textStyle = TextStyle(
                             fontFamily = fontFamily.value,
                             fontSize = 18.sp
-                        )
+                        ),
                     )
                     LaunchedEffect(richStateText.value.annotatedString.text) {
                         scrollState.animateScrollTo(scrollState.maxValue)
@@ -1013,5 +1022,4 @@ fun updateReminderInDB(viewModel: MainActivityViewModel, note: MutableState<Note
     }
 
 }
-
 
