@@ -1,5 +1,6 @@
 package com.pzbapps.squiggly.edit_note_feature.presentation.components
 
+import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -70,6 +71,7 @@ import com.mohamedrejeb.richeditor.ui.material3.RichTextEditor
 import com.mohamedrejeb.richeditor.ui.material3.RichTextEditorDefaults
 import com.pzbapps.squiggly.common.data.Model.NoteBook
 import com.pzbapps.squiggly.common.domain.utils.Constant
+import com.pzbapps.squiggly.common.domain.utils.checkIfNotebookAlreadyExists
 import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
@@ -164,13 +166,6 @@ fun NoteContent(
 
     var focusRequester = remember { FocusRequester() }
 
-    val coroutineScope = rememberCoroutineScope()
-
-    var searchIndices by remember { mutableStateOf(listOf<Int>()) } // All search result offsets
-    var currentIndex by remember { mutableStateOf(0) }
-    val scrollState = rememberScrollState()
-
-
 
     if (screen != Constant.LOCKED_NOTE && screen != Constant.ARCHIVE) {
         Row(
@@ -242,7 +237,7 @@ fun NoteContent(
             if (imeVisible) WindowInsets.ime.getBottom(LocalDensity.current).dp + 50.dp else 0.dp
 
 
-
+        var scrollState = rememberScrollState()
 
 
 
@@ -972,10 +967,16 @@ fun AlertDialogBox(
         confirmButton = {
             androidx.compose.material.Button(
                 onClick = {
-                    val noteBook = NoteBook(0, notebookText.value)
-                    viewModel.addNoteBook(noteBook)
-                    viewModel.notebooks.add(notebookText.value)
-                    onDismiss()
+                    var result = checkIfNotebookAlreadyExists(viewModel, notebookText)
+                    if (result) {
+                        val noteBook = NoteBook(0, notebookText.value)
+                        viewModel.addNoteBook(noteBook)
+                        viewModel.notebooks.add(notebookText.value)
+                        onDismiss()
+                    } else {
+                        Toast.makeText(context, "Notebook already exists", Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.onPrimary,
@@ -1037,6 +1038,8 @@ fun updateReminderInDB(viewModel: MainActivityViewModel, note: MutableState<Note
     }
 
 }
+
+
 
 
 
