@@ -2,6 +2,7 @@ package com.pzbapps.squiggly.edit_note_feature.presentation.components
 
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -11,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -87,7 +89,7 @@ import java.util.Locale
 
 @OptIn(
     ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class,
-    ExperimentalLayoutApi::class, ExperimentalMaterialApi::class
+    ExperimentalLayoutApi::class, ExperimentalMaterialApi::class, ExperimentalFoundationApi::class
 )
 @Composable
 fun NoteContent(
@@ -162,6 +164,12 @@ fun NoteContent(
 
     var focusRequester = remember { FocusRequester() }
 
+    val coroutineScope = rememberCoroutineScope()
+
+    var searchIndices by remember { mutableStateOf(listOf<Int>()) } // All search result offsets
+    var currentIndex by remember { mutableStateOf(0) }
+    val scrollState = rememberScrollState()
+
 
 
     if (screen != Constant.LOCKED_NOTE && screen != Constant.ARCHIVE) {
@@ -229,9 +237,11 @@ fun NoteContent(
                 }
         )
 
-        val scrollState = rememberScrollState()
+
         val imePadding =
             if (imeVisible) WindowInsets.ime.getBottom(LocalDensity.current).dp + 50.dp else 0.dp
+
+
 
 
 
@@ -247,7 +257,12 @@ fun NoteContent(
                             append(text.substring(currentIndex)) // Append remaining text
                             break
                         } else {
-                            append(text.substring(currentIndex, index)) // Append text before match
+                            append(
+                                text.substring(
+                                    currentIndex,
+                                    index
+                                )
+                            ) // Append text before match
                             append("<span style='background-color:gray;'>") // Highlight match
                             append(text.substring(index, index + query.length))
                             append("</span>")
@@ -1022,4 +1037,8 @@ fun updateReminderInDB(viewModel: MainActivityViewModel, note: MutableState<Note
     }
 
 }
+
+
+
+
 
