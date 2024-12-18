@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.FontDownload
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -32,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.text.font.FontFamily
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.lifecycleScope
@@ -43,6 +45,7 @@ import com.pzbapps.squiggly.add_note_feature.presentation.components.DiscardNote
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.common.presentation.alertboxes.AlertDialogBoxTrialEnded
+import com.pzbapps.squiggly.common.presentation.fontsbottomsheet.FontBottomSheet
 import com.pzbapps.squiggly.main_screen.domain.model.Note
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -65,9 +68,32 @@ fun MainStructureCheckBoxNote(
 
     val showBottomSheet = remember { mutableStateOf(false) }
 
+    val showFontBottomSheet = remember { mutableStateOf(false) }
+
+    val fontFamily =
+        remember { mutableStateOf(com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyRegular) }
+
     val listOfSelectedTags =
         remember { mutableStateListOf<String>() } // THESE ARE THE TAGS SELECTED BY THE USER IN ADD NOTE CHECKBOX
     // FEATURE AND WILL BE ADDED TO THE "LIST_OF_TAGS" IN THE NOTE TABLE
+
+    var fontFamilyString = remember { mutableStateOf("") }
+
+    when (fontFamily.value) {
+        com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyRegular -> fontFamilyString.value = com.pzbapps.squiggly.common.presentation.FontFamily.lufgaRegular
+        com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyBold -> fontFamilyString.value = com.pzbapps.squiggly.common.presentation.FontFamily.lufgaBold
+        com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyExtraLight -> fontFamilyString.value = com.pzbapps.squiggly.common.presentation.FontFamily.lufgaextraLight
+        com.pzbapps.squiggly.common.presentation.FontFamily.pacificoRegular -> fontFamilyString.value = com.pzbapps.squiggly.common.presentation.FontFamily.pacificoString
+        com.pzbapps.squiggly.common.presentation.FontFamily.parkinsons -> fontFamilyString.value = com.pzbapps.squiggly.common.presentation.FontFamily.parkinsonsString
+        com.pzbapps.squiggly.common.presentation.FontFamily.jaro -> fontFamilyString.value = com.pzbapps.squiggly.common.presentation.FontFamily.jaroString
+        com.pzbapps.squiggly.common.presentation.FontFamily.dancingScript -> fontFamilyString.value = com.pzbapps.squiggly.common.presentation.FontFamily.dancingScriptString
+        com.pzbapps.squiggly.common.presentation.FontFamily.doto -> fontFamilyString.value = com.pzbapps.squiggly.common.presentation.FontFamily.dotoString
+        com.pzbapps.squiggly.common.presentation.FontFamily.edu -> fontFamilyString.value = com.pzbapps.squiggly.common.presentation.FontFamily.eduString
+        com.pzbapps.squiggly.common.presentation.FontFamily.lobster -> fontFamilyString.value = com.pzbapps.squiggly.common.presentation.FontFamily.lobsterString
+        com.pzbapps.squiggly.common.presentation.FontFamily.playfair -> fontFamilyString.value = com.pzbapps.squiggly.common.presentation.FontFamily.playfairString
+        com.pzbapps.squiggly.common.presentation.FontFamily.poppins -> fontFamilyString.value = com.pzbapps.squiggly.common.presentation.FontFamily.poppinsString
+        else -> com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyRegular
+    }
 
 //    var mutableListOfCheckboxTexts = remember {
 //        mutableStateListOf<MutableState<String>>()
@@ -117,7 +143,8 @@ fun MainStructureCheckBoxNote(
                     notebook = notebookState.value,
                     timeStamp = System.currentTimeMillis(),
                     color = backgroundColor.value.toArgb(),
-                    tags = listOfSelectedTags.toCollection(ArrayList())
+                    tags = listOfSelectedTags.toCollection(ArrayList()),
+                    font = fontFamilyString.value
 //            listOfCheckedNotes = mutableListConverted,
 //            listOfCheckedBoxes = mutableListOfCheckBoxes,
 
@@ -131,7 +158,8 @@ fun MainStructureCheckBoxNote(
                     notebook = notebookState.value,
                     timeStamp = System.currentTimeMillis(),
                     color = 0,
-                    tags = listOfSelectedTags.toCollection(ArrayList())
+                    tags = listOfSelectedTags.toCollection(ArrayList()),
+                    font = fontFamilyString.value
 //            listOfCheckedNotes = mutableListConverted,
 //            listOfCheckedBoxes = mutableListOfCheckBoxes,
 
@@ -174,7 +202,8 @@ fun MainStructureCheckBoxNote(
                     listOfCheckedNotes = mutableListConverted,
                     listOfCheckedBoxes = mutableListOfCheckBoxes,
                     color = backgroundColor.value.toArgb(),
-                    tags = listOfSelectedTags.toCollection(ArrayList())
+                    tags = listOfSelectedTags.toCollection(ArrayList()),
+                    font = fontFamilyString.value
                 )
                 viewModel.updateNote(note1)
             } else {
@@ -187,7 +216,8 @@ fun MainStructureCheckBoxNote(
                     listOfCheckedNotes = mutableListConverted,
                     listOfCheckedBoxes = mutableListOfCheckBoxes,
                     color = 0,
-                    tags = listOfSelectedTags.toCollection(ArrayList())
+                    tags = listOfSelectedTags.toCollection(ArrayList()),
+                    font = fontFamilyString.value
                 )
                 viewModel.updateNote(note1)
             }
@@ -229,7 +259,8 @@ fun MainStructureCheckBoxNote(
                             listOfCheckedNotes = mutableListConverted,
                             listOfCheckedBoxes = mutableListOfCheckBoxes,
                             color = backgroundColor.value.toArgb(),
-                            tags = listOfSelectedTags.toCollection(ArrayList())
+                            tags = listOfSelectedTags.toCollection(ArrayList()),
+                            font = fontFamilyString.value
                         )
                         viewModel.updateNote(note1)
                     } else {
@@ -242,7 +273,8 @@ fun MainStructureCheckBoxNote(
                             listOfCheckedNotes = mutableListConverted,
                             listOfCheckedBoxes = mutableListOfCheckBoxes,
                             color = 0,
-                            tags = listOfSelectedTags.toCollection(ArrayList())
+                            tags = listOfSelectedTags.toCollection(ArrayList()),
+                            font = fontFamilyString.value
                         )
                         viewModel.updateNote(note1)
                     }
@@ -283,7 +315,8 @@ fun MainStructureCheckBoxNote(
                                     timeStamp = System.currentTimeMillis(),
                                     timeModified = System.currentTimeMillis(),
                                     color = backgroundColor.value.toArgb(),
-                                    tags = listOfSelectedTags.toCollection(ArrayList())
+                                    tags = listOfSelectedTags.toCollection(ArrayList()),
+                                    font = fontFamilyString.value
                                 )
                                 viewModel.updateNote(note)
                             } else {
@@ -296,7 +329,8 @@ fun MainStructureCheckBoxNote(
                                     timeStamp = System.currentTimeMillis(),
                                     timeModified = System.currentTimeMillis(),
                                     color = 0,
-                                    tags = listOfSelectedTags.toCollection(ArrayList())
+                                    tags = listOfSelectedTags.toCollection(ArrayList()),
+                                    font = fontFamilyString.value
                                 )
                                 viewModel.updateNote(note)
                             }
@@ -316,6 +350,15 @@ fun MainStructureCheckBoxNote(
                     }
                 },
                 actions = {
+                    IconButton(onClick = {
+                        showFontBottomSheet.value = true
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.FontDownload,
+                            contentDescription = "Fonts",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    }
                     IconButton(onClick = {
                         var analytics = Firebase.analytics
                         var bundle = Bundle()
@@ -358,7 +401,8 @@ fun MainStructureCheckBoxNote(
                                     timeStamp = System.currentTimeMillis(),
                                     timeModified = System.currentTimeMillis(),
                                     color = backgroundColor.value.toArgb(),
-                                    tags = listOfSelectedTags.toCollection(ArrayList())
+                                    tags = listOfSelectedTags.toCollection(ArrayList()),
+                                    font = fontFamilyString.value
                                 )
                                 viewModel.updateNote(note)
                             } else {
@@ -371,7 +415,8 @@ fun MainStructureCheckBoxNote(
                                     timeStamp = System.currentTimeMillis(),
                                     timeModified = System.currentTimeMillis(),
                                     color = 0,
-                                    tags = listOfSelectedTags.toCollection(ArrayList())
+                                    tags = listOfSelectedTags.toCollection(ArrayList()),
+                                    font = fontFamilyString.value
                                 )
                                 viewModel.updateNote(note)
                             }
@@ -420,6 +465,9 @@ fun MainStructureCheckBoxNote(
             if (showBottomSheet.value) {
                 AddNoteBottomSheet(showBottomSheet, backgroundColor, activity = activity)
             }
+            if (showFontBottomSheet.value) {
+                FontBottomSheet(showFontBottomSheet, fontFamily)
+            }
             CheckboxNote(
                 viewModel,
                 navController,
@@ -430,7 +478,8 @@ fun MainStructureCheckBoxNote(
                 count,
                 mutableListConverted,
                 backgroundColor,
-                listOfSelectedTags
+                listOfSelectedTags,
+                fontFamily
             )
         }
     }

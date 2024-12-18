@@ -26,7 +26,6 @@ import com.mohamedrejeb.richeditor.model.RichTextState
 @Composable
 fun SingleRowFontsBottomSheet(
     font: FontFamily,
-    richTextState: MutableState<RichTextState>,
     fontFamily: MutableState<FontFamily>,
     showBottomSheet: MutableState<Boolean>
 ) {

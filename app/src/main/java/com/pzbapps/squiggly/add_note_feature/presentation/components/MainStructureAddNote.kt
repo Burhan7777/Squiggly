@@ -619,7 +619,7 @@ fun MainStructureAddNote(
                 TextColorBottomSheet(showTextColorBottomSheet, richTextState)
             }
             if (showFontBottomSheet.value) {
-                FontBottomSheet(showFontBottomSheet, richTextState, fontFamily)
+                FontBottomSheet(showFontBottomSheet, fontFamily)
             }
         }
     }

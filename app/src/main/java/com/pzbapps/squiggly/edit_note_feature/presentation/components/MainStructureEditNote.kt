@@ -208,6 +208,7 @@ fun MainStructureEditNote(
 
 
 
+
     when (fontFamily.value) {
         FontFamily.fontFamilyRegular -> fontFamilyString.value = FontFamily.lufgaRegular
         FontFamily.fontFamilyBold -> fontFamilyString.value = FontFamily.lufgaBold
@@ -434,6 +435,7 @@ fun MainStructureEditNote(
                             listOfCheckedNotes = converted,
                             listOfCheckedBoxes = mutableListOfCheckBoxes.value,
                             color = backgroundColor.value,
+                            font = fontFamilyString.value,
                             tags = listOfSelectedTags.toCollection(ArrayList())
 
                         )
@@ -472,10 +474,11 @@ fun MainStructureEditNote(
                             notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
                             listOfBulletPointNotes = convertedBulletPoints,
                             color = backgroundColor.value,
-                            tags = listOfSelectedTags.toCollection(ArrayList())
+                            tags = listOfSelectedTags.toCollection(ArrayList()),
+                            font = fontFamilyString.value,
 
 
-                        )
+                            )
                         viewModel.updateNote(note!!)
                     }
                 }
@@ -518,7 +521,8 @@ fun MainStructureEditNote(
                 listOfCheckedNotes = converted,
                 listOfCheckedBoxes = mutableListOfCheckBoxes.value,
                 color = backgroundColor.value,
-                tags = listOfSelectedTags.toCollection(ArrayList())
+                tags = listOfSelectedTags.toCollection(ArrayList()),
+                font = fontFamilyString.value,
             )
             viewModel.updateNote(note1)
         }
@@ -544,7 +548,8 @@ fun MainStructureEditNote(
                 notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
                 listOfBulletPointNotes = convertedBulletPoints,
                 color = backgroundColor.value,
-                tags = listOfSelectedTags.toCollection(ArrayList())
+                tags = listOfSelectedTags.toCollection(ArrayList()),
+                font = fontFamilyString.value,
             )
             viewModel.updateNote(note1)
         }
@@ -1045,6 +1050,26 @@ fun MainStructureEditNote(
                                 )
                             }
                         }
+                        DropdownMenuItem(
+                            onClick = {
+                                // Handle option 2 click
+                                showFontBottomSheet.value = true
+
+                            }) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    imageVector = Icons.Filled.FontDownload,
+                                    contentDescription = "Font",
+                                    tint = MaterialTheme.colors.onPrimary
+                                )
+                                Spacer(modifier = Modifier.width(5.dp))
+                                Text(
+                                    "Fonts",
+                                    fontFamily = FontFamily.fontFamilyRegular,
+                                    fontSize = 17.sp
+                                )
+                            }
+                        }
                         if (mutableListOfCheckboxTexts.size > 0 || mutableListOfBulletPoints.size > 0) {
                             DropdownMenuItem(onClick = {
                                 var analytics = com.google.firebase.ktx.Firebase.analytics
@@ -1250,7 +1275,7 @@ fun MainStructureEditNote(
         TextColorBottomSheet(showTextColorBottomSheet, richStateText)
     }
     if (showFontBottomSheet.value) {
-        FontBottomSheet(showFontBottomSheet, richStateText, fontFamily)
+        FontBottomSheet(showFontBottomSheet, fontFamily)
     }
 
 

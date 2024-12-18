@@ -46,7 +46,8 @@ fun SingleRowCheckBoxNotes(
     focusRequester: FocusRequester,
     focusRequesters: SnapshotStateList<FocusRequester>,
     isNewCheckboxCreated: MutableState<Boolean>,
-    backgroundColor:MutableState<Int>,
+    backgroundColor: MutableState<Int>,
+    fontFamily: MutableState<androidx.compose.ui.text.font.FontFamily>,
     onDelete: () -> Unit
 
 ) {
@@ -70,7 +71,7 @@ fun SingleRowCheckBoxNotes(
             checkBox.value = listOfCheckboxes.value[index]
         }
     } catch (exception: IndexOutOfBoundsException) {
-ShowShortToast("Some error with the note")
+        ShowShortToast("Some error with the note")
     }
 //    for(i in listOfCheckboxes)
 //    LaunchedEffect(key1 = i) {
@@ -144,7 +145,7 @@ ShowShortToast("Some error with the note")
                 )
             ),
             textStyle = LocalTextStyle.current.copy(
-                fontFamily = FontFamily.fontFamilyRegular
+                fontFamily = fontFamily.value
             ),
             modifier = Modifier
                 .clickable {

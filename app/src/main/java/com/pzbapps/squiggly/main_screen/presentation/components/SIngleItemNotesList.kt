@@ -194,7 +194,7 @@ fun SingleItemNoteList(note: Note, navHostController: NavHostController, scope: 
                     text = note.title,
                     modifier = Modifier.padding(10.dp),
                     fontSize = 25.sp,
-                    fontFamily = FontFamily.fontFamilyBold,
+                    fontFamily = fontFamily.value,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -228,7 +228,7 @@ fun SingleItemNoteList(note: Note, navHostController: NavHostController, scope: 
                                 )
                                 Text(
                                     text = note.listOfCheckedNotes[i],
-                                    fontFamily = FontFamily.fontFamilyRegular,
+                                    fontFamily = fontFamily.value,
                                     fontSize = 15.sp,
                                     overflow = TextOverflow.Ellipsis,
                                     maxLines = 1,
@@ -258,7 +258,7 @@ fun SingleItemNoteList(note: Note, navHostController: NavHostController, scope: 
                                 )
                                 Text(
                                     text = note.listOfCheckedNotes[i],
-                                    fontFamily = FontFamily.fontFamilyRegular,
+                                    fontFamily = fontFamily.value,
                                     fontSize = 15.sp,
                                     overflow = TextOverflow.Ellipsis,
                                     maxLines = 1,

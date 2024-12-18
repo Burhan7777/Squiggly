@@ -504,7 +504,7 @@ fun NoteContent(
                 cursorColor = MaterialTheme.colors.onPrimary,
                 textColor = MaterialTheme.colors.onPrimary,
             ),
-            textStyle = TextStyle(fontFamily = FontFamily.fontFamilyBold, fontSize = 25.sp)
+            textStyle = TextStyle(fontFamily = fontFamily.value, fontSize = 25.sp)
         )
         // println(listOfNotes.size)
         //println(listOfCheckboxes.size)
@@ -547,6 +547,7 @@ fun NoteContent(
                         focusRequesters,
                         isNewCheckboxAdded,
                         backgroundColor,
+                        fontFamily,
                         onDelete = {
                             try {
                                 focusRequesters.removeAt(index)

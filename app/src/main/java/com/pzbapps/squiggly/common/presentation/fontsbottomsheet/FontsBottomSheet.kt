@@ -25,7 +25,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun FontBottomSheet(
     showBottomSheet: MutableState<Boolean>,
-    richTextState: MutableState<RichTextState>,
     fontFamily: MutableState<androidx.compose.ui.text.font.FontFamily>
 ) {
     if (showBottomSheet.value) {
@@ -41,7 +40,7 @@ fun FontBottomSheet(
         ) {
             LazyVerticalGrid(columns = GridCells.Fixed(3)) {
                 items(FontFamily.listOfFonts()) { font ->
-                    SingleRowFontsBottomSheet(font, richTextState, fontFamily, showBottomSheet)
+                    SingleRowFontsBottomSheet(font, fontFamily, showBottomSheet)
                 }
             }
 
