@@ -187,6 +187,7 @@ class MainActivityViewModel @Inject constructor(
     var dateCreatedOldestFirst = mutableStateOf(false)
     var dateModifiedNewestFirst = mutableStateOf(false)
 
+
     fun insertNote(note: Note) {
         viewModelScope.launch(Dispatchers.IO) {
             generatedNoteId.postValue(insertNoteRepository.insertNote(note))

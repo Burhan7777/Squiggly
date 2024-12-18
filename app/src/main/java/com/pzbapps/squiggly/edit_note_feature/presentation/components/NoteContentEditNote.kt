@@ -2,6 +2,12 @@ package com.pzbapps.squiggly.edit_note_feature.presentation.components
 
 import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.ScrollState
@@ -346,12 +352,23 @@ fun NoteContent(
                     }
                 }
             }
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp)
+            androidx.compose.animation.AnimatedVisibility(
+                visible = !showTags.value,
+                enter = slideInVertically(
+                    initialOffsetY = { it / 2 },
+                    animationSpec = tween(durationMillis = 100, easing = LinearEasing)
+                ),
+                exit = fadeOut(
+                    animationSpec = tween(durationMillis = 100, easing = LinearEasing)
+                )
             ) {
-                if (!showTags.value) {
+                //     if (!showTags.value) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp)
+                ) {
+
                     Text(
                         "Tags",
                         color = MaterialTheme.colors.onPrimary.copy(alpha = 0.5f),
@@ -464,6 +481,7 @@ fun NoteContent(
                         }
                     }
                 }
+                //     }
             }
         }
     } else if (listOfNotes.size > 0 && listOfBulletPointNotes.size == 0) {

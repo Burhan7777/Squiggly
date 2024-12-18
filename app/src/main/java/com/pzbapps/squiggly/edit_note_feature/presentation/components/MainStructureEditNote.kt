@@ -1412,7 +1412,10 @@ fun pinOrUnpinNote(
 fun removeHighlights(text: String): String {
     // Regex to remove spans with background style (rgba)
     return text.replace(
-        Regex("""<span[^>]*background\s*:\s*rgba\(\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d(\.\d)?)\s*\);?[^>]*>(.*?)</span>""", RegexOption.DOT_MATCHES_ALL)
+        Regex(
+            """<span[^>]*background\s*:\s*rgba\(\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d(\.\d)?)\s*\);?[^>]*>(.*?)</span>""",
+            RegexOption.DOT_MATCHES_ALL
+        )
     ) {
         it.groupValues[6] // Correctly retrieve the inner content of the span
     }

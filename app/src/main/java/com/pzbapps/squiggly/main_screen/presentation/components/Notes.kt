@@ -214,8 +214,7 @@ fun Notes(
                                                     viewModel.filteredNotesByTag.clear()
                                                 }
 
-                                            }
-                                        )
+                                            })
                                     }
                                 }
                             ) {

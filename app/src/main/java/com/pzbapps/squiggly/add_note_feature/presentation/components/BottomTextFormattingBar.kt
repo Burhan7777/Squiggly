@@ -60,6 +60,7 @@ import androidx.compose.ui.unit.sp
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import com.mohamedrejeb.richeditor.model.RichTextState
+import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import java.util.Stack
 
 @OptIn(ExperimentalLayoutApi::class)
