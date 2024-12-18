@@ -35,8 +35,6 @@ fun FontBottomSheet(
 
 
         ModalBottomSheet(
-            modifier = Modifier
-                .height(500.dp),
             containerColor = MaterialTheme.colors.primaryVariant,
             onDismissRequest = { scope.launch { showBottomSheet.value = false } },
             // sheetState = sheetState,
