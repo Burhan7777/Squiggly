@@ -91,7 +91,7 @@ fun BottomTextFormattingBarLockedNote(
                     }
                 }) {
                     Icon(
-                        imageVector = Icons.Filled.PlusOne,
+                        imageVector = Icons.Filled.FormatSize,
                         contentDescription = "Decrease font size",
                         tint = MaterialTheme.colors.onPrimary
                     )
@@ -116,7 +116,7 @@ fun BottomTextFormattingBarLockedNote(
                     )
                 }) {
                     Icon(
-                        imageVector = Icons.Filled.PlusOne,
+                        imageVector = Icons.Filled.FormatSize,
                         contentDescription = "increase  font size",
                         tint = MaterialTheme.colors.onPrimary
                     )
