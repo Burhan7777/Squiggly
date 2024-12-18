@@ -184,7 +184,7 @@ fun SingleItemNotebookList(
                     text = note.title,
                     modifier = Modifier.padding(10.dp),
                     fontSize = 25.sp,
-                    fontFamily = FontFamily.fontFamilyBold,
+                    fontFamily = fontFamily.value,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -218,7 +218,7 @@ fun SingleItemNotebookList(
                                 )
                                 Text(
                                     text = note.listOfCheckedNotes[i],
-                                    fontFamily = FontFamily.fontFamilyRegular,
+                                    fontFamily = fontFamily.value,
                                     fontSize = 15.sp,
                                     overflow = TextOverflow.Ellipsis,
                                     maxLines = 1,
@@ -248,7 +248,7 @@ fun SingleItemNotebookList(
                                 )
                                 Text(
                                     text = note.listOfCheckedNotes[i],
-                                    fontFamily = FontFamily.fontFamilyRegular,
+                                    fontFamily = fontFamily.value,
                                     fontSize = 15.sp,
                                     overflow = TextOverflow.Ellipsis,
                                     maxLines = 1,
@@ -302,7 +302,7 @@ fun SingleItemNotebookList(
                     text = note.title,
                     modifier = Modifier.padding(10.dp),
                     fontSize = 25.sp,
-                    fontFamily = FontFamily.fontFamilyBold,
+                    fontFamily = fontFamily.value,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -328,7 +328,7 @@ fun SingleItemNotebookList(
                                 )
                                 Text(
                                     text = note.listOfBulletPointNotes[i],
-                                    fontFamily = FontFamily.fontFamilyRegular,
+                                    fontFamily = fontFamily.value,
                                     fontSize = 15.sp,
                                     overflow = TextOverflow.Ellipsis,
                                     maxLines = 1,
@@ -348,7 +348,7 @@ fun SingleItemNotebookList(
                                 )
                                 Text(
                                     text = note.listOfBulletPointNotes[i],
-                                    fontFamily = FontFamily.fontFamilyRegular,
+                                    fontFamily = fontFamily.value,
                                     fontSize = 15.sp,
                                     overflow = TextOverflow.Ellipsis,
                                     maxLines = 1,

@@ -172,7 +172,7 @@ fun SingleItemLockedNoteList(note: Note, navHostController: NavHostController) {
                     text = note.title,
                     modifier = Modifier.padding(10.dp),
                     fontSize = 25.sp,
-                    fontFamily = FontFamily.fontFamilyBold,
+                    fontFamily = fontFamily.value,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -206,7 +206,7 @@ fun SingleItemLockedNoteList(note: Note, navHostController: NavHostController) {
                                 )
                                 Text(
                                     text = note.listOfCheckedNotes[i],
-                                    fontFamily = FontFamily.fontFamilyRegular,
+                                    fontFamily = fontFamily.value,
                                     fontSize = 15.sp,
                                     overflow = TextOverflow.Ellipsis,
                                     maxLines = 1,
@@ -236,7 +236,7 @@ fun SingleItemLockedNoteList(note: Note, navHostController: NavHostController) {
                                 )
                                 Text(
                                     text = note.listOfCheckedNotes[i],
-                                    fontFamily = FontFamily.fontFamilyRegular,
+                                    fontFamily = fontFamily.value,
                                     fontSize = 15.sp,
                                     overflow = TextOverflow.Ellipsis,
                                     maxLines = 1,
@@ -290,7 +290,7 @@ fun SingleItemLockedNoteList(note: Note, navHostController: NavHostController) {
                     text = note.title,
                     modifier = Modifier.padding(10.dp),
                     fontSize = 25.sp,
-                    fontFamily = FontFamily.fontFamilyBold,
+                    fontFamily = fontFamily.value,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -316,7 +316,7 @@ fun SingleItemLockedNoteList(note: Note, navHostController: NavHostController) {
                                 )
                                 Text(
                                     text = note.listOfBulletPointNotes[i],
-                                    fontFamily = FontFamily.fontFamilyRegular,
+                                    fontFamily = fontFamily.value,
                                     fontSize = 15.sp,
                                     overflow = TextOverflow.Ellipsis,
                                     maxLines = 1,
@@ -336,7 +336,7 @@ fun SingleItemLockedNoteList(note: Note, navHostController: NavHostController) {
                                 )
                                 Text(
                                     text = note.listOfBulletPointNotes[i],
-                                    fontFamily = FontFamily.fontFamilyRegular,
+                                    fontFamily = fontFamily.value,
                                     fontSize = 15.sp,
                                     overflow = TextOverflow.Ellipsis,
                                     maxLines = 1,

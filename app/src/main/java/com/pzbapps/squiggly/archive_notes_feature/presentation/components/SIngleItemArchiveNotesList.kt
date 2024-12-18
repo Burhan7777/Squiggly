@@ -40,14 +40,13 @@ fun SingleItemArchiveNoteList(
     activity: MainActivity
 ) {
 
-
+    var fontFamily = remember { mutableStateOf(FontFamily.fontFamilyRegular) }
+    var fontFamilyString = note.font
     if (note.archive && note.listOfCheckedNotes.size == 0 && note.listOfBulletPointNotes.size == 0 && !note.deletedNote && !note.locked) {
         var richTextState = rememberRichTextState()
         var contentText = remember { mutableStateOf("") }
 
-        var fontFamily = remember { mutableStateOf(FontFamily.fontFamilyRegular) }
 
-        var fontFamilyString = note.font
 
         when (fontFamilyString) {
             FontFamily.lufgaRegular -> fontFamily.value = FontFamily.fontFamilyRegular
@@ -155,7 +154,6 @@ fun SingleItemArchiveNoteList(
                             Constant.ARCHIVE
                         )
                     )
-                    Log.i("title", note.title)
                 },
             shape = MaterialTheme.shapes.medium.copy(
                 topStart = CornerSize(10.dp),
@@ -171,13 +169,12 @@ fun SingleItemArchiveNoteList(
                 disabledContentColor = androidx.compose.material.MaterialTheme.colors.onPrimary
             )
         ) {
-            println(note.listOfCheckedNotes.size)
             Column(modifier = Modifier.fillMaxSize()) {
                 Text(
                     text = note.title,
                     modifier = Modifier.padding(10.dp),
                     fontSize = 25.sp,
-                    fontFamily = FontFamily.fontFamilyBold,
+                    fontFamily = fontFamily.value,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -211,7 +208,7 @@ fun SingleItemArchiveNoteList(
                                 )
                                 Text(
                                     text = note.listOfCheckedNotes[i],
-                                    fontFamily = FontFamily.fontFamilyRegular,
+                                    fontFamily = fontFamily.value,
                                     fontSize = 15.sp,
                                     overflow = TextOverflow.Ellipsis,
                                     maxLines = 1,
@@ -240,7 +237,7 @@ fun SingleItemArchiveNoteList(
                                 )
                                 Text(
                                     text = note.listOfCheckedNotes[i],
-                                    fontFamily = FontFamily.fontFamilyRegular,
+                                    fontFamily = fontFamily.value,
                                     fontSize = 15.sp,
                                     overflow = TextOverflow.Ellipsis,
                                     maxLines = 1,
@@ -294,7 +291,7 @@ fun SingleItemArchiveNoteList(
                     text = note.title,
                     modifier = Modifier.padding(10.dp),
                     fontSize = 25.sp,
-                    fontFamily = FontFamily.fontFamilyBold,
+                    fontFamily = fontFamily.value,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -320,7 +317,7 @@ fun SingleItemArchiveNoteList(
                                 )
                                 Text(
                                     text = note.listOfBulletPointNotes[i],
-                                    fontFamily = FontFamily.fontFamilyRegular,
+                                    fontFamily = fontFamily.value,
                                     fontSize = 15.sp,
                                     overflow = TextOverflow.Ellipsis,
                                     maxLines = 1,
@@ -340,7 +337,7 @@ fun SingleItemArchiveNoteList(
                                 )
                                 Text(
                                     text = note.listOfBulletPointNotes[i],
-                                    fontFamily = FontFamily.fontFamilyRegular,
+                                    fontFamily = fontFamily.value,
                                     fontSize = 15.sp,
                                     overflow = TextOverflow.Ellipsis,
                                     maxLines = 1,
