@@ -44,6 +44,7 @@ fun SingleRoaBulletPointNotes(
     focusRequester: FocusRequester,
     focusRequesters: SnapshotStateList<FocusRequester>,
     backgroundColor: MutableState<Int>,
+    fontFamily: MutableState<androidx.compose.ui.text.font.FontFamily>,
     //isNewCheckBoxAdded: MutableState<Boolean>,
     onDelete: () -> Unit
 
@@ -100,7 +101,7 @@ fun SingleRoaBulletPointNotes(
                 )
             ),
             textStyle = LocalTextStyle.current.copy(
-                fontFamily = FontFamily.fontFamilyRegular
+                fontFamily = fontFamily.value
             ),
             modifier = Modifier
                 .clickable {

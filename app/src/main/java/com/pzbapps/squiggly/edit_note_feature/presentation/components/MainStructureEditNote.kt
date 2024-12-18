@@ -1050,27 +1050,27 @@ fun MainStructureEditNote(
                                 )
                             }
                         }
-                        DropdownMenuItem(
-                            onClick = {
-                                // Handle option 2 click
-                                showFontBottomSheet.value = true
-
-                            }) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Icon(
-                                    imageVector = Icons.Filled.FontDownload,
-                                    contentDescription = "Font",
-                                    tint = MaterialTheme.colors.onPrimary
-                                )
-                                Spacer(modifier = Modifier.width(5.dp))
-                                Text(
-                                    "Fonts",
-                                    fontFamily = FontFamily.fontFamilyRegular,
-                                    fontSize = 17.sp
-                                )
-                            }
-                        }
                         if (mutableListOfCheckboxTexts.size > 0 || mutableListOfBulletPoints.size > 0) {
+                            DropdownMenuItem(
+                                onClick = {
+                                    // Handle option 2 click
+                                    showFontBottomSheet.value = true
+
+                                }) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(
+                                        imageVector = Icons.Filled.FontDownload,
+                                        contentDescription = "Font",
+                                        tint = MaterialTheme.colors.onPrimary
+                                    )
+                                    Spacer(modifier = Modifier.width(5.dp))
+                                    Text(
+                                        "Fonts",
+                                        fontFamily = FontFamily.fontFamilyRegular,
+                                        fontSize = 17.sp
+                                    )
+                                }
+                            }
                             DropdownMenuItem(onClick = {
                                 var analytics = com.google.firebase.ktx.Firebase.analytics
                                 var bundle = Bundle()

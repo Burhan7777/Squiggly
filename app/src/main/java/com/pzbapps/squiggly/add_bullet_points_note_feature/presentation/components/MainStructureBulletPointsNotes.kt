@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.FontDownload
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -45,6 +46,7 @@ import com.pzbapps.squiggly.add_note_feature.presentation.components.DiscardNote
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.common.presentation.alertboxes.AlertDialogBoxTrialEnded
+import com.pzbapps.squiggly.common.presentation.fontsbottomsheet.FontBottomSheet
 import com.pzbapps.squiggly.main_screen.domain.model.Note
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -93,6 +95,54 @@ fun MainStructureBulletPointsNotes(
 
     val showBottomSheet = remember { mutableStateOf(false) }
 
+    var fontFamilyString = remember { mutableStateOf("") }
+
+    val fontFamily =
+        remember { mutableStateOf(com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyRegular) }
+
+    val showFontBottomSheet = remember { mutableStateOf(false) }
+
+
+    when (fontFamily.value) {
+        com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyRegular -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.lufgaRegular
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyBold -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.lufgaBold
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyExtraLight -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.lufgaextraLight
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.pacificoRegular -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.pacificoString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.parkinsons -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.parkinsonsString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.jaro -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.jaroString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.dancingScript -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.dancingScriptString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.doto -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.dotoString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.edu -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.eduString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.lobster -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.lobsterString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.playfair -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.playfairString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.poppins -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.poppinsString
+
+        else -> com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyRegular
+    }
+
     LaunchedEffect(key1 = true) {
         if (mutableListOfBulletPointsNotes.isEmpty()) {
             mutableListOfBulletPointsNotes.add(mutableStateOf(""))
@@ -116,7 +166,8 @@ fun MainStructureBulletPointsNotes(
                     notebook = notebookState.value,
                     timeStamp = System.currentTimeMillis(),
                     color = backgroundColor.value.toArgb(),
-                    tags = listOfSelectedTags.toCollection(ArrayList())
+                    tags = listOfSelectedTags.toCollection(ArrayList()),
+                    font = fontFamilyString.value
 //            listOfCheckedNotes = mutableListConverted,
 //            listOfCheckedBoxes = mutableListOfCheckBoxes,
 
@@ -129,7 +180,8 @@ fun MainStructureBulletPointsNotes(
                     notebook = notebookState.value,
                     timeStamp = System.currentTimeMillis(),
                     color = 0,
-                    tags = listOfSelectedTags.toCollection(ArrayList())
+                    tags = listOfSelectedTags.toCollection(ArrayList()),
+                    font = fontFamilyString.value
 //            listOfCheckedNotes = mutableListConverted,
 //            listOfCheckedBoxes = mutableListOfCheckBoxes,
 
@@ -171,7 +223,8 @@ fun MainStructureBulletPointsNotes(
                 notebook = notebookState.value,
                 listOfBulletPointNotes = mutableListConverted,
                 color = backgroundColor.value.toArgb(),
-                tags = listOfSelectedTags.toCollection(ArrayList())
+                tags = listOfSelectedTags.toCollection(ArrayList()),
+                font = fontFamilyString.value
             )
             viewModel.updateNote(note1)
         } else {
@@ -183,7 +236,8 @@ fun MainStructureBulletPointsNotes(
                 notebook = notebookState.value,
                 listOfBulletPointNotes = mutableListConverted,
                 color = 0,
-                tags = listOfSelectedTags.toCollection(ArrayList())
+                tags = listOfSelectedTags.toCollection(ArrayList()),
+                font = fontFamilyString.value
             )
             viewModel.updateNote(note1)
         }
@@ -219,7 +273,8 @@ fun MainStructureBulletPointsNotes(
                             notebook = notebookState.value,
                             listOfBulletPointNotes = mutableListConverted,
                             color = backgroundColor.value.toArgb(),
-                            tags = listOfSelectedTags.toCollection(ArrayList())
+                            tags = listOfSelectedTags.toCollection(ArrayList()),
+                            font = fontFamilyString.value
                         )
                         viewModel.updateNote(note1)
                     } else {
@@ -231,7 +286,8 @@ fun MainStructureBulletPointsNotes(
                             notebook = notebookState.value,
                             listOfBulletPointNotes = mutableListConverted,
                             color = 0,
-                            tags = listOfSelectedTags.toCollection(ArrayList())
+                            tags = listOfSelectedTags.toCollection(ArrayList()),
+                            font = fontFamilyString.value
                         )
                         viewModel.updateNote(note1)
                     }
@@ -275,7 +331,8 @@ fun MainStructureBulletPointsNotes(
                                     timeStamp = System.currentTimeMillis(),
                                     timeModified = System.currentTimeMillis(),
                                     color = backgroundColor.value.toArgb(),
-                                    tags = listOfSelectedTags.toCollection(ArrayList())
+                                    tags = listOfSelectedTags.toCollection(ArrayList()),
+                                    font = fontFamilyString.value
                                 )
                                 viewModel.updateNote(note)
                             } else {
@@ -287,7 +344,8 @@ fun MainStructureBulletPointsNotes(
                                     timeStamp = System.currentTimeMillis(),
                                     timeModified = System.currentTimeMillis(),
                                     color = 0,
-                                    tags = listOfSelectedTags.toCollection(ArrayList())
+                                    tags = listOfSelectedTags.toCollection(ArrayList()),
+                                    font = fontFamilyString.value
                                 )
                                 viewModel.updateNote(note)
                             }
@@ -313,6 +371,15 @@ fun MainStructureBulletPointsNotes(
                     }
                 },
                 actions = {
+                    IconButton(onClick = {
+                        showFontBottomSheet.value = true
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.FontDownload,
+                            contentDescription = "Fonts",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    }
                     IconButton(onClick = {
                         var analytics = Firebase.analytics
                         var bundle = Bundle()
@@ -353,7 +420,8 @@ fun MainStructureBulletPointsNotes(
                                     timeStamp = System.currentTimeMillis(),
                                     timeModified = System.currentTimeMillis(),
                                     color = backgroundColor.value.toArgb(),
-                                    tags = listOfSelectedTags.toCollection(ArrayList())
+                                    tags = listOfSelectedTags.toCollection(ArrayList()),
+                                    font = fontFamilyString.value
                                 )
                                 viewModel.updateNote(note)
                             } else {
@@ -365,7 +433,8 @@ fun MainStructureBulletPointsNotes(
                                     timeStamp = System.currentTimeMillis(),
                                     timeModified = System.currentTimeMillis(),
                                     color = 0,
-                                    tags = listOfSelectedTags.toCollection(ArrayList())
+                                    tags = listOfSelectedTags.toCollection(ArrayList()),
+                                    font = fontFamilyString.value
                                 )
                                 viewModel.updateNote(note)
                             }
@@ -420,6 +489,9 @@ fun MainStructureBulletPointsNotes(
             if (showBottomSheet.value) {
                 AddNoteBottomSheet(showBottomSheet, backgroundColor, activity = activity)
             }
+            if (showFontBottomSheet.value) {
+                FontBottomSheet(showFontBottomSheet, fontFamily)
+            }
             BulletPointNote(
                 viewModel,
                 navController,
@@ -429,7 +501,8 @@ fun MainStructureBulletPointsNotes(
                 count,
                 mutableListConverted,
                 backgroundColor,
-                listOfSelectedTags
+                listOfSelectedTags,
+                fontFamily
             )
         }
     }
