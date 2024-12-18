@@ -41,6 +41,7 @@ fun SingleRowBulletPointNotebook(
     count: MutableState<Int>,
     focusRequester: FocusRequester,
     backgroundColor: MutableState<Color>,
+    fontFamily: MutableState<androidx.compose.ui.text.font.FontFamily>,
     onDelete: () -> Unit
 ) {
 
@@ -85,7 +86,7 @@ fun SingleRowBulletPointNotebook(
                 )
             ),
             textStyle = LocalTextStyle.current.copy(
-                fontFamily = FontFamily.fontFamilyRegular
+                fontFamily = fontFamily.value
             ),
             modifier = Modifier
                 .focusRequester(focusRequester)

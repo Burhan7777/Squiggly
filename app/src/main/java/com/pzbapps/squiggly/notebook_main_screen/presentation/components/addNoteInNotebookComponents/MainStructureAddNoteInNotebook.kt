@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.FontDownload
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -422,6 +423,7 @@ fun MainStructureAddNoteInNotebook(
                     }
                 },
                 actions = {
+
                     IconButton(onClick = {
                         showDiscardNoteAlertBox.value = true
                     }) {
@@ -536,7 +538,7 @@ fun MainStructureAddNoteInNotebook(
                     backgroundColor,
                     fontFamily,
                     listOfSelectedTags,
-                    showTags
+                    showTags,
 //                notebook,
 //                notebookFromDB)
                 )

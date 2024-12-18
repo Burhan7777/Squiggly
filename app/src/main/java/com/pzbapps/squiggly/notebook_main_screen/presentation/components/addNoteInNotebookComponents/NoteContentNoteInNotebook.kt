@@ -42,7 +42,8 @@ import com.pzbapps.squiggly.common.presentation.alertboxes.addTagAlertBoxes.AddT
 import com.pzbapps.squiggly.common.presentation.alertboxes.addTagAlertBoxes.SelectTags
 
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class,
+@OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class,
     ExperimentalMaterialApi::class
 )
 @Composable
@@ -59,7 +60,7 @@ fun NoteContentNoteInNotebook(
     backgroundColor: MutableState<Color>,
     fontFamily: MutableState<androidx.compose.ui.text.font.FontFamily>,
     listOFSelectedTags: SnapshotStateList<String>,
-    showTags: MutableState<Boolean>
+    showTags: MutableState<Boolean>,
 //    notebook: MutableState<ArrayList<String>>,
 //    notebookFromDB: MutableState<ArrayList<NoteBook>>
 ) {
