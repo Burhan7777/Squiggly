@@ -1,5 +1,6 @@
 package com.pzbapps.squiggly.edit_note_feature.presentation.components.alertBoxes
 
+import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -129,6 +130,8 @@ fun AlertBoxShowReminder(
                             cancelReminder(activity, note.value.id)
                             updateReminderInDB(viewModel, note)
                             time.longValue = 0
+                            Toast.makeText(activity, "Reminder Cancelled", Toast.LENGTH_SHORT)
+                                .show()
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Clear,

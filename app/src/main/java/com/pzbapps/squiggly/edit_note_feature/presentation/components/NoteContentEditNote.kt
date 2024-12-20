@@ -488,6 +488,24 @@ fun NoteContent(
                 .padding(bottom = if (imeVisible) WindowInsets.ime.getBottom((LocalDensity.current)).dp else 0.dp)
         ) {
 
+            if (showReminderDialogBox.value) {
+                if (systemTime.longValue < time.longValue) {
+                    AlertBoxShowReminder(
+                        time,
+                        systemTime,
+                        activity,
+                        note,
+                        title,
+                        showMenu,
+                        notificationLauncher,
+                        viewModel,
+                        timeInString,
+                        formattedTime,
+                        showReminderDialogBox
+                    )
+                }
+            }
+
             if (showSelectTagAlertBox.value) {
                 SelectTags(viewModel.tags, listOfSelectedTags, viewModel, showAddTagAlertBox) {
                     showSelectTagAlertBox.value = false
@@ -580,61 +598,6 @@ fun NoteContent(
                         }
                     }
                 }
-                item {
-                    if (systemTime.longValue < time.longValue) {
-                        Card(
-                            modifier = Modifier
-                                .wrapContentWidth()
-                                .wrapContentHeight()
-                                .padding(30.dp)
-                                .clickable {
-                                    addReminder(
-                                        activity,
-                                        note,
-                                        title,
-                                        showMenu,
-                                        notificationLauncher,
-                                        viewModel,
-                                        time,
-                                        systemTime,
-                                        mutableStateOf(false),
-                                        timeInString
-                                    )
-                                },
-                            shape = RoundedCornerShape(20.dp),
-                            colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colors.primaryVariant,
-                                contentColor = MaterialTheme.colors.onPrimary
-                            )
-                        ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.padding(10.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Filled.Alarm,
-                                    contentDescription = "Alarm",
-                                    tint = MaterialTheme.colors.onPrimary
-                                )
-                                Spacer(modifier = Modifier.width(3.dp))
-
-                                Text(if (timeInString.value == "") formattedTime.value else timeInString.value)
-                                Spacer(modifier = Modifier.width(3.dp))
-                                IconButton(onClick = {
-                                    cancelReminder(activity, note.value.id)
-                                    updateReminderInDB(viewModel, note)
-                                    time.longValue = 0
-                                }) {
-                                    Icon(
-                                        imageVector = Icons.Filled.Clear,
-                                        contentDescription = "Cancel the alarm",
-                                        tint = MaterialTheme.colors.onPrimary
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
             }
         }
 
@@ -679,6 +642,24 @@ fun NoteContent(
             modifier = Modifier
                 .padding(bottom = if (imeVisible) WindowInsets.ime.getBottom((LocalDensity.current)).dp else 0.dp)
         ) {
+
+            if (showReminderDialogBox.value) {
+                if (systemTime.longValue < time.longValue) {
+                    AlertBoxShowReminder(
+                        time,
+                        systemTime,
+                        activity,
+                        note,
+                        title,
+                        showMenu,
+                        notificationLauncher,
+                        viewModel,
+                        timeInString,
+                        formattedTime,
+                        showReminderDialogBox
+                    )
+                }
+            }
 
             if (showSelectTagAlertBox.value) {
                 SelectTags(viewModel.tags, listOfSelectedTags, viewModel, showAddTagAlertBox) {
@@ -768,61 +749,6 @@ fun NoteContent(
                                     color = MaterialTheme.colors.onPrimary,
                                     fontFamily = FontFamily.fontFamilyRegular
                                 )
-                            }
-                        }
-                    }
-                }
-                item {
-                    if (systemTime.longValue < time.longValue) {
-                        Card(
-                            modifier = Modifier
-                                .wrapContentWidth()
-                                .wrapContentHeight()
-                                .padding(30.dp)
-                                .clickable {
-                                    addReminder(
-                                        activity,
-                                        note,
-                                        title,
-                                        showMenu,
-                                        notificationLauncher,
-                                        viewModel,
-                                        time,
-                                        systemTime,
-                                        mutableStateOf(false),
-                                        timeInString
-                                    )
-                                },
-                            shape = RoundedCornerShape(20.dp),
-                            colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colors.primaryVariant,
-                                contentColor = MaterialTheme.colors.onPrimary
-                            )
-                        ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.padding(10.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Filled.Alarm,
-                                    contentDescription = "Alarm",
-                                    tint = MaterialTheme.colors.onPrimary
-                                )
-                                Spacer(modifier = Modifier.width(3.dp))
-
-                                Text(if (timeInString.value == "") formattedTime.value else timeInString.value)
-                                Spacer(modifier = Modifier.width(3.dp))
-                                IconButton(onClick = {
-                                    cancelReminder(activity, note.value.id)
-                                    updateReminderInDB(viewModel, note)
-                                    time.longValue = 0
-                                }) {
-                                    Icon(
-                                        imageVector = Icons.Filled.Clear,
-                                        contentDescription = "Cancel the alarm",
-                                        tint = MaterialTheme.colors.onPrimary
-                                    )
-                                }
                             }
                         }
                     }
