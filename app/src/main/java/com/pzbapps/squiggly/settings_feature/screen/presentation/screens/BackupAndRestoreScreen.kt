@@ -65,6 +65,7 @@ fun BackupAndRestoreScreen(navHostController: NavHostController, activity: MainA
     var showListOfBackupFilesDialogBox = remember { mutableStateOf(false) }
     var loadingDialogWhenBackingUp = remember { mutableStateOf(false) }
     var loadingDialogWhenRestoring = remember { mutableStateOf(false) }
+    val showRestoreBackups = remember { mutableStateOf(false) }
 
     val prefs = context.getSharedPreferences(Constant.AUTO_SAVE_PREF, MODE_PRIVATE)
     val autoSave = prefs.getBoolean(Constant.AUTO_SAVE_KEY, true)
@@ -174,6 +175,7 @@ fun BackupAndRestoreScreen(navHostController: NavHostController, activity: MainA
                     )
                 )
                 .clickable {
+                    showRestoreBackups.value = true
                     var firebaseUserId = Firebase.auth.currentUser?.uid
                     var storageRef = Firebase.storage
                     val fileMetadataList = mutableListOf<Pair<StorageReference, Long>>()
@@ -198,6 +200,8 @@ fun BackupAndRestoreScreen(navHostController: NavHostController, activity: MainA
                                                 listOfBackUpFiles.value =
                                                     sortedFiles.map { it.first } // Update your state
                                                 showListOfBackupFilesDialogBox.value = true
+                                                showRestoreBackups.value = false
+
                                             }
                                         }
                                         .addOnFailureListener {
@@ -389,6 +393,9 @@ fun BackupAndRestoreScreen(navHostController: NavHostController, activity: MainA
         }
         if (loadingDialogWhenRestoring.value) {
             LoadingDialogBox(text = mutableStateOf("Restoring backup"))
+        }
+        if (showRestoreBackups.value) {
+            LoadingDialogBox(text = mutableStateOf("Fetching backups"))
         }
     }
     if (autoSaveCheckedBox.value) {
