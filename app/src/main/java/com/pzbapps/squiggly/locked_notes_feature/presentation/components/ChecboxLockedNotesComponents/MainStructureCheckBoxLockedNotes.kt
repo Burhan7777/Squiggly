@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.FontDownload
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -46,6 +47,7 @@ import com.pzbapps.squiggly.add_note_feature.presentation.components.DiscardNote
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.common.presentation.alertboxes.AlertDialogBoxTrialEnded
+import com.pzbapps.squiggly.common.presentation.fontsbottomsheet.FontBottomSheet
 import com.pzbapps.squiggly.main_screen.domain.model.Note
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -110,6 +112,54 @@ fun MainStructureCheckBoxLockedNotes(
         remember { mutableStateListOf<String>() } // THESE ARE THE TAGS SELECTED BY THE USER IN ADD NOTE CHECKBOX
     // FEATURE AND WILL BE ADDED TO THE "LIST_OF_TAGS" IN THE NOTE TABLE
 
+    val showFontBottomSheet = remember { mutableStateOf(false) }
+
+    val fontFamily =
+        remember { mutableStateOf(com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyRegular) }
+
+
+    var fontFamilyString = remember { mutableStateOf("") }
+
+    when (fontFamily.value) {
+        com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyRegular -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.lufgaRegular
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyBold -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.lufgaBold
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyExtraLight -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.lufgaextraLight
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.pacificoRegular -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.pacificoString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.parkinsons -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.parkinsonsString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.jaro -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.jaroString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.dancingScript -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.dancingScriptString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.doto -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.dotoString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.edu -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.eduString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.lobster -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.lobsterString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.playfair -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.playfairString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.poppins -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.poppinsString
+
+        else -> com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyRegular
+    }
+
     var showDiscardNoteAlertBox = remember { mutableStateOf(false) }
 
     if (generatedNoteId.value.toInt() == 0) {
@@ -123,7 +173,8 @@ fun MainStructureCheckBoxLockedNotes(
                     timeStamp = System.currentTimeMillis(),
                     locked = true,
                     color = backgroundColor.value.toArgb(),
-                    tags = listOfSelectedTags.toCollection(ArrayList())
+                    tags = listOfSelectedTags.toCollection(ArrayList()),
+                    font = fontFamilyString.value
 //            listOfCheckedNotes = mutableListConverted,
 //            listOfCheckedBoxes = mutableListOfCheckBoxes,
 
@@ -138,7 +189,8 @@ fun MainStructureCheckBoxLockedNotes(
                     timeStamp = System.currentTimeMillis(),
                     locked = true,
                     color = 0,
-                    tags = listOfSelectedTags.toCollection(ArrayList())
+                    tags = listOfSelectedTags.toCollection(ArrayList()),
+                    font = fontFamilyString.value
 //            listOfCheckedNotes = mutableListConverted,
 //            listOfCheckedBoxes = mutableListOfCheckBoxes,
 
@@ -182,7 +234,8 @@ fun MainStructureCheckBoxLockedNotes(
                 listOfCheckedBoxes = mutableListOfCheckBoxes,
                 locked = true,
                 color = backgroundColor.value.toArgb(),
-                tags = listOfSelectedTags.toCollection(ArrayList())
+                tags = listOfSelectedTags.toCollection(ArrayList()),
+                font = fontFamilyString.value
             )
             viewModel.updateNote(note1)
         } else {
@@ -196,7 +249,8 @@ fun MainStructureCheckBoxLockedNotes(
                 listOfCheckedBoxes = mutableListOfCheckBoxes,
                 locked = true,
                 color = 0,
-                tags = listOfSelectedTags.toCollection(ArrayList())
+                tags = listOfSelectedTags.toCollection(ArrayList()),
+                font = fontFamilyString.value
             )
             viewModel.updateNote(note1)
         }
@@ -238,7 +292,8 @@ fun MainStructureCheckBoxLockedNotes(
                             listOfCheckedBoxes = mutableListOfCheckBoxes,
                             locked = true,
                             color = backgroundColor.value.toArgb(),
-                            tags = listOfSelectedTags.toCollection(ArrayList())
+                            tags = listOfSelectedTags.toCollection(ArrayList()),
+                            font = fontFamilyString.value
                         )
                         viewModel.updateNote(note1)
                     } else {
@@ -252,7 +307,8 @@ fun MainStructureCheckBoxLockedNotes(
                             listOfCheckedBoxes = mutableListOfCheckBoxes,
                             locked = true,
                             color = 0,
-                            tags = listOfSelectedTags.toCollection(ArrayList())
+                            tags = listOfSelectedTags.toCollection(ArrayList()),
+                            font = fontFamilyString.value
                         )
                         viewModel.updateNote(note1)
                     }
@@ -299,7 +355,8 @@ fun MainStructureCheckBoxLockedNotes(
                                     locked = true,
                                     timeModified = System.currentTimeMillis(),
                                     color = backgroundColor.value.toArgb(),
-                                    tags = listOfSelectedTags.toCollection(ArrayList())
+                                    tags = listOfSelectedTags.toCollection(ArrayList()),
+                                    font = fontFamilyString.value
                                 )
                                 viewModel.updateNote(note)
                             } else {
@@ -312,7 +369,8 @@ fun MainStructureCheckBoxLockedNotes(
                                     locked = true,
                                     timeModified = System.currentTimeMillis(),
                                     color = 0,
-                                    tags = listOfSelectedTags.toCollection(ArrayList())
+                                    tags = listOfSelectedTags.toCollection(ArrayList()),
+                                    font = fontFamilyString.value
                                 )
                                 viewModel.updateNote(note)
                             }
@@ -335,6 +393,15 @@ fun MainStructureCheckBoxLockedNotes(
                 },
                 actions = {
                     IconButton(onClick = {
+                        showFontBottomSheet.value = true
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.FontDownload,
+                            contentDescription = "Font",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    }
+                    IconButton(onClick = {
                         var analytics = Firebase.analytics
                         var bundle = Bundle()
                         bundle.putString(
@@ -346,7 +413,7 @@ fun MainStructureCheckBoxLockedNotes(
                     }) {
                         Icon(
                             imageVector = Icons.Filled.Palette,
-                            contentDescription = "Backgroound color",
+                            contentDescription = "Background color",
                             tint = MaterialTheme.colors.onPrimary
                         )
                     }
@@ -375,7 +442,9 @@ fun MainStructureCheckBoxLockedNotes(
                                     locked = true,
                                     timeModified = System.currentTimeMillis(),
                                     color = backgroundColor.value.toArgb(),
-                                    tags = listOfSelectedTags.toCollection(ArrayList())
+                                    tags = listOfSelectedTags.toCollection(ArrayList()),
+                                    font = fontFamilyString.value
+
                                 )
                                 viewModel.updateNote(note)
                             } else {
@@ -388,7 +457,8 @@ fun MainStructureCheckBoxLockedNotes(
                                     locked = true,
                                     timeModified = System.currentTimeMillis(),
                                     color = 0,
-                                    tags = listOfSelectedTags.toCollection(ArrayList())
+                                    tags = listOfSelectedTags.toCollection(ArrayList()),
+                                    font = fontFamilyString.value
                                 )
                                 viewModel.updateNote(note)
                             }
@@ -444,6 +514,9 @@ fun MainStructureCheckBoxLockedNotes(
             if (showBottomSheet.value) {
                 AddNoteBottomSheet(showBottomSheet, backgroundColor, activity = activity)
             }
+            if (showFontBottomSheet.value) {
+                FontBottomSheet(showFontBottomSheet, fontFamily)
+            }
             CheckboxLockedNotes(
                 viewModel,
                 navController,
@@ -454,7 +527,8 @@ fun MainStructureCheckBoxLockedNotes(
                 count,
                 backgroundColor,
                 listOfSelectedTags,
-                mutableListConverted
+                mutableListConverted,
+                fontFamily
             )
         }
     }

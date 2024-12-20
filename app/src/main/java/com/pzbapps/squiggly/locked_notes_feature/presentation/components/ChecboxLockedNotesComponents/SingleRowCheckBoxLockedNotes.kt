@@ -42,6 +42,7 @@ fun SingleRowCheckBoxLockedNotes(
     count: MutableState<Int>,
     backgroundColor: MutableState<Color>,
     focusRequester: FocusRequester,
+    fontFamily: MutableState<androidx.compose.ui.text.font.FontFamily>,
     onDelete: () -> Unit
 ) {
     var checkBox = rememberSaveable { mutableStateOf(false) }
@@ -92,7 +93,7 @@ fun SingleRowCheckBoxLockedNotes(
                 )
             ),
             textStyle = LocalTextStyle.current.copy(
-                fontFamily = FontFamily.fontFamilyRegular
+                fontFamily = fontFamily.value
             ),
             modifier = Modifier
                 .focusRequester(focusRequester)
@@ -104,7 +105,8 @@ fun SingleRowCheckBoxLockedNotes(
             trailingIcon = {
                 IconButton(onClick = {
                     onDelete()
-                    mutableListOfCheckBoxes.removeAt(index) }) {
+                    mutableListOfCheckBoxes.removeAt(index)
+                }) {
                     Icon(
                         imageVector = Icons.Filled.Clear,
                         contentDescription = "Clear checkbox",

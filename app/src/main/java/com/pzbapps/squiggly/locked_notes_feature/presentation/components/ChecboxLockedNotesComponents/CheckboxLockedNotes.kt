@@ -47,6 +47,7 @@ fun CheckboxLockedNotes(
     backgroundColor: MutableState<Color>,
     listOfSelectedTags: SnapshotStateList<String>,
     mutableListConverted: ArrayList<String>,
+    fontFamily: MutableState<androidx.compose.ui.text.font.FontFamily>
 ) {
 
     var dialogOpen = remember {
@@ -114,7 +115,7 @@ fun CheckboxLockedNotes(
                 cursorColor = MaterialTheme.colors.onPrimary,
                 textColor = androidx.compose.material.MaterialTheme.colors.onPrimary
             ),
-            textStyle = TextStyle(fontFamily = FontFamily.fontFamilyBold, fontSize = 25.sp)
+            textStyle = TextStyle(fontFamily = fontFamily.value, fontSize = 25.sp)
         )
         var firstCheckBoxCheck = remember {
             mutableStateOf(true)
@@ -140,6 +141,7 @@ fun CheckboxLockedNotes(
                         count,
                         backgroundColor,
                         focusRequester,
+                        fontFamily,
                         onDelete = {
                             try {
                                 focusRequesters.removeAt(indexed)
