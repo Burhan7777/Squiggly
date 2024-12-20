@@ -206,6 +206,8 @@ fun MainStructureEditNote(
 
     val showTags = remember { mutableStateOf(false) }
 
+    val showActiveReminders = remember { mutableStateOf(false) }
+
 
 
 
@@ -1022,18 +1024,22 @@ fun MainStructureEditNote(
                         DropdownMenuItem(
                             onClick = {
                                 // Handle option 2 click
-                                addReminder(
-                                    activity,
-                                    note,
-                                    title,
-                                    showMenu,
-                                    notificationLauncher,
-                                    viewModel,
-                                    time,
-                                    systemTime,
-                                    showRationaleDialogBox,
-                                    timeInString,
-                                )
+                                if (systemTime.longValue > time.longValue) {
+                                    addReminder(
+                                        activity,
+                                        note,
+                                        title,
+                                        showMenu,
+                                        notificationLauncher,
+                                        viewModel,
+                                        time,
+                                        systemTime,
+                                        showRationaleDialogBox,
+                                        timeInString,
+                                    )
+                                } else {
+                                    showActiveReminders.value = true
+                                }
 
                             }) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -1141,7 +1147,8 @@ fun MainStructureEditNote(
                     fontFamily,
                     listOfSelectedTags,
                     showTags,
-                    query
+                    query,
+                    showActiveReminders
                 )
             }
             if (mutableListOfCheckboxTexts.size == 0 && mutableListOfBulletPoints.size == 0 && !hideFormattingTextBarWhenTitleIsInFocus.value) {

@@ -83,6 +83,7 @@ import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.common.presentation.alertboxes.addTagAlertBoxes.AddTag
 import com.pzbapps.squiggly.common.presentation.alertboxes.addTagAlertBoxes.SelectTags
+import com.pzbapps.squiggly.edit_note_feature.presentation.components.alertBoxes.AlertBoxShowReminder
 import com.pzbapps.squiggly.main_screen.domain.model.Note
 import com.pzbapps.squiggly.reminder_feature.cancelReminder
 import kotlinx.coroutines.CoroutineScope
@@ -130,7 +131,8 @@ fun NoteContent(
     fontFamily: MutableState<androidx.compose.ui.text.font.FontFamily>,
     listOfSelectedTags: SnapshotStateList<String>,
     showTags: MutableState<Boolean>,
-    query: String
+    query: String,
+    showReminderDialogBox: MutableState<Boolean>
 ) {
 
     var dialogOpen = remember {
@@ -140,6 +142,7 @@ fun NoteContent(
     var notebookText = remember {
         mutableStateOf("")
     }
+
 
     val showSelectTagAlertBox = remember { mutableStateOf(false) }
 
@@ -284,6 +287,24 @@ fun NoteContent(
 
             // Buttons overlay on top of the current word
 
+            if (showReminderDialogBox.value) {
+                if (systemTime.longValue < time.longValue) {
+                    AlertBoxShowReminder(
+                        time,
+                        systemTime,
+                        activity,
+                        note,
+                        title,
+                        showMenu,
+                        notificationLauncher,
+                        viewModel,
+                        timeInString,
+                        formattedTime,
+                        showReminderDialogBox
+                    )
+                }
+            }
+
 
             if (showSelectTagAlertBox.value) {
                 SelectTags(
@@ -424,59 +445,6 @@ fun NoteContent(
                                     color = MaterialTheme.colors.onPrimary,
                                     fontFamily = FontFamily.fontFamilyRegular
                                 )
-                            }
-                        }
-                    }
-                    if (systemTime.longValue < time.longValue) {
-                        Card(
-                            modifier = Modifier
-                                .wrapContentWidth()
-                                .wrapContentHeight()
-                                .padding(30.dp)
-                                .clickable {
-                                    addReminder(
-                                        activity,
-                                        note,
-                                        title,
-                                        showMenu,
-                                        notificationLauncher,
-                                        viewModel,
-                                        time,
-                                        systemTime,
-                                        mutableStateOf(false),
-                                        timeInString
-                                    )
-                                },
-                            shape = RoundedCornerShape(20.dp),
-                            colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colors.primaryVariant,
-                                contentColor = MaterialTheme.colors.onPrimary
-                            )
-                        ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.padding(10.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Filled.Alarm,
-                                    contentDescription = "Alarm",
-                                    tint = MaterialTheme.colors.onPrimary
-                                )
-                                Spacer(modifier = Modifier.width(3.dp))
-
-                                Text(if (timeInString.value == "") formattedTime.value else timeInString.value)
-                                Spacer(modifier = Modifier.width(3.dp))
-                                IconButton(onClick = {
-                                    cancelReminder(activity, note.value.id)
-                                    updateReminderInDB(viewModel, note)
-                                    time.longValue = 0
-                                }) {
-                                    Icon(
-                                        imageVector = Icons.Filled.Clear,
-                                        contentDescription = "Cancel the alarm",
-                                        tint = MaterialTheme.colors.onPrimary
-                                    )
-                                }
                             }
                         }
                     }
