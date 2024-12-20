@@ -46,6 +46,7 @@ import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ListResult
+import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.pzbapps.squiggly.common.domain.utils.Constant
 import com.pzbapps.squiggly.common.presentation.FontFamily
@@ -60,7 +61,7 @@ fun BackupAndRestoreScreen(navHostController: NavHostController, activity: MainA
     val context = LocalContext.current
     var backUpFileName = remember { mutableStateOf("") }
     var showBackUpFIleNameAlertBox = remember { mutableStateOf(false) }
-    var listOfBackUpFiles = remember { MutableLiveData<ListResult>() }
+    val listOfBackUpFiles = remember { mutableStateOf<List<StorageReference>>(emptyList()) }
     var showListOfBackupFilesDialogBox = remember { mutableStateOf(false) }
     var loadingDialogWhenBackingUp = remember { mutableStateOf(false) }
     var loadingDialogWhenRestoring = remember { mutableStateOf(false) }
@@ -175,22 +176,40 @@ fun BackupAndRestoreScreen(navHostController: NavHostController, activity: MainA
                 .clickable {
                     var firebaseUserId = Firebase.auth.currentUser?.uid
                     var storageRef = Firebase.storage
+                    val fileMetadataList = mutableListOf<Pair<StorageReference, Long>>()
                     var childStorage =
                         storageRef.reference.child("Notebook Database/$firebaseUserId/")
                     childStorage
                         .listAll()
-                        .addOnSuccessListener {
-                            if (it.items.isNotEmpty()) {
-                                listOfBackUpFiles.value = it
-                                showListOfBackupFilesDialogBox.value = true
-                            } else {
-                                Toast
-                                    .makeText(
-                                        context,
-                                        "There is no backup stored",
-                                        Toast.LENGTH_SHORT
-                                    )
-                                    .show()
+                        .addOnSuccessListener { result ->
+                            if (result.items.isNotEmpty()) {
+                                result.items.forEach { fileRef ->
+                                    fileRef
+                                        .getMetadata()
+                                        .addOnSuccessListener { metadata ->
+                                            val lastModified = metadata.updatedTimeMillis ?: 0L
+                                            fileMetadataList.add(Pair(fileRef, lastModified))
+
+                                            // Check if we've retrieved metadata for all files
+                                            if (fileMetadataList.size == result.items.size) {
+                                                // Sort files by last modified time in descending order
+                                                val sortedFiles =
+                                                    fileMetadataList.sortedByDescending { it.second }
+                                                listOfBackUpFiles.value =
+                                                    sortedFiles.map { it.first } // Update your state
+                                                showListOfBackupFilesDialogBox.value = true
+                                            }
+                                        }
+                                        .addOnFailureListener {
+                                            Toast
+                                                .makeText(
+                                                    context,
+                                                    "Failed to restore the backups",
+                                                    Toast.LENGTH_SHORT
+                                                )
+                                                .show()
+                                        }
+                                }
                             }
                         }
                 },
@@ -221,7 +240,10 @@ fun BackupAndRestoreScreen(navHostController: NavHostController, activity: MainA
                 Column() {
                     Text(
                         text = "Restore Notes",
-                        modifier = Modifier.padding(top = 12.dp, start = 10.dp),
+                        modifier = Modifier.padding(
+                            top = 12.dp,
+                            start = 10.dp
+                        ),
                         fontSize = 18.sp,
                         fontFamily = FontFamily.fontFamilyRegular,
                         maxLines = 2,
@@ -293,7 +315,10 @@ fun BackupAndRestoreScreen(navHostController: NavHostController, activity: MainA
                 Column() {
                     Text(
                         text = "Auto Save notes",
-                        modifier = Modifier.padding(top = 12.dp, start = 10.dp),
+                        modifier = Modifier.padding(
+                            top = 12.dp,
+                            start = 10.dp
+                        ),
                         fontSize = 18.sp,
                         fontFamily = FontFamily.fontFamilyRegular,
                         maxLines = 2,
@@ -332,7 +357,8 @@ fun BackupAndRestoreScreen(navHostController: NavHostController, activity: MainA
             fontStyle = FontStyle.Italic,
             modifier = Modifier
                 .background(
-                    MaterialTheme.colors.primaryVariant, shape = MaterialTheme.shapes.medium.copy(
+                    MaterialTheme.colors.primaryVariant,
+                    shape = MaterialTheme.shapes.medium.copy(
                         topStart = CornerSize(20.dp),
                         topEnd = CornerSize(20.dp),
                         bottomStart = CornerSize(20.dp),
@@ -351,7 +377,7 @@ fun BackupAndRestoreScreen(navHostController: NavHostController, activity: MainA
         }
         if (showListOfBackupFilesDialogBox.value) {
             DisplayBackupNamesAlertBox(
-                listOfBackUpFiles = listOfBackUpFiles.value?.items!!,
+                listOfBackUpFiles = listOfBackUpFiles,
                 loadingDialogWhenRestoring,
                 activity = activity
             ) {
@@ -367,12 +393,22 @@ fun BackupAndRestoreScreen(navHostController: NavHostController, activity: MainA
     }
     if (autoSaveCheckedBox.value) {
         val editor: SharedPreferences.Editor =
-            context.getSharedPreferences(Constant.AUTO_SAVE_PREF, MODE_PRIVATE).edit()
+            context
+                .getSharedPreferences(
+                    Constant.AUTO_SAVE_PREF,
+                    MODE_PRIVATE
+                )
+                .edit()
         editor.putBoolean(Constant.AUTO_SAVE_KEY, true)
         editor.apply()
     } else {
         val editor: SharedPreferences.Editor =
-            context.getSharedPreferences(Constant.AUTO_SAVE_PREF, MODE_PRIVATE).edit()
+            context
+                .getSharedPreferences(
+                    Constant.AUTO_SAVE_PREF,
+                    MODE_PRIVATE
+                )
+                .edit()
         editor.putBoolean(Constant.AUTO_SAVE_KEY, false)
         editor.apply()
     }

@@ -34,7 +34,7 @@ import java.io.FileOutputStream
 
 @Composable
 fun DisplayBackupNamesAlertBox(
-    listOfBackUpFiles: List<StorageReference>,
+    listOfBackUpFiles: MutableState<List<StorageReference>>,
     loadingDialog: MutableState<Boolean>,
     activity: MainActivity,
     onDismiss: () -> Unit
@@ -52,14 +52,14 @@ fun DisplayBackupNamesAlertBox(
         title = {
             Column(modifier = Modifier.height(300.dp)) {
                 Text(
-                    text = "Select the backup file to restore",
+                    text = "Select the backup file to restore(Newest first)",
                     fontStyle = FontStyle.Italic,
                     fontSize = 12.sp,
                     fontFamily = FontFamily.fontFamilyRegular,
                     color = MaterialTheme.colors.onPrimary
                 )
                 LazyColumn() {
-                    items(listOfBackUpFiles.toMutableStateList()) { item ->
+                    items(listOfBackUpFiles.value.toMutableStateList()) { item ->
                         Text(
                             text = item.name,
                             fontSize = 15.sp,
