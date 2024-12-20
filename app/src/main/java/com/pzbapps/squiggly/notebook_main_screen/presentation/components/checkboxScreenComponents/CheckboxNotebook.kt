@@ -46,7 +46,8 @@ fun CheckboxNotebook(
     count: MutableState<Int>,
     mutableListConverted: ArrayList<String>,
     backgroundColor: MutableState<Color>,
-    listOfSelectedTags: SnapshotStateList<String>
+    listOfSelectedTags: SnapshotStateList<String>,
+    fontFamily: MutableState<androidx.compose.ui.text.font.FontFamily>
 ) {
 
     var dialogOpen = remember {
@@ -103,7 +104,7 @@ fun CheckboxNotebook(
                 cursorColor = MaterialTheme.colors.onPrimary,
                 textColor = androidx.compose.material.MaterialTheme.colors.onPrimary
             ),
-            textStyle = TextStyle(fontFamily = FontFamily.fontFamilyBold, fontSize = 25.sp)
+            textStyle = TextStyle(fontFamily = fontFamily.value, fontSize = 25.sp)
         )
         var firstCheckBoxCheck = remember {
             mutableStateOf(true)
@@ -143,6 +144,7 @@ fun CheckboxNotebook(
                         count,
                         focusRequester,
                         backgroundColor,
+                        fontFamily,
                         onDelete = {
                             try {
                                 focusRequesters.removeAt(indexed)

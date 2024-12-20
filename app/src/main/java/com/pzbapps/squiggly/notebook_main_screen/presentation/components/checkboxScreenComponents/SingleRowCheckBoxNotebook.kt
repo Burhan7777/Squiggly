@@ -41,6 +41,7 @@ fun SingleRowCheckBoxNotebook(
     count: MutableState<Int>,
     focusRequester: FocusRequester,
     backgroundColor: MutableState<Color>,
+    fontFamily: MutableState<androidx.compose.ui.text.font.FontFamily>,
     onDelete: () -> Unit
 ) {
     var checkBox = rememberSaveable { mutableStateOf(false) }
@@ -95,7 +96,7 @@ fun SingleRowCheckBoxNotebook(
                 )
             ),
             textStyle = LocalTextStyle.current.copy(
-                fontFamily = FontFamily.fontFamilyRegular
+                fontFamily = fontFamily.value
             ),
             modifier = Modifier
                 .focusRequester(focusRequester)
