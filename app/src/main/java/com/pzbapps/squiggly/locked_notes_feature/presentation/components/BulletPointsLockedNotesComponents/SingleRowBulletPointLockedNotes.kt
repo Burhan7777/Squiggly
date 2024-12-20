@@ -41,6 +41,7 @@ fun SingleRowBulletPointLockedNotes(
     count: MutableState<Int>,
     focusRequester: FocusRequester,
     backgroundColor: MutableState<androidx.compose.ui.graphics.Color>,
+    fontFamily: MutableState<androidx.compose.ui.text.font.FontFamily>,
     onDelete: () -> Unit
 ) {
 
@@ -81,7 +82,7 @@ fun SingleRowBulletPointLockedNotes(
                 )
             ),
             textStyle = LocalTextStyle.current.copy(
-                fontFamily = FontFamily.fontFamilyRegular
+                fontFamily = fontFamily.value
             ),
             modifier = Modifier
                 .focusRequester(focusRequester)

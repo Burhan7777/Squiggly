@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.FontDownload
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -47,6 +48,7 @@ import com.pzbapps.squiggly.add_note_feature.presentation.components.DiscardNote
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.common.presentation.alertboxes.AlertDialogBoxTrialEnded
+import com.pzbapps.squiggly.common.presentation.fontsbottomsheet.FontBottomSheet
 import com.pzbapps.squiggly.main_screen.domain.model.Note
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -91,6 +93,54 @@ fun MainStructureBulletPointsLockedNotes(
         remember { mutableStateListOf<String>() } // THESE ARE THE TAGS SELECTED BY THE USER IN ADD NOTE BULLET_POINT
     // FEATURE AND WILL BE ADDED TO THE "LIST_OF_TAGS" IN THE NOTE TABLE
 
+    var fontFamilyString = remember { mutableStateOf("") }
+
+    val fontFamily =
+        remember { mutableStateOf(com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyRegular) }
+
+    val showFontBottomSheet = remember { mutableStateOf(false) }
+
+
+    when (fontFamily.value) {
+        com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyRegular -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.lufgaRegular
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyBold -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.lufgaBold
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyExtraLight -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.lufgaextraLight
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.pacificoRegular -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.pacificoString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.parkinsons -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.parkinsonsString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.jaro -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.jaroString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.dancingScript -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.dancingScriptString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.doto -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.dotoString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.edu -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.eduString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.lobster -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.lobsterString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.playfair -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.playfairString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.poppins -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.poppinsString
+
+        else -> com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyRegular
+    }
+
     LaunchedEffect(key1 = true) {
         if (mutableListOfBulletPointsNotes.isEmpty()) {
             mutableListOfBulletPointsNotes.add(mutableStateOf(""))
@@ -120,7 +170,8 @@ fun MainStructureBulletPointsLockedNotes(
                     timeStamp = System.currentTimeMillis(),
                     locked = true,
                     color = backgroundColor.value.toArgb(),
-                    tags = listOfSelectedTags.toCollection(ArrayList())
+                    tags = listOfSelectedTags.toCollection(ArrayList()),
+                    font = fontFamilyString.value
 //            listOfCheckedNotes = mutableListConverted,
 //            listOfCheckedBoxes = mutableListOfCheckBoxes,
 
@@ -137,7 +188,8 @@ fun MainStructureBulletPointsLockedNotes(
                 timeStamp = System.currentTimeMillis(),
                 locked = true,
                 color = 0,
-                tags = listOfSelectedTags.toCollection(ArrayList())
+                tags = listOfSelectedTags.toCollection(ArrayList()),
+                font = fontFamilyString.value
 //            listOfCheckedNotes = mutableListConverted,
 //            listOfCheckedBoxes = mutableListOfCheckBoxes,
 
@@ -179,7 +231,8 @@ fun MainStructureBulletPointsLockedNotes(
                 listOfBulletPointNotes = mutableListConverted,
                 locked = true,
                 color = backgroundColor.value.toArgb(),
-                tags = listOfSelectedTags.toCollection(ArrayList())
+                tags = listOfSelectedTags.toCollection(ArrayList()),
+                font = fontFamilyString.value
             )
             viewModel.updateNote(note1)
         } else {
@@ -192,7 +245,8 @@ fun MainStructureBulletPointsLockedNotes(
                 listOfBulletPointNotes = mutableListConverted,
                 locked = true,
                 color = 0,
-                tags = listOfSelectedTags.toCollection(ArrayList())
+                tags = listOfSelectedTags.toCollection(ArrayList()),
+                font = fontFamilyString.value
             )
             viewModel.updateNote(note1)
         }
@@ -229,7 +283,8 @@ fun MainStructureBulletPointsLockedNotes(
                             listOfBulletPointNotes = mutableListConverted,
                             locked = true,
                             color = backgroundColor.value.toArgb(),
-                            tags = listOfSelectedTags.toCollection(ArrayList())
+                            tags = listOfSelectedTags.toCollection(ArrayList()),
+                            font = fontFamilyString.value
                         )
                         viewModel.updateNote(note1)
                     } else {
@@ -242,7 +297,8 @@ fun MainStructureBulletPointsLockedNotes(
                             listOfBulletPointNotes = mutableListConverted,
                             locked = true,
                             color = 0,
-                            tags = listOfSelectedTags.toCollection(ArrayList())
+                            tags = listOfSelectedTags.toCollection(ArrayList()),
+                            font = fontFamilyString.value
                         )
                         viewModel.updateNote(note1)
                     }
@@ -286,7 +342,8 @@ fun MainStructureBulletPointsLockedNotes(
                                     locked = true,
                                     timeModified = System.currentTimeMillis(),
                                     color = backgroundColor.value.toArgb(),
-                                    tags = listOfSelectedTags.toCollection(ArrayList())
+                                    tags = listOfSelectedTags.toCollection(ArrayList()),
+                                    font = fontFamilyString.value
                                 )
                                 viewModel.updateNote(note)
                             } else {
@@ -298,7 +355,8 @@ fun MainStructureBulletPointsLockedNotes(
                                     locked = true,
                                     timeModified = System.currentTimeMillis(),
                                     color = 0,
-                                    tags = listOfSelectedTags.toCollection(ArrayList())
+                                    tags = listOfSelectedTags.toCollection(ArrayList()),
+                                    font = fontFamilyString.value
                                 )
                                 viewModel.updateNote(note)
                             }
@@ -320,6 +378,15 @@ fun MainStructureBulletPointsLockedNotes(
                     }
                 },
                 actions = {
+                    IconButton(onClick = {
+                        showFontBottomSheet.value = true
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.FontDownload,
+                            contentDescription = "Fonts",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    }
                     IconButton(onClick = {
                         var analytics = Firebase.analytics
                         var bundle = Bundle()
@@ -359,7 +426,8 @@ fun MainStructureBulletPointsLockedNotes(
                                 locked = true,
                                 timeModified = System.currentTimeMillis(),
                                 color = backgroundColor.value.toArgb(),
-                                tags = listOfSelectedTags.toCollection(ArrayList())
+                                tags = listOfSelectedTags.toCollection(ArrayList()),
+                                font = fontFamilyString.value
 
                             )
                             viewModel.updateNote(note)
@@ -372,7 +440,8 @@ fun MainStructureBulletPointsLockedNotes(
                                 locked = true,
                                 timeModified = System.currentTimeMillis(),
                                 color = 0,
-                                tags = listOfSelectedTags.toCollection(ArrayList())
+                                tags = listOfSelectedTags.toCollection(ArrayList()),
+                                font = fontFamilyString.value
                             )
                             viewModel.updateNote(note)
                         }
@@ -422,6 +491,9 @@ fun MainStructureBulletPointsLockedNotes(
             if (showBottomSheet.value) {
                 AddNoteBottomSheet(showBottomSheet, backgroundColor, activity = activity)
             }
+            if (showFontBottomSheet.value) {
+                FontBottomSheet(showFontBottomSheet, fontFamily)
+            }
             BulletPointLockedNotes(
                 viewModel,
                 navController,
@@ -431,7 +503,8 @@ fun MainStructureBulletPointsLockedNotes(
                 count,
                 mutableListConverted,
                 backgroundColor,
-                listOfSelectedTags
+                listOfSelectedTags,
+                fontFamily
             )
         }
     }

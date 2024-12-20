@@ -45,7 +45,8 @@ fun BulletPointLockedNotes(
     count: MutableState<Int>,
     mutableListConverted: ArrayList<String>,
     backgroundColor: MutableState<androidx.compose.ui.graphics.Color>,
-    listOfSelectedTags: SnapshotStateList<String>
+    listOfSelectedTags: SnapshotStateList<String>,
+    fontFamily: MutableState<androidx.compose.ui.text.font.FontFamily>
 ) {
 
     val context = LocalContext.current
@@ -114,7 +115,7 @@ fun BulletPointLockedNotes(
                 cursorColor = MaterialTheme.colors.onPrimary,
                 textColor = androidx.compose.material.MaterialTheme.colors.onPrimary
             ),
-            textStyle = TextStyle(fontFamily = FontFamily.fontFamilyBold, fontSize = 25.sp)
+            textStyle = TextStyle(fontFamily = fontFamily.value, fontSize = 25.sp)
         )
         var firstCheckBoxCheck = remember {
             mutableStateOf(true)
@@ -140,6 +141,7 @@ fun BulletPointLockedNotes(
                         count,
                         focusRequester,
                         backgroundColor,
+                        fontFamily,
                         onDelete = {
                             try {
                                 focusRequesters.removeAt(indexed)
