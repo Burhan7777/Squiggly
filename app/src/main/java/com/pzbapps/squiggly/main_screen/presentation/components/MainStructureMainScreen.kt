@@ -482,7 +482,7 @@ fun MainStructureMainScreen(
 
                 }
                 if (showDeleteTagAlertBox.value) {
-                    DeleteTagAlertBox(viewModel, tag.value, showProgressOfRemovingTag) {
+                    DeleteTagAlertBox(viewModel, tag.value, showProgressOfRemovingTag, showEditTagsAlertBox) {
                         showDeleteTagAlertBox.value = false
                     }
                 }

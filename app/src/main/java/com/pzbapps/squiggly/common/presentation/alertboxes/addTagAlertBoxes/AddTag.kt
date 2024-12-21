@@ -26,6 +26,7 @@ import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.edit_note_feature.domain.usecase.getPasswordFromFirebase
 import com.pzbapps.squiggly.edit_note_feature.presentation.components.alertBoxes.lockTheNote
+import kotlinx.coroutines.delay
 
 @Composable
 fun AddTag(viewModel: MainActivityViewModel, onDismiss: () -> Unit) {
@@ -88,7 +89,7 @@ fun AddTag(viewModel: MainActivityViewModel, onDismiss: () -> Unit) {
                     viewModel.getAllTags()
                     val tags = viewModel.tags
                     for (tag in tags) {
-                        if (tag.name == tagName.value) {
+                        if (tag.name.trim() == tagName.value.trim()) {
                             Toast.makeText(context, "Tag already exists", Toast.LENGTH_SHORT).show()
                             return@Button
                         }

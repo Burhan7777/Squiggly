@@ -268,7 +268,7 @@ fun MainStructureLockedNotesScreen(
 
             }
             if (showDeleteTagAlertBox.value) {
-                DeleteTagAlertBox(viewModel, tag.value, showProgressOfRemovingTag) {
+                DeleteTagAlertBox(viewModel, tag.value, showEditTagsAlertBox,showProgressOfRemovingTag) {
                     showDeleteTagAlertBox.value = false
                 }
             }

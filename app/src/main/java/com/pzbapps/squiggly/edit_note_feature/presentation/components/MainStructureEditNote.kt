@@ -243,7 +243,17 @@ fun MainStructureEditNote(
     }
 
     LaunchedEffect(Unit) {
+        var allTags = viewModel.tags
+        var titleOfTags = SnapshotStateList<String>()
+        for (tag in allTags) {
+            titleOfTags.add(tag.name)
+        }
         listOfSelectedTags.addAll(note.value.tags)
+        for (tag in listOfSelectedTags) {
+            if (!titleOfTags.contains(tag)) {
+                listOfSelectedTags.remove(tag)
+            }
+        }
     }
 
     LaunchedEffect(key1 = Unit) {

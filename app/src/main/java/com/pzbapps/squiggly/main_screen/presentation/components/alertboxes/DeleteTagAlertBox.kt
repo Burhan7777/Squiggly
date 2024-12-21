@@ -20,6 +20,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
@@ -29,14 +30,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun DeleteTagAlertBox(
     viewModel: MainActivityViewModel,
     tag: String,
     showProgressBarOfDeletingTag: MutableState<Boolean>,
+    showEditTagAlertBox: MutableState<Boolean>,
     onDismiss: () -> Unit
 ) {
+
+    val scope = rememberCoroutineScope()
     androidx.compose.material3.AlertDialog(
         onDismissRequest = { onDismiss() },
         shape = androidx.compose.material.MaterialTheme.shapes.medium.copy(
@@ -66,21 +74,14 @@ fun DeleteTagAlertBox(
             androidx.compose.material.OutlinedButton(
                 onClick = {
                     showProgressBarOfDeletingTag.value = true
-                    viewModel.getAllNotes()
-                    var listOfNotes = viewModel.listOfNotes
-                    for (note in listOfNotes) {
-                        var tags = note.tags
-                        if (tags.contains(tag)) {
-                            tags.remove(tag)
-                        }
-                        var note = note.copy(tags = tags)
-                        viewModel.deleteTag(tag)
-                        viewModel.updateNote(note)
-                    }
-                    showProgressBarOfDeletingTag.value = false
-                    viewModel.getAllTags()
-                    viewModel.tags.removeAll { it.name == tag }
-                    onDismiss()
+                    deleteTagsFromNotes(
+                        tag,
+                        viewModel,
+                        showProgressBarOfDeletingTag,
+                        scope,
+                        showEditTagAlertBox,
+                        onDismiss
+                    )
                 },
                 shape = androidx.compose.material.MaterialTheme.shapes.medium.copy(
                     topStart = CornerSize(15.dp),
@@ -125,4 +126,69 @@ fun DeleteTagAlertBox(
                 )
             }
         })
+}
+
+fun deleteTagsFromNotes(
+    tag: String,
+    viewModel: MainActivityViewModel,
+    showProgressBarOfDeletingTag: MutableState<Boolean>,
+    coroutineScope: CoroutineScope,
+    showEditTagAlertBox: MutableState<Boolean>,
+    onDismiss: () -> Unit
+) {
+    coroutineScope.launch(Dispatchers.IO) {
+        viewModel.getAllNotes()
+        var listOfNotes = viewModel.listOfNotes
+        for (note in listOfNotes) {
+            var tags = note.tags
+            if (tags.contains(tag)) {
+                tags.remove(tag)
+            }
+            var note = note.copy(tags = tags)
+            deleteTag(tag, viewModel, coroutineScope)
+            viewModel.updateNote(note)
+        }
+        delay(200)
+        viewModel.getAllNotes()
+        var listOfNotesAgain = viewModel.listOfNotes
+        for (note in listOfNotesAgain) {
+            var tags = note.tags
+            if (tags.contains(tag)) {
+                deleteTagsFromNotes(
+                    tag,
+                    viewModel,
+                    showProgressBarOfDeletingTag,
+                    coroutineScope,
+                    showEditTagAlertBox,
+                    onDismiss
+                )
+            }
+        }
+        viewModel.getAllTags()
+        delay(200)
+        viewModel.tags.removeAll { it.name == tag }
+        showProgressBarOfDeletingTag.value = false
+        showEditTagAlertBox.value = false
+        onDismiss()
+    }
+
+}
+
+fun deleteTag(tag: String, viewModel: MainActivityViewModel, scope: CoroutineScope) {
+    scope.launch(Dispatchers.IO) {
+        viewModel.deleteTag(tag)
+        delay(300)
+        viewModel.getAllTags()
+        var tags = viewModel.tags
+        for (tagy in tags) {
+            if (tagy.name == tag) {
+                deleteTag(tag, viewModel, scope)
+                println("FWF:tagDeleted")
+            }
+
+        }
+        return@launch
+    }
+    return
+
 }
