@@ -74,6 +74,7 @@ fun DeleteTagAlertBox(
             androidx.compose.material.OutlinedButton(
                 onClick = {
                     showProgressBarOfDeletingTag.value = true
+                    deleteTag(tag, viewModel, scope)
                     deleteTagsFromNotes(
                         tag,
                         viewModel,
@@ -145,7 +146,7 @@ fun deleteTagsFromNotes(
                 tags.remove(tag)
             }
             var note = note.copy(tags = tags)
-            deleteTag(tag, viewModel, coroutineScope)
+
             viewModel.updateNote(note)
         }
         delay(200)
