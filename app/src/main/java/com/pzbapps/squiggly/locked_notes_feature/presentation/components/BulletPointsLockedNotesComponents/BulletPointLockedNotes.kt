@@ -73,6 +73,8 @@ fun BulletPointLockedNotes(
 
     val showSelectTagAlertBox = remember { mutableStateOf(false) }
     val showAddTagAlertBox = remember { mutableStateOf(false) }
+    val showAddingTagDialogBox = remember { mutableStateOf(false) } // THIS DIALOG BOX IS SHOWN
+    // WHEN WE PRESS SAVE BUTTON IN ADD TAG DIALOG BOX
 
 //    for (i in listOfNoteBooks?.indices ?: arrayListOf<GetNoteBook>().indices) {
 //        notebooks.add(listOfNoteBooks!![i]?.notebook ?: GetNoteBook().notebook)
@@ -91,7 +93,7 @@ fun BulletPointLockedNotes(
         }
 
         if (showAddTagAlertBox.value) {
-            AddTag(viewModel) {
+            AddTag(viewModel,showAddingTagDialogBox,listOfSelectedTags,showSelectTagAlertBox) {
                 showAddTagAlertBox.value = false
             }
         }

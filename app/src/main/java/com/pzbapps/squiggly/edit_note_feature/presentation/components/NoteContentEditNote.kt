@@ -143,6 +143,9 @@ fun NoteContent(
         mutableStateOf("")
     }
 
+    val showAddingTagDialogBox = remember { mutableStateOf(false) } // THIS DIALOG BOX IS SHOWN
+    // WHEN WE PRESS SAVE BUTTON IN ADD TAG DIALOG BOX
+
 
     val showSelectTagAlertBox = remember { mutableStateOf(false) }
 
@@ -250,6 +253,8 @@ fun NoteContent(
 
 
 
+
+
         LaunchedEffect(query) {
             if (query.length > 1) {
                 val text = richStateText.value.toHtml()
@@ -318,7 +323,7 @@ fun NoteContent(
             }
 
             if (showAddTagAlertBox.value) {
-                AddTag(viewModel) {
+                AddTag(viewModel,showAddingTagDialogBox,listOfSelectedTags,showSelectTagAlertBox) {
                     showAddTagAlertBox.value = false
                 }
             }
@@ -513,7 +518,7 @@ fun NoteContent(
             }
 
             if (showAddTagAlertBox.value) {
-                AddTag(viewModel) {
+                AddTag(viewModel,showAddingTagDialogBox,listOfSelectedTags,showSelectTagAlertBox) {
                     showAddTagAlertBox.value = false
                 }
             }
@@ -668,7 +673,7 @@ fun NoteContent(
             }
 
             if (showAddTagAlertBox.value) {
-                AddTag(viewModel) {
+                AddTag(viewModel,showAddingTagDialogBox,listOfSelectedTags,showSelectTagAlertBox) {
                     showAddTagAlertBox.value = false
                 }
             }

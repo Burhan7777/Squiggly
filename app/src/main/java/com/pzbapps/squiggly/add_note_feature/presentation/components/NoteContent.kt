@@ -107,6 +107,8 @@ fun NoteContent(
         mutableStateOf("")
     }
 
+    val showAddingTagDialogBox = remember { mutableStateOf(false) }
+
     val keyboardController = LocalSoftwareKeyboardController.current
     val imeVisible = WindowInsets.isImeVisible
 
@@ -134,7 +136,7 @@ fun NoteContent(
         }
 
         if (showAddTagAlertBox.value) {
-            AddTag(viewModel) {
+            AddTag(viewModel, showAddingTagDialogBox,listOFSelectedTags,showSelectTagAlertBox) {
                 showAddTagAlertBox.value = false
             }
         }

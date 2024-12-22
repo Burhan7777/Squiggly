@@ -68,6 +68,9 @@ fun BulletPointNotebook(
     val showSelectTagAlertBox = remember { mutableStateOf(false) }
     val showAddTagAlertBox = remember { mutableStateOf(false) }
 
+    val showAddingTagDialogBox = remember { mutableStateOf(false) } // THIS DIALOG BOX IS SHOWN
+    // WHEN WE PRESS SAVE BUTTON IN ADD TAG DIALOG BOX
+
 
     viewModel.getNoteBook()
     val notebooks: ArrayList<String> =
@@ -90,7 +93,7 @@ fun BulletPointNotebook(
         }
 
         if (showAddTagAlertBox.value) {
-            AddTag(viewModel) {
+            AddTag(viewModel,showAddingTagDialogBox,listOfSelectedTags,showSelectTagAlertBox) {
                 showAddTagAlertBox.value = false
             }
         }

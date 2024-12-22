@@ -85,6 +85,7 @@ fun CheckboxNote(
 
     val showSelectTagAlertBox = remember { mutableStateOf(false) }
     val showAddTagAlertBox = remember { mutableStateOf(false) }
+    val showAddingTagDialogBox = remember { mutableStateOf(false) }
 
 
 
@@ -109,7 +110,7 @@ fun CheckboxNote(
         }
 
         if (showAddTagAlertBox.value) {
-            AddTag(viewModel) {
+            AddTag(viewModel,showAddingTagDialogBox,listOfSelectedTags,showSelectTagAlertBox) {
                 showAddTagAlertBox.value = false
             }
         }

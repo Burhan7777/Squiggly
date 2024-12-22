@@ -10,7 +10,7 @@ fun checkIfNotebookAlreadyExists(
     viewModel.getAllNotebooks()
     var listOfNotebooks = viewModel.listOfNoteBooks
     for (i in listOfNotebooks) {
-        if (i.name == notebookText.value) {
+        if (i.name.trim() == notebookText.value.trim()) {
             return true
         }
     }

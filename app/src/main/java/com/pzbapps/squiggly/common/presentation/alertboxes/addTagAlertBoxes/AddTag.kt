@@ -12,9 +12,11 @@ import androidx.compose.material.Text
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -26,12 +28,21 @@ import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.edit_note_feature.domain.usecase.getPasswordFromFirebase
 import com.pzbapps.squiggly.edit_note_feature.presentation.components.alertBoxes.lockTheNote
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
-fun AddTag(viewModel: MainActivityViewModel, onDismiss: () -> Unit) {
+fun AddTag(
+    viewModel: MainActivityViewModel,
+    showAddingTagDialogBox: MutableState<Boolean>,
+    selectedTags: SnapshotStateList<String>,
+    showSelectTagAlertBox: MutableState<Boolean>,
+    onDismiss: () -> Unit
+) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+
     val tagName = remember { mutableStateOf("") }
     androidx.compose.material3.AlertDialog(
         onDismissRequest = {
@@ -90,14 +101,18 @@ fun AddTag(viewModel: MainActivityViewModel, onDismiss: () -> Unit) {
                     val tags = viewModel.tags
                     for (tag in tags) {
                         if (tag.name.trim() == tagName.value.trim()) {
-                            Toast.makeText(context, "Tag already exists", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Tag already exists", Toast.LENGTH_SHORT)
+                                .show()
                             return@Button
                         }
                     }
                     viewModel.addTag(tag)
-                    viewModel.getAllTags()
+                    selectedTags.add(tagName.value)
+                    showSelectTagAlertBox.value = false
                     onDismiss()
                     Toast.makeText(context, "Tag Added", Toast.LENGTH_SHORT).show()
+
+
                 },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.onPrimary,

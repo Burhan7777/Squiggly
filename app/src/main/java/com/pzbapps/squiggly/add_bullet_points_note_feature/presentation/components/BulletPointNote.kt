@@ -78,6 +78,7 @@ fun BulletPointNote(
 
     val showSelectTagAlertBox = remember { mutableStateOf(false) }
     val showAddTagAlertBox = remember { mutableStateOf(false) }
+    val showAddingTagDialogBox = remember { mutableStateOf(false) }
 
 
     viewModel.getNoteBook()
@@ -101,7 +102,7 @@ fun BulletPointNote(
         }
 
         if (showAddTagAlertBox.value) {
-            AddTag(viewModel) {
+            AddTag(viewModel,showAddingTagDialogBox,listOfSelectedTags,showSelectTagAlertBox) {
                 showAddTagAlertBox.value = false
             }
         }

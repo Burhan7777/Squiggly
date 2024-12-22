@@ -102,6 +102,9 @@ fun NoteContentNoteInLockedScreen(
         focusRequester.requestFocus()
     }
 
+    val showAddingTagDialogBox = remember { mutableStateOf(false) } // THIS DIALOG BOX IS SHOWN
+    // WHEN WE PRESS SAVE BUTTON IN ADD TAG DIALOG BOX
+
 //    val listOfNoteBooks = viewModel.getNoteBooks.observeAsState().value
 //    Log.i("notebooks", listOfNoteBooks?.size.toString())
 
@@ -148,7 +151,7 @@ fun NoteContentNoteInLockedScreen(
         }
 
         if (showAddTagAlertBox.value) {
-            AddTag(viewModel) {
+            AddTag(viewModel,showAddingTagDialogBox,listOFSelectedTags,showSelectTagAlertBox) {
                 showAddTagAlertBox.value = false
             }
         }

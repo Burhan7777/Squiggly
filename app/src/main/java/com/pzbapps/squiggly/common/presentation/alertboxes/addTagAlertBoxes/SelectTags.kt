@@ -66,6 +66,7 @@ fun SelectTags(
         ),
         containerColor = androidx.compose.material.MaterialTheme.colors.primaryVariant,
         title = {
+            viewModel.getAllTags()
             Column() {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,

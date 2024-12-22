@@ -98,6 +98,8 @@ fun NoteContentNoteInNotebook(
     val showSelectTagAlertBox = remember { mutableStateOf(false) }
     val showAddTagAlertBox = remember { mutableStateOf(false) }
 
+    val showAddingTagDialogBox = remember { mutableStateOf(false) } // THIS DIALOG BOX IS SHOWN
+    // WHEN WE PRESS SAVE BUTTON IN ADD TAG DIALOG BOX
     LaunchedEffect(key1 = Unit) {
         focusRequester.requestFocus()
     }
@@ -149,7 +151,7 @@ fun NoteContentNoteInNotebook(
         }
 
         if (showAddTagAlertBox.value) {
-            AddTag(viewModel) {
+            AddTag(viewModel,showAddingTagDialogBox,listOFSelectedTags,showSelectTagAlertBox) {
                 showAddTagAlertBox.value = false
             }
         }
