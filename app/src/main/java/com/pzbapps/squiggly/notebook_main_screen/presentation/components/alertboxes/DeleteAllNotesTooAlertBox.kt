@@ -26,9 +26,10 @@ fun DeleteAllNotesToo(
     showDeleteNotebookDialogBox: MutableState<Boolean>,
     onDismiss: () -> Unit
 ) {
-    androidx.compose.material3.AlertDialog(onDismissRequest = {
-        onDismiss()
-    },
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = {
+            onDismiss()
+        },
         shape = MaterialTheme.shapes.medium.copy(
             topStart = CornerSize(15.dp),
             topEnd = CornerSize(15.dp),
@@ -59,14 +60,13 @@ fun DeleteAllNotesToo(
             Button(
                 onClick = {
                     viewModel.getAllNotesByNotebook(name)
-                    viewModel.listOfNotesByNotebookLiveData.observe(activity) {
-                        for (i in it) {
-                            val notebook = i.copy(
-                                deletedNote = true,
-                                timePutInTrash = System.currentTimeMillis()
-                            )
-                            viewModel.updateNote(notebook)
-                        }
+                    var listOfNotebooks = viewModel.listOfNotesByNotebook
+                    for (i in listOfNotebooks) {
+                        val notebook = i.copy(
+                            deletedNote = true,
+                            timePutInTrash = System.currentTimeMillis()
+                        )
+                        viewModel.updateNote(notebook)
                     }
                     onDismiss()
                     showDeleteNotebookDialogBox.value = true
@@ -91,13 +91,12 @@ fun DeleteAllNotesToo(
             OutlinedButton(
                 onClick = {
                     viewModel.getAllNotesByNotebook(name)
-                    viewModel.listOfNotesByNotebookLiveData.observe(activity) {
-                        for (i in it) {
-                            val notebook = i.copy(
-                                notebook = Constant.NOT_CATEGORIZED
-                            )
-                            viewModel.updateNote(notebook)
-                        }
+                    var listOfNotebooks = viewModel.listOfNotesByNotebook
+                    for (i in listOfNotebooks) {
+                        val notebook = i.copy(
+                            notebook = Constant.NOT_CATEGORIZED
+                        )
+                        viewModel.updateNote(notebook)
                     }
                     onDismiss()
                     showDeleteNotebookDialogBox.value = true

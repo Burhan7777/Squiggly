@@ -12,6 +12,7 @@ v4.0.0 - beta
 7) Add fonts to bullet points and checkbox. 
 8) Restore files should be in latest first (sort by date). 
 9) Check with different devices before launching the app to check migration.. (Abuji, mummy, sadaf, baji , daeda).
+10) Notes removed from other notebooks when some notebook is deleted.
 
 v3.3.0-beta
 ---------------------------
