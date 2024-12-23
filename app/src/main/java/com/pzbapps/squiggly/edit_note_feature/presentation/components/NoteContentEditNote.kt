@@ -887,10 +887,11 @@ fun AlertDialogBox(
             androidx.compose.material.Button(
                 onClick = {
                     var result = checkIfNotebookAlreadyExists(viewModel, notebookText)
-                    if (result) {
+                    if (!result) {
                         val noteBook = NoteBook(0, notebookText.value)
                         viewModel.addNoteBook(noteBook)
                         viewModel.notebooks.add(notebookText.value)
+                        viewModel.getAllNotebooks()
                         onDismiss()
                     } else {
                         Toast.makeText(context, "Notebook already exists", Toast.LENGTH_SHORT)
