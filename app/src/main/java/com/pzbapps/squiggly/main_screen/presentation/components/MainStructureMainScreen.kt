@@ -1,6 +1,7 @@
 package com.pzbapps.squiggly.main_screen.presentation.components
 
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -37,11 +38,13 @@ import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions.SCANNER
 import com.google.mlkit.vision.documentscanner.GmsDocumentScanning
 import com.google.mlkit.vision.documentscanner.GmsDocumentScanningResult
 import com.pzbapps.squiggly.common.domain.utils.CheckInternet
+import com.pzbapps.squiggly.common.domain.utils.Constant
 import com.pzbapps.squiggly.common.domain.utils.NavigationItems
 import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.common.presentation.Screens
+import com.pzbapps.squiggly.common.presentation.alertboxes.ratingDialogBox.ShowRatingDialogBox
 import com.pzbapps.squiggly.edit_note_feature.domain.usecase.checkIfUserHasCreatedPassword
 import com.pzbapps.squiggly.main_screen.presentation.components.alertboxes.AlertDialogBoxEnterPasswordToOpenLockedNotes
 import com.pzbapps.squiggly.main_screen.presentation.components.alertboxes.DeleteTagAlertBox
@@ -418,6 +421,16 @@ fun MainStructureMainScreen(
                     .padding(paddingValues)
                     .fillMaxSize()
             ) {
+                val sharedPreference = activity.getSharedPreferences(
+                    Constant.SHOW_RATING_DIALOG_BOX,
+                    Context.MODE_PRIVATE
+                )
+
+                val value = sharedPreference.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
+                println(value)
+                if (value == 5) {
+                    ShowRatingDialogBox { }
+                }
                 TopSearchBar(
                     navHostController,
                     drawerState,
@@ -482,7 +495,12 @@ fun MainStructureMainScreen(
 
                 }
                 if (showDeleteTagAlertBox.value) {
-                    DeleteTagAlertBox(viewModel, tag.value, showProgressOfRemovingTag, showEditTagsAlertBox) {
+                    DeleteTagAlertBox(
+                        viewModel,
+                        tag.value,
+                        showProgressOfRemovingTag,
+                        showEditTagsAlertBox
+                    ) {
                         showDeleteTagAlertBox.value = false
                     }
                 }

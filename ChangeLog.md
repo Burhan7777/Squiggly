@@ -12,6 +12,8 @@ v.4.1.0-rc
 backup created every 24 hours,voice to text feature,premium batch , support to 6 months development time)
 7) Shows premium wall for the first time the user starts the app. Repeat premium wall after every 5 times the app starts.
 8) Add firebase events to trial period to see conversion on main page.
+9) Change "contains ads" in play store.
+10) Display buy premium at top bar.
 
 v-4.0.1-beta
 ---------------------------

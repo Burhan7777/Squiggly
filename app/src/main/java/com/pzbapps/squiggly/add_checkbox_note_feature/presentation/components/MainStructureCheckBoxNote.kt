@@ -1,5 +1,6 @@
 package com.pzbapps.squiggly.add_checkbox_note_feature.presentation.components
 
+import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
@@ -42,6 +43,7 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import com.pzbapps.squiggly.add_note_feature.presentation.components.BottomSheet.AddNoteBottomSheet
 import com.pzbapps.squiggly.add_note_feature.presentation.components.DiscardNoteAlertBox
+import com.pzbapps.squiggly.common.domain.utils.Constant
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.common.presentation.alertboxes.AlertDialogBoxTrialEnded
@@ -80,19 +82,55 @@ fun MainStructureCheckBoxNote(
     var fontFamilyString = remember { mutableStateOf("") }
 
     when (fontFamily.value) {
-        com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyRegular -> fontFamilyString.value = com.pzbapps.squiggly.common.presentation.FontFamily.lufgaRegular
-        com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyBold -> fontFamilyString.value = com.pzbapps.squiggly.common.presentation.FontFamily.lufgaBold
-        com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyExtraLight -> fontFamilyString.value = com.pzbapps.squiggly.common.presentation.FontFamily.lufgaextraLight
-        com.pzbapps.squiggly.common.presentation.FontFamily.pacificoRegular -> fontFamilyString.value = com.pzbapps.squiggly.common.presentation.FontFamily.pacificoString
-        com.pzbapps.squiggly.common.presentation.FontFamily.parkinsons -> fontFamilyString.value = com.pzbapps.squiggly.common.presentation.FontFamily.parkinsonsString
-        com.pzbapps.squiggly.common.presentation.FontFamily.jaro -> fontFamilyString.value = com.pzbapps.squiggly.common.presentation.FontFamily.jaroString
-        com.pzbapps.squiggly.common.presentation.FontFamily.dancingScript -> fontFamilyString.value = com.pzbapps.squiggly.common.presentation.FontFamily.dancingScriptString
-        com.pzbapps.squiggly.common.presentation.FontFamily.doto -> fontFamilyString.value = com.pzbapps.squiggly.common.presentation.FontFamily.dotoString
-        com.pzbapps.squiggly.common.presentation.FontFamily.edu -> fontFamilyString.value = com.pzbapps.squiggly.common.presentation.FontFamily.eduString
-        com.pzbapps.squiggly.common.presentation.FontFamily.lobster -> fontFamilyString.value = com.pzbapps.squiggly.common.presentation.FontFamily.lobsterString
-        com.pzbapps.squiggly.common.presentation.FontFamily.playfair -> fontFamilyString.value = com.pzbapps.squiggly.common.presentation.FontFamily.playfairString
-        com.pzbapps.squiggly.common.presentation.FontFamily.poppins -> fontFamilyString.value = com.pzbapps.squiggly.common.presentation.FontFamily.poppinsString
+        com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyRegular -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.lufgaRegular
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyBold -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.lufgaBold
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyExtraLight -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.lufgaextraLight
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.pacificoRegular -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.pacificoString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.parkinsons -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.parkinsonsString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.jaro -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.jaroString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.dancingScript -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.dancingScriptString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.doto -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.dotoString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.edu -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.eduString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.lobster -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.lobsterString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.playfair -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.playfairString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.poppins -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.poppinsString
+
         else -> com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyRegular
+    }
+
+    val sharedPreferences =
+        activity.getSharedPreferences(Constant.SHOW_RATING_DIALOG_BOX, Context.MODE_PRIVATE)
+    val keyExists = sharedPreferences.contains(Constant.SHOW_RATING_DIALOG_BOX_KEY)
+
+    if (!keyExists) {
+        val createSharedPreferences =
+            activity.getSharedPreferences(Constant.SHOW_RATING_DIALOG_BOX, Context.MODE_PRIVATE)
+                .edit()
+        createSharedPreferences.putInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
+        createSharedPreferences.apply()
     }
 
 //    var mutableListOfCheckboxTexts = remember {
@@ -231,6 +269,17 @@ fun MainStructureCheckBoxNote(
     var remember = rememberCoroutineScope()
     BackHandler {
         // keyboardController?.hide()
+        var value = sharedPreferences.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
+        var newValue = value + 1
+
+        val createSharedPreferences =
+            sharedPreferences.edit()
+
+        createSharedPreferences.putInt(
+            Constant.SHOW_RATING_DIALOG_BOX_KEY,
+            newValue
+        )
+        createSharedPreferences.apply()
         remember.launch(Dispatchers.Main) {
             count.value++
             navController.navigateUp()
@@ -304,6 +353,18 @@ fun MainStructureCheckBoxNote(
                             listOfCheckedNotes,
                             mutableListConverted
                         )
+
+                        var value = sharedPreferences.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
+                        var newValue = value + 1
+
+                        val createSharedPreferences =
+                            sharedPreferences.edit()
+
+                        createSharedPreferences.putInt(
+                            Constant.SHOW_RATING_DIALOG_BOX_KEY,
+                            newValue
+                        )
+                        createSharedPreferences.apply()
                         if (title.value.isNotEmpty() || (mutableListConverted.size != 1 || mutableListConverted[0].isNotEmpty())) {
                             if (backgroundColor.value != backgroundColor1) {
                                 val note = Note(
@@ -389,6 +450,21 @@ fun MainStructureCheckBoxNote(
                             listOfCheckedNotes,
                             mutableListConverted
                         )
+
+                        var value = sharedPreferences.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
+                        var newValue = value + 1
+
+                        val createSharedPreferences =
+                            sharedPreferences.edit()
+
+                        createSharedPreferences.putInt(
+                            Constant.SHOW_RATING_DIALOG_BOX_KEY,
+                            newValue
+                        )
+                        createSharedPreferences.apply()
+
+
+
 
                         if (title.value.isNotEmpty() || (mutableListConverted.size != 1 || mutableListConverted[0].isNotEmpty())) {
                             if (backgroundColor.value != backgroundColor1) {
