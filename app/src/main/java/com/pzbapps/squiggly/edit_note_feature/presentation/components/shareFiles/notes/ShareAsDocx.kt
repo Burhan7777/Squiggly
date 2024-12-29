@@ -15,7 +15,7 @@ fun exportAndShareDocx(
 ) {
     var fileName = UUID.randomUUID()
     val docxFile = File(context.cacheDir, "$fileName.docx")
-
+    println("TItle:$title")
     // Call the Python function to create the docx file
     val python = Python.getInstance()
     val module = python.getModule("shareNoteAsDocx")

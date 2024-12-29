@@ -1,6 +1,23 @@
 -------------------------- CHANGE LOG------------------------
 
 
+v.4.1.0-rc
+---------------------------
+1) Full launch.
+2) Fixes bug of document scanner and share as Docx.
+3) Rating dialog box.
+4) Firebase event on both option of rating app.
+5) Adds in app purchases for premium users. 19 rs / month.
+6) (Ad free, scan documents to pdf, share as pdf , share as docx , premium fonts , 
+backup created every 24 hours,voice to text feature,premium batch , support to 6 months development time)
+7) Shows premium wall for the first time the user starts the app. Repeat premium wall after every 5 times the app starts.
+8) Add firebase events to trial period to see conversion on main page.
+
+v-4.0.1-beta
+---------------------------
+1) Fixes bug of crashing app on sharing notes as docx.
+
+
 v4.0.0 - beta
 ---------------------------
 1) Adds tags.
