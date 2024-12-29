@@ -7,6 +7,7 @@ import com.chaquo.python.PyObject
 import com.chaquo.python.Python
 import java.io.File
 import java.io.FileOutputStream
+import java.util.UUID
 
 fun exportBulletPointsToDocx(context: Context, title: String, bulletPoints: ArrayList<String>) {
     // Initialize Python
@@ -15,13 +16,14 @@ fun exportBulletPointsToDocx(context: Context, title: String, bulletPoints: Arra
         py.getModule("shareNotesAsDocxBulletPoints") // The name of your Python file without .py
 
     // Call the Python function to get the .docx binary content
+    var fileName = UUID.randomUUID()
     val result: PyObject =
         pyObj.callAttr("export_bullet_points_to_docx", title, bulletPoints.toTypedArray())
 
 
     val docxBytes = result.toJava(ByteArray::class.java)
     // Save the binary content to a .docx file in cache
-    val filePath = File(context.cacheDir, "$title.docx")
+    val filePath = File(context.cacheDir, "$fileName.docx")
     FileOutputStream(filePath).use { fos ->
         fos.write(docxBytes)
     }

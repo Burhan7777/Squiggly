@@ -7,6 +7,7 @@ import androidx.core.content.FileProvider
 import com.chaquo.python.Python
 import java.io.File
 import java.io.FileOutputStream
+import java.util.UUID
 
 fun exportToDocxCheckBoxes(
     context: Context,
@@ -34,9 +35,10 @@ fun exportToDocxCheckBoxes(
 
     // Get the byte array of the file content
     val docxBytes = result.toJava(ByteArray::class.java)
+    var fileName = UUID.randomUUID()
 
     // Create a temporary file to share
-    val docxFile = File(context.cacheDir, "${title.replace(" ", "_")}_notes.docx")
+    val docxFile = File(context.cacheDir, "$fileName.docx")
     FileOutputStream(docxFile).use { outputStream ->
         outputStream.write(docxBytes)
     }
