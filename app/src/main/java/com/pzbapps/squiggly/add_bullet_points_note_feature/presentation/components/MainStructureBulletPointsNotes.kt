@@ -1,5 +1,6 @@
 package com.pzbapps.squiggly.add_bullet_points_note_feature.presentation.components
 
+import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
@@ -43,6 +44,7 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import com.pzbapps.squiggly.add_note_feature.presentation.components.BottomSheet.AddNoteBottomSheet
 import com.pzbapps.squiggly.add_note_feature.presentation.components.DiscardNoteAlertBox
+import com.pzbapps.squiggly.common.domain.utils.Constant
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.common.presentation.alertboxes.AlertDialogBoxTrialEnded
@@ -142,6 +144,11 @@ fun MainStructureBulletPointsNotes(
 
         else -> com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyRegular
     }
+
+    var sharedPreferences = activity.getSharedPreferences(
+        Constant.SHOW_RATING_DIALOG_BOX,
+        Context.MODE_PRIVATE
+    )
 
     LaunchedEffect(key1 = true) {
         if (mutableListOfBulletPointsNotes.isEmpty()) {
@@ -246,6 +253,17 @@ fun MainStructureBulletPointsNotes(
     var remember = rememberCoroutineScope()
     BackHandler {
         // keyboardController?.hide()
+        var value = sharedPreferences.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
+        var newValue = value + 1
+
+        val createSharedPreferences =
+            sharedPreferences.edit()
+
+        createSharedPreferences.putInt(
+            Constant.SHOW_RATING_DIALOG_BOX_KEY,
+            newValue
+        )
+        createSharedPreferences.apply()
         remember.launch(Dispatchers.Main) {
             count.value++
             navController.popBackStack()
@@ -317,6 +335,17 @@ fun MainStructureBulletPointsNotes(
                 title = { Text(text = "") },
                 navigationIcon = {
                     IconButton(onClick = {
+                        var value = sharedPreferences.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
+                        var newValue = value + 1
+
+                        val createSharedPreferences =
+                            sharedPreferences.edit()
+
+                        createSharedPreferences.putInt(
+                            Constant.SHOW_RATING_DIALOG_BOX_KEY,
+                            newValue
+                        )
+                        createSharedPreferences.apply()
                         convertMutableStateIntoString(
                             mutableListOfBulletPointsNotes,
                             mutableListConverted
@@ -406,6 +435,17 @@ fun MainStructureBulletPointsNotes(
                         )
                     }
                     IconButton(onClick = {
+                        var value = sharedPreferences.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
+                        var newValue = value + 1
+
+                        val createSharedPreferences =
+                            sharedPreferences.edit()
+
+                        createSharedPreferences.putInt(
+                            Constant.SHOW_RATING_DIALOG_BOX_KEY,
+                            newValue
+                        )
+                        createSharedPreferences.apply()
                         convertMutableStateIntoString(
                             mutableListOfBulletPointsNotes,
                             mutableListConverted

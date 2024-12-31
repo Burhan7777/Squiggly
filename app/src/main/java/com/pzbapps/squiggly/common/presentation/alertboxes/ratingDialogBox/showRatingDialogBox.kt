@@ -1,5 +1,10 @@
 package com.pzbapps.squiggly.common.presentation.alertboxes.ratingDialogBox
 
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.Button
@@ -12,14 +17,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.pzbapps.squiggly.common.domain.utils.Constant
 import com.pzbapps.squiggly.common.presentation.FontFamily
+import com.pzbapps.squiggly.common.presentation.MainActivity
 
 @Composable
-fun ShowRatingDialogBox(onDismiss: () -> Unit) {
+fun ShowRatingDialogBox(activity: MainActivity, onDismiss: () -> Unit) {
     var scope = rememberCoroutineScope()
     androidx.compose.material3.AlertDialog(
         onDismissRequest = {
-            onDismiss()
+
         },
         shape = MaterialTheme.shapes.medium.copy(
             topStart = CornerSize(15.dp),
@@ -58,6 +65,26 @@ fun ShowRatingDialogBox(onDismiss: () -> Unit) {
             Button(
                 onClick = {
 
+                    val createSharedPreferences =
+                        activity.getSharedPreferences(Constant.HIDE_RATING_DIALOG_BOX, Context.MODE_PRIVATE)
+                            .edit()
+                    createSharedPreferences.putBoolean(Constant.HIDE_RATING_DIALOG_BOX_KEY, true)
+                    createSharedPreferences.apply()
+
+                    try {
+                        var intent = Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("https://play.google.com/store/apps/details?id=com.pzbapps.squiggly")
+                        )
+                        activity.startActivity(intent)
+                    } catch (e: ActivityNotFoundException) {
+                        Toast.makeText(
+                            activity,
+                            "No app found to open this link",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    onDismiss()
                 },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.onPrimary,
@@ -75,7 +102,19 @@ fun ShowRatingDialogBox(onDismiss: () -> Unit) {
         },
         dismissButton = {
             OutlinedButton(
-                onClick = { onDismiss() },
+                onClick = {
+                    val sharedPreference = activity.getSharedPreferences(
+                        Constant.SHOW_RATING_DIALOG_BOX,
+                        Context.MODE_PRIVATE
+                    )
+
+                    var value = sharedPreference.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
+                    var editSF = sharedPreference.edit()
+                    editSF.putInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, ++value)
+                    editSF.apply()
+
+                    onDismiss()
+                },
                 shape = MaterialTheme.shapes.medium.copy(
                     topStart = CornerSize(15.dp),
                     topEnd = CornerSize(15.dp),
@@ -88,7 +127,8 @@ fun ShowRatingDialogBox(onDismiss: () -> Unit) {
                     contentColor = MaterialTheme.colors.onPrimary
                 ),
             ) {
-                Text(text = "Already rated", fontFamily = FontFamily.fontFamilyRegular)
+
+                Text(text = "Remind me later", fontFamily = FontFamily.fontFamilyRegular)
             }
         }
     )

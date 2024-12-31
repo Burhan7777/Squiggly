@@ -121,17 +121,12 @@ fun MainStructureCheckBoxNote(
         else -> com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyRegular
     }
 
-    val sharedPreferences =
-        activity.getSharedPreferences(Constant.SHOW_RATING_DIALOG_BOX, Context.MODE_PRIVATE)
-    val keyExists = sharedPreferences.contains(Constant.SHOW_RATING_DIALOG_BOX_KEY)
+    var sharedPreferences = activity.getSharedPreferences(
+        Constant.SHOW_RATING_DIALOG_BOX,
+        Context.MODE_PRIVATE
+    )
 
-    if (!keyExists) {
-        val createSharedPreferences =
-            activity.getSharedPreferences(Constant.SHOW_RATING_DIALOG_BOX, Context.MODE_PRIVATE)
-                .edit()
-        createSharedPreferences.putInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
-        createSharedPreferences.apply()
-    }
+
 
 //    var mutableListOfCheckboxTexts = remember {
 //        mutableStateListOf<MutableState<String>>()
@@ -269,6 +264,7 @@ fun MainStructureCheckBoxNote(
     var remember = rememberCoroutineScope()
     BackHandler {
         // keyboardController?.hide()
+
         var value = sharedPreferences.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
         var newValue = value + 1
 
@@ -365,6 +361,7 @@ fun MainStructureCheckBoxNote(
                             newValue
                         )
                         createSharedPreferences.apply()
+
                         if (title.value.isNotEmpty() || (mutableListConverted.size != 1 || mutableListConverted[0].isNotEmpty())) {
                             if (backgroundColor.value != backgroundColor1) {
                                 val note = Note(

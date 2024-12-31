@@ -30,5 +30,7 @@ object Constant {
     const val SORT_ORDER_VALUE_2 = "modified date"
     const val SHOW_RATING_DIALOG_BOX = "show_rating_dialog_box"
     const val SHOW_RATING_DIALOG_BOX_KEY = "show_rating_dialog_box_key"
+    const val HIDE_RATING_DIALOG_BOX = "hide_rating_dialog_box"
+    const val HIDE_RATING_DIALOG_BOX_KEY = "hide_rating_dialog_box_key"
 
 }

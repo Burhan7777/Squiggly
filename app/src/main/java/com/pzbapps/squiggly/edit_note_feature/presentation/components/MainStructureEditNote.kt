@@ -1,5 +1,6 @@
 package com.pzbapps.squiggly.edit_note_feature.presentation.components
 
+import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
@@ -280,6 +281,11 @@ fun MainStructureEditNote(
         }
     }
 
+
+    var sharedPreferences = activity.getSharedPreferences(
+        Constant.SHOW_RATING_DIALOG_BOX,
+        Context.MODE_PRIVATE
+    )
 
     LaunchedEffect(key1 = true) {
         // WindowCompat.setDecorFitsSystemWindows(activity.window, false)
@@ -569,6 +575,18 @@ fun MainStructureEditNote(
 
     var remember = rememberCoroutineScope()
     BackHandler {
+        var value = sharedPreferences.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
+        var newValue = value + 1
+
+        val createSharedPreferences =
+            sharedPreferences.edit()
+
+        createSharedPreferences.putInt(
+            Constant.SHOW_RATING_DIALOG_BOX_KEY,
+            newValue
+        )
+        createSharedPreferences.apply()
+
         var formattedText =
             removeHighlights(richStateText.value.toHtml())
         richStateText.value.setHtml(formattedText)
@@ -699,6 +717,17 @@ fun MainStructureEditNote(
                 ),
                 navigationIcon = {
                     IconButton(onClick = {
+                        var value = sharedPreferences.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
+                        var newValue = value + 1
+
+                        val createSharedPreferences =
+                            sharedPreferences.edit()
+
+                        createSharedPreferences.putInt(
+                            Constant.SHOW_RATING_DIALOG_BOX_KEY,
+                            newValue
+                        )
+                        createSharedPreferences.apply()
                         var formattedText =
                             removeHighlights(richStateText.value.toHtml())
                         richStateText.value.setHtml(formattedText)
@@ -923,6 +952,17 @@ fun MainStructureEditNote(
                         )
                     }
                     IconButton(onClick = {
+                        var value = sharedPreferences.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
+                        var newValue = value + 1
+
+                        val createSharedPreferences =
+                            sharedPreferences.edit()
+
+                        createSharedPreferences.putInt(
+                            Constant.SHOW_RATING_DIALOG_BOX_KEY,
+                            newValue
+                        )
+                        createSharedPreferences.apply()
                         var formattedText =
                             removeHighlights(richStateText.value.toHtml())
                         richStateText.value.setHtml(formattedText)

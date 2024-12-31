@@ -1,6 +1,7 @@
 package com.pzbapps.squiggly.main_screen.presentation.components
 
 import android.app.Activity.RESULT_OK
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -102,6 +103,33 @@ fun MainStructureMainScreen(
     val tag =
         remember { mutableStateOf("") } // WE GET THE SELECTED TAG TO REMOVE IT. ITS PASSED TO NOTE
     // AND SET THEIR IN THE ONCLICK OF THE DELETE BUTTON IN EDIT TAG ALERT BOX
+
+    val hideRatingDialogBox = remember { mutableStateOf(true) }
+
+    val sharedPreferences =
+        activity.getSharedPreferences(Constant.HIDE_RATING_DIALOG_BOX, Context.MODE_PRIVATE)
+    val keyExists = sharedPreferences.contains(Constant.HIDE_RATING_DIALOG_BOX_KEY)
+
+    if (!keyExists) {
+        val createSharedPreferences =
+            activity.getSharedPreferences(Constant.HIDE_RATING_DIALOG_BOX, Context.MODE_PRIVATE)
+                .edit()
+        createSharedPreferences.putBoolean(Constant.HIDE_RATING_DIALOG_BOX_KEY, false)
+        createSharedPreferences.apply()
+    }
+
+    val sharedPreferencesShowDialog =
+        activity.getSharedPreferences(Constant.SHOW_RATING_DIALOG_BOX, Context.MODE_PRIVATE)
+
+    val showDialogKeyExists = sharedPreferencesShowDialog.contains(Constant.SHOW_RATING_DIALOG_BOX_KEY)
+
+    if (!showDialogKeyExists) {
+        val createSharedPreferences =
+            activity.getSharedPreferences(Constant.SHOW_RATING_DIALOG_BOX, Context.MODE_PRIVATE)
+                .edit()
+        createSharedPreferences.putInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 1)
+        createSharedPreferences.apply()
+    }
 
     val options = GmsDocumentScannerOptions.Builder()
         .setScannerMode(SCANNER_MODE_FULL)
@@ -235,11 +263,19 @@ fun MainStructureMainScreen(
                                 var bundle = Bundle()
                                 bundle.putString("rate_app_pressed", "rate_app_pressed")
                                 analytics.logEvent("rate_app_pressed", bundle)
-                                var intent = Intent(
-                                    Intent.ACTION_VIEW,
-                                    Uri.parse("https://play.google.com/store/apps/details?id=com.pzbapps.squiggly")
-                                )
-                                activity.startActivity(intent)
+                                try {
+                                    var intent = Intent(
+                                        Intent.ACTION_VIEW,
+                                        Uri.parse("https://play.google.com/store/apps/details?id=com.pzbapps.squiggly")
+                                    )
+                                    activity.startActivity(intent)
+                                } catch (e: ActivityNotFoundException) {
+                                    Toast.makeText(
+                                        activity,
+                                        "No app found to open this link",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             } else if (selectedItem.value == 6) {
                                 navHostController.navigate(Screens.AboutUsScreen.route)
                             }
@@ -421,15 +457,39 @@ fun MainStructureMainScreen(
                     .padding(paddingValues)
                     .fillMaxSize()
             ) {
-                val sharedPreference = activity.getSharedPreferences(
+                // HERE WE HAVE TWO CHECKS TO SHOW THE RATING DIALOG BOX
+                // SHOW_DIALOG CHECKS THE VALUE WHICH IS INCREMENTED  WHILE SAVING
+                // NEW NOTE OR EDITING NOTE. IF USER PRESSES "REMIND ME LATER" VALUE OF INT
+                // IS INCREASED BY ONE AND IT WILL SHOW NEXT TIME WHEN CONDITIONS ARE MET
+                // IF USER PRESSES "RATE APP" BOOLEAN VALUE WILL BE SET TO TRUE WITHIN THE "SHOWRATINGDIALOGBOX" SCREEN
+                // AND HIDE_DIALOG WILL ALWAYS BE POSITIVE AND RATING DIALOG WILL NOT BE SHOWN AGAIN
+
+                val sharedPreferenceShowDialog = activity.getSharedPreferences(
                     Constant.SHOW_RATING_DIALOG_BOX,
                     Context.MODE_PRIVATE
                 )
 
-                val value = sharedPreference.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
-                println(value)
-                if (value == 5) {
-                    ShowRatingDialogBox { }
+                var showDialog =
+                    sharedPreferenceShowDialog.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
+
+                val sharedPreferenceHideDialog = activity.getSharedPreferences(
+                    Constant.HIDE_RATING_DIALOG_BOX,
+                    Context.MODE_PRIVATE
+                )
+
+                var hideDialog = sharedPreferenceHideDialog.getBoolean(
+                    Constant.HIDE_RATING_DIALOG_BOX_KEY,
+                    false
+                )
+
+                if (!hideDialog) {
+                    if (showDialog % 7 == 0) {
+                        if (hideRatingDialogBox.value) {
+                            ShowRatingDialogBox(activity) {
+                                hideRatingDialogBox.value = false
+                            }
+                        }
+                    }
                 }
                 TopSearchBar(
                     navHostController,

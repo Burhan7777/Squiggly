@@ -1,5 +1,6 @@
 package com.pzbapps.squiggly.add_note_feature.presentation.components
 
+import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
@@ -39,6 +40,7 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import com.mohamedrejeb.richeditor.model.RichTextState
 import com.pzbapps.squiggly.add_note_feature.presentation.components.BottomSheet.AddNoteBottomSheet
+import com.pzbapps.squiggly.common.domain.utils.Constant
 import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
@@ -144,6 +146,11 @@ fun MainStructureAddNote(
         FontFamily.poppins -> fontFamilyString.value = FontFamily.poppinsString
         else -> FontFamily.fontFamilyRegular
     }
+
+    var sharedPreferences = activity.getSharedPreferences(
+        Constant.SHOW_RATING_DIALOG_BOX,
+        Context.MODE_PRIVATE
+    )
 
     LaunchedEffect(richTextState.value) {
         snapshotFlow { richTextState.value.annotatedString }
@@ -328,6 +335,17 @@ fun MainStructureAddNote(
     }
 
     BackHandler {
+        var value = sharedPreferences.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
+        var newValue = value + 1
+
+        val createSharedPreferences =
+            sharedPreferences.edit()
+
+        createSharedPreferences.putInt(
+            Constant.SHOW_RATING_DIALOG_BOX_KEY,
+            newValue
+        )
+        createSharedPreferences.apply()
         var analytics = Firebase.analytics
         var bundle = Bundle()
         bundle.putString("back_handler_triggered_add_notes", "back_handler_triggered_add_notes")
@@ -381,6 +399,17 @@ fun MainStructureAddNote(
                 title = { Text(text = "") },
                 navigationIcon = {
                     IconButton(onClick = {
+                        var value = sharedPreferences.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
+                        var newValue = value + 1
+
+                        val createSharedPreferences =
+                            sharedPreferences.edit()
+
+                        createSharedPreferences.putInt(
+                            Constant.SHOW_RATING_DIALOG_BOX_KEY,
+                            newValue
+                        )
+                        createSharedPreferences.apply()
                         var analytics = Firebase.analytics
                         var bundle = Bundle()
                         bundle.putString(
@@ -470,6 +499,17 @@ fun MainStructureAddNote(
                     }
                     IconButton(onClick = {
 
+                        var value = sharedPreferences.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
+                        var newValue = value + 1
+
+                        val createSharedPreferences =
+                            sharedPreferences.edit()
+
+                        createSharedPreferences.putInt(
+                            Constant.SHOW_RATING_DIALOG_BOX_KEY,
+                            newValue
+                        )
+                        createSharedPreferences.apply()
                         if (title.value.isNotEmpty() || richTextState.value.annotatedString.text.isNotEmpty()) {
                             if (backgroundColor.value != backgroundColor1) {
                                 var note2 = Note(
