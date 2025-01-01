@@ -21,7 +21,7 @@ private val DarkColorPalette = darkColors(
     primaryVariant = secondaryColorDark,
     secondary = gradient1,
     onPrimary = white,
-    onSecondary = black
+    onSecondary = black,
 )
 
 val LightColorPalette = lightColors(
