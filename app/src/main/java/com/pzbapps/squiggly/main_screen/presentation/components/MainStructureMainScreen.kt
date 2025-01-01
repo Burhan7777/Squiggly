@@ -4,11 +4,13 @@ import android.app.Activity.RESULT_OK
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.graphics.Paint.Align
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -23,6 +25,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.CheckBox
 import androidx.compose.material3.*
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -121,7 +124,8 @@ fun MainStructureMainScreen(
     val sharedPreferencesShowDialog =
         activity.getSharedPreferences(Constant.SHOW_RATING_DIALOG_BOX, Context.MODE_PRIVATE)
 
-    val showDialogKeyExists = sharedPreferencesShowDialog.contains(Constant.SHOW_RATING_DIALOG_BOX_KEY)
+    val showDialogKeyExists =
+        sharedPreferencesShowDialog.contains(Constant.SHOW_RATING_DIALOG_BOX_KEY)
 
     if (!showDialogKeyExists) {
         val createSharedPreferences =
@@ -175,6 +179,18 @@ fun MainStructureMainScreen(
                         modifier = Modifier.padding(20.dp),
                         fontSize = 20.sp
                     )
+                    androidx.compose.material3.OutlinedButton(
+                        onClick = {
+                            navHostController.navigate(Screens.PremiumPlanScreen.route)
+                        },
+                        border = BorderStroke(1.dp, MaterialTheme.colors.onPrimary),
+                    ) {
+                        androidx.compose.material3.Text(
+                            "Go Premium",
+                            color = MaterialTheme.colors.onPrimary
+                        )
+                    }
+                }
 //                    androidx.compose.material.OutlinedButton(
 //                        onClick = {
 //                            FirebaseAuth.getInstance().signOut()
@@ -200,7 +216,6 @@ fun MainStructureMainScreen(
 //                            fontSize = 10.sp,
 //                        )
 //                    }
-                }
                 Spacer(modifier = Modifier.height(8.dp))
                 NavigationItems.navigationItems.forEachIndexed { indexed, item ->
                     NavigationDrawerItem(

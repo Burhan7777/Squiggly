@@ -76,4 +76,6 @@ sealed class Screens(val route: String) {
     object PrivacyPolicy : Screens("privacy_policy")
     object FeedbackScreen : Screens("feedback_screen")
     object ReportBugScreen : Screens("report_bug_screen")
+
+    object PremiumPlanScreen : Screens("premium_plan_screen")
 }

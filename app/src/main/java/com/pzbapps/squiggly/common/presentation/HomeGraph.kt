@@ -25,6 +25,7 @@ import com.pzbapps.squiggly.notebook_main_screen.presentation.screen.AddNoteInNo
 import com.pzbapps.squiggly.notebook_main_screen.presentation.screen.NotebookMainScreen
 import com.pzbapps.squiggly.notebook_main_screen.presentation.screen.bulletpointsscreen.BulletPointsNotebookMainScreen
 import com.pzbapps.squiggly.notebook_main_screen.presentation.screen.checkboxscreen.CheckboxNoteBookMainScreen
+import com.pzbapps.squiggly.premium_feature.presentation.screen.PremiumPlan
 import com.pzbapps.squiggly.settings_feature.screen.presentation.screens.BackupAndRestoreScreen
 import com.pzbapps.squiggly.search_main_screen_feature.presentation.screens.SearchScreen
 import com.pzbapps.squiggly.settings_feature.screen.presentation.screens.FeedbackScreen
@@ -220,6 +221,10 @@ fun NavGraphBuilder.homeGraph(
         }
         composable(Screens.ReportBugScreen.route) {
             ReportBugScreen()
+        }
+
+        composable(Screens.PremiumPlanScreen.route) {
+            PremiumPlan()
         }
 
     }
