@@ -15,6 +15,10 @@ backup created every 24 hours,voice to text feature,premium batch , support to 6
 9) Change "contains ads" in play store.
 10) Display buy premium at top bar.
 
+v-4.0.2-beta
+---------------------------
+1) Google billing added.
+
 v-4.0.1-beta
 ---------------------------
 1) Fixes bug of crashing app on sharing notes as docx.

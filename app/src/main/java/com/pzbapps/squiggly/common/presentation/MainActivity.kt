@@ -40,6 +40,9 @@ import com.pzbapps.squiggly.common.domain.utils.Constant
 import com.pzbapps.squiggly.common.presentation.alertboxes.ShowFirebaseDialogBox
 import com.pzbapps.squiggly.main_screen.domain.model.Note
 import com.pzbapps.squiggly.ui.theme.ScribbleTheme
+import com.qonversion.android.sdk.Qonversion
+import com.qonversion.android.sdk.QonversionConfig
+import com.qonversion.android.sdk.dto.QLaunchMode
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.TimeUnit
 
@@ -50,6 +53,13 @@ class MainActivity : ComponentActivity() {
     lateinit var result: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val qonversionConfig = QonversionConfig.Builder(
+            this,
+            "xPbOCckgIIHehGB6hBQk1a1WHgfyJE-0",
+            QLaunchMode.Analytics
+        ).build()
+        Qonversion.initialize(qonversionConfig)
 
         viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
         viewModel.getAllNotebooks() // WE LOAD THE NOTEBOOKS IN THE START ONLY SO THAT TO SHOW THEM EVERYWHERE NEEDED.

@@ -224,7 +224,7 @@ fun NavGraphBuilder.homeGraph(
         }
 
         composable(Screens.PremiumPlanScreen.route) {
-            PremiumPlan(navController)
+            PremiumPlan(activity, navController)
         }
 
     }

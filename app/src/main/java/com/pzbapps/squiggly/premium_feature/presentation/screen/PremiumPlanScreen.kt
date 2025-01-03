@@ -47,10 +47,18 @@ import androidx.navigation.NavHostController
 import com.pzbapps.squiggly.R
 import com.pzbapps.squiggly.common.domain.utils.Constant
 import com.pzbapps.squiggly.common.presentation.FontFamily
+import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.ui.theme.premiumColor
+import com.qonversion.android.sdk.Qonversion
+import com.qonversion.android.sdk.dto.QonversionError
+import com.qonversion.android.sdk.dto.QonversionErrorCode
+import com.qonversion.android.sdk.dto.entitlements.QEntitlement
+import com.qonversion.android.sdk.dto.offerings.QOfferings
+import com.qonversion.android.sdk.listeners.QonversionEntitlementsCallback
+import com.qonversion.android.sdk.listeners.QonversionOfferingsCallback
 
 @Composable
-fun PremiumPlan(navHostController: NavHostController) {
+fun PremiumPlan(activity: MainActivity, navHostController: NavHostController) {
 
     Column(
         modifier = Modifier
@@ -150,6 +158,42 @@ fun PremiumPlan(navHostController: NavHostController) {
 
         Button(
             onClick = {
+                Qonversion.shared.offerings(object : QonversionOfferingsCallback {
+                    override fun onSuccess(offerings: QOfferings) {
+                        val mainOffering = offerings.main
+                        println(mainOffering?.products)
+                        if (mainOffering != null && mainOffering.products.isNotEmpty()) {
+                            // Display products for sale
+                            val product = mainOffering.products[0]
+                            println(product.prettyPrice)
+                            Qonversion.shared.purchase(activity, product, callback = object :
+                                QonversionEntitlementsCallback {
+                                override fun onSuccess(entitlements: Map<String, QEntitlement>) {
+                                    val premiumEntitlement = entitlements["premium"]
+                                    if (premiumEntitlement != null && premiumEntitlement.isActive) {
+                                        // Handle active entitlement here
+                                        Toast.makeText(
+                                            activity,
+                                            "Subscription successful",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                }
+
+                                override fun onError(error: QonversionError) {
+                                    // Handle error here
+                                    if (error.code === QonversionErrorCode.PurchaseCanceled) {
+                                        // Purchase canceled by the user
+                                    }
+                                }
+                            })
+                        }
+                    }
+
+                    override fun onError(error: QonversionError) {
+                        // handle error here
+                    }
+                })
 
             },
             modifier = Modifier
@@ -180,7 +224,9 @@ fun PremiumPlan(navHostController: NavHostController) {
             "You will be charged ₹ 19.00 every month ",
             color = MaterialTheme.colors.onPrimary,
             fontFamily = FontFamily.fontFamilyRegular,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            fontSize = 13.sp,
+            modifier = Modifier.fillMaxWidth()
         )
 
         TextButton(onClick = {
@@ -189,11 +235,11 @@ fun PremiumPlan(navHostController: NavHostController) {
             Text(
                 "Cancel Subscription",
                 color = MaterialTheme.colors.onPrimary,
-                fontFamily = FontFamily.fontFamilyBold,
+                fontFamily = FontFamily.fontFamilyExtraLight,
                 textDecoration = TextDecoration.Underline,
                 fontStyle = FontStyle.Italic,
                 textAlign = TextAlign.Center,
-                fontSize = 20.sp
+                fontSize = 18.sp
             )
         }
     }
