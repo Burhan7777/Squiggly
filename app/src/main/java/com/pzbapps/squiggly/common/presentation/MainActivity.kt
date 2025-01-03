@@ -32,6 +32,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
+import com.google.android.gms.ads.MobileAds
 import com.pzbapps.squiggly.auto_save_firebase_backup_feature.BackupWorker
 import com.pzbapps.squiggly.common.domain.usecase.ShowFIrebaseMaintenanceAlertBox
 import com.pzbapps.squiggly.common.domain.usecase.ShowFirebaseOtherPurposesAlertBox
@@ -44,6 +45,9 @@ import com.qonversion.android.sdk.Qonversion
 import com.qonversion.android.sdk.QonversionConfig
 import com.qonversion.android.sdk.dto.QLaunchMode
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
 
@@ -60,6 +64,12 @@ class MainActivity : ComponentActivity() {
             QLaunchMode.Analytics
         ).build()
         Qonversion.initialize(qonversionConfig)
+
+        val backgroundScope = CoroutineScope(Dispatchers.IO)
+        backgroundScope.launch {
+            // Initialize the Google Mobile Ads SDK on a background thread.
+            MobileAds.initialize(this@MainActivity) {}
+        }
 
         viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
         viewModel.getAllNotebooks() // WE LOAD THE NOTEBOOKS IN THE START ONLY SO THAT TO SHOW THEM EVERYWHERE NEEDED.

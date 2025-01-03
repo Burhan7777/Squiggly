@@ -21,6 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Scribble"
         tools:targetApi="31">
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-1841372340473388~7831018470"/>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

@@ -172,6 +172,9 @@ dependencies {
     // QONVERSION
     implementation 'io.qonversion.android.sdk:sdk:8.2.3'
 
+    //ADMOB
+    implementation("com.google.android.gms:play-services-ads:23.6.0")
+
 
     //COLOR PICKER
   //  implementation ('com.godaddy.android.colorpicker:compose-color-picker:0.7.0')

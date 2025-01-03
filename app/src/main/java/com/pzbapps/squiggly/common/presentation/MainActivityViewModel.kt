@@ -40,6 +40,7 @@ import com.pzbapps.squiggly.search_main_screen_feature.domain.usecase.GetSearchR
 import com.pzbapps.squiggly.settings_feature.screen.data.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -167,13 +168,14 @@ class MainActivityViewModel @Inject constructor(
 
     var generatedNoteId = MutableLiveData<Long>()
 
+
+
     var listOfLockedNotebooksNote =
         mutableStateListOf<Note>() // THIS IS STORED IN VIEWMODEL BECAUSE AFTER OPENING THE NOTE AND MOVING BACK IT WILL BE EMPTY
 
     var showLockedNotes =
         mutableStateOf(false)
 
-    var timeInString = mutableStateOf("")
 
     /*  var getListOfNotesToShow = mutableListOf<AddNote>()
           private set
@@ -186,6 +188,8 @@ class MainActivityViewModel @Inject constructor(
 
     var dateCreatedOldestFirst = mutableStateOf(false)
     var dateModifiedNewestFirst = mutableStateOf(false)
+
+
 
 
     fun insertNote(note: Note) {

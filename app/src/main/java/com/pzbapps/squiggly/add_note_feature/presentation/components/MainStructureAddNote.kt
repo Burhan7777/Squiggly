@@ -36,6 +36,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavHostController
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import com.mohamedrejeb.richeditor.model.RichTextState
@@ -122,6 +126,8 @@ fun MainStructureAddNote(
     val undoStack = remember { Stack<String>() }
     val redoStack = remember { Stack<String>() }
 
+    var mInterstitialAd: InterstitialAd? = null
+
     // Track the current content as a snapshot
     var currentContent = remember { mutableStateOf("") }
 
@@ -130,6 +136,8 @@ fun MainStructureAddNote(
     var fontFamily = remember { mutableStateOf(FontFamily.fontFamilyRegular) }
 
     var fontFamilyString = remember { mutableStateOf("") }
+
+    var timeWhenNewNoteWasStarted = System.currentTimeMillis()
 
     when (fontFamily.value) {
         FontFamily.fontFamilyRegular -> fontFamilyString.value = FontFamily.lufgaRegular
@@ -151,6 +159,22 @@ fun MainStructureAddNote(
         Constant.SHOW_RATING_DIALOG_BOX,
         Context.MODE_PRIVATE
     )
+
+    val adRequest = AdRequest.Builder().build()
+
+    InterstitialAd.load(
+        activity,
+        "ca-app-pub-3940256099942544/1033173712",
+        adRequest,
+        object : InterstitialAdLoadCallback() {
+            override fun onAdFailedToLoad(adError: LoadAdError) {
+                mInterstitialAd = null
+            }
+
+            override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                mInterstitialAd = interstitialAd
+            }
+        })
 
     LaunchedEffect(richTextState.value) {
         snapshotFlow { richTextState.value.annotatedString }
@@ -335,6 +359,21 @@ fun MainStructureAddNote(
     }
 
     BackHandler {
+
+        var currentTIme = System.currentTimeMillis()
+
+        println("current time is $currentTIme")
+        println("time when app was opened is $timeWhenNewNoteWasStarted")
+
+        if (currentTIme - timeWhenNewNoteWasStarted > 10000) {
+            if (mInterstitialAd != null) {
+                mInterstitialAd?.show(activity)
+            } else {
+
+            }
+        }
+
+
         var value = sharedPreferences.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
         var newValue = value + 1
 
