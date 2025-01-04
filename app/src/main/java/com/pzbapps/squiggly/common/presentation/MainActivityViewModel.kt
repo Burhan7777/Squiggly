@@ -13,6 +13,10 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.pzbapps.squiggly.add_note_feature.data.repository.InsertNoteRepository
 import com.pzbapps.squiggly.add_note_feature.domain.model.AddNote
 import com.pzbapps.squiggly.add_note_feature.domain.model.GetNoteBook
@@ -168,6 +172,7 @@ class MainActivityViewModel @Inject constructor(
 
     var generatedNoteId = MutableLiveData<Long>()
 
+    var mInterstitialAd: InterstitialAd? = null
 
 
     var listOfLockedNotebooksNote =
@@ -190,7 +195,26 @@ class MainActivityViewModel @Inject constructor(
     var dateModifiedNewestFirst = mutableStateOf(false)
 
 
+    fun loadAndShowAd() {
 
+        val adRequest = AdRequest.Builder().build()
+
+        InterstitialAd.load(
+            application,
+            "ca-app-pub-3940256099942544/1033173712",
+            adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    mInterstitialAd = null
+                    println("Failed to load ad")
+                }
+
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                    mInterstitialAd = interstitialAd
+                    println("Ad loaded")
+                }
+            })
+    }
 
     fun insertNote(note: Note) {
         viewModelScope.launch(Dispatchers.IO) {

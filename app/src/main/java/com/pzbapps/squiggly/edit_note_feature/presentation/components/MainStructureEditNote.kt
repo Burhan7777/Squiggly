@@ -34,6 +34,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.firebase.Firebase
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.auth.auth
@@ -208,6 +212,12 @@ fun MainStructureEditNote(
     val showTags = remember { mutableStateOf(false) }
 
     val showActiveReminders = remember { mutableStateOf(false) }
+
+    var timeWhenNewNoteWasStarted = remember { System.currentTimeMillis() }
+
+    LaunchedEffect(true) {
+        viewModel.loadAndShowAd()
+    }
 
 
 
@@ -575,6 +585,16 @@ fun MainStructureEditNote(
 
     var remember = rememberCoroutineScope()
     BackHandler {
+
+
+        var currentTIme = System.currentTimeMillis()
+
+        if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
+            if (viewModel.mInterstitialAd != null) {
+                viewModel.mInterstitialAd?.show(activity)
+            } else {
+            }
+        }
         var value = sharedPreferences.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
         var newValue = value + 1
 
@@ -717,6 +737,15 @@ fun MainStructureEditNote(
                 ),
                 navigationIcon = {
                     IconButton(onClick = {
+                        var currentTIme = System.currentTimeMillis()
+
+                        if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
+                            if (viewModel.mInterstitialAd != null) {
+                                viewModel.mInterstitialAd?.show(activity)
+                            } else {
+                            }
+                        }
+
                         var value = sharedPreferences.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
                         var newValue = value + 1
 
@@ -952,6 +981,15 @@ fun MainStructureEditNote(
                         )
                     }
                     IconButton(onClick = {
+                        var currentTIme = System.currentTimeMillis()
+
+                        if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
+                            if (viewModel.mInterstitialAd != null) {
+                                viewModel.mInterstitialAd?.show(activity)
+                            } else {
+                            }
+                        }
+
                         var value = sharedPreferences.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
                         var newValue = value + 1
 

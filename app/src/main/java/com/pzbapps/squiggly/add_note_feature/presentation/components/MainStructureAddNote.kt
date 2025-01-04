@@ -126,7 +126,9 @@ fun MainStructureAddNote(
     val undoStack = remember { Stack<String>() }
     val redoStack = remember { Stack<String>() }
 
-    var mInterstitialAd: InterstitialAd? = null
+    LaunchedEffect(true) {
+        viewModel.loadAndShowAd()
+    }
 
     // Track the current content as a snapshot
     var currentContent = remember { mutableStateOf("") }
@@ -137,7 +139,7 @@ fun MainStructureAddNote(
 
     var fontFamilyString = remember { mutableStateOf("") }
 
-    var timeWhenNewNoteWasStarted = System.currentTimeMillis()
+    var timeWhenNewNoteWasStarted = remember { System.currentTimeMillis() }
 
     when (fontFamily.value) {
         FontFamily.fontFamilyRegular -> fontFamilyString.value = FontFamily.lufgaRegular
@@ -159,22 +161,6 @@ fun MainStructureAddNote(
         Constant.SHOW_RATING_DIALOG_BOX,
         Context.MODE_PRIVATE
     )
-
-    val adRequest = AdRequest.Builder().build()
-
-    InterstitialAd.load(
-        activity,
-        "ca-app-pub-3940256099942544/1033173712",
-        adRequest,
-        object : InterstitialAdLoadCallback() {
-            override fun onAdFailedToLoad(adError: LoadAdError) {
-                mInterstitialAd = null
-            }
-
-            override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                mInterstitialAd = interstitialAd
-            }
-        })
 
     LaunchedEffect(richTextState.value) {
         snapshotFlow { richTextState.value.annotatedString }
@@ -363,9 +349,9 @@ fun MainStructureAddNote(
         var currentTIme = System.currentTimeMillis()
 
 
-        if (currentTIme - timeWhenNewNoteWasStarted > 10000) {
-            if (mInterstitialAd != null) {
-                mInterstitialAd?.show(activity)
+        if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
+            if (viewModel.mInterstitialAd != null) {
+                viewModel.mInterstitialAd?.show(activity)
             } else {
 
             }
@@ -440,9 +426,9 @@ fun MainStructureAddNote(
                         var currentTIme = System.currentTimeMillis()
 
 
-                        if (currentTIme - timeWhenNewNoteWasStarted > 10000) {
-                            if (mInterstitialAd != null) {
-                                mInterstitialAd?.show(activity)
+                        if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
+                            if (viewModel.mInterstitialAd != null) {
+                                viewModel.mInterstitialAd?.show(activity)
                             } else {
 
                             }
@@ -551,9 +537,9 @@ fun MainStructureAddNote(
                         var currentTIme = System.currentTimeMillis()
 
 
-                        if (currentTIme - timeWhenNewNoteWasStarted > 10000) {
-                            if (mInterstitialAd != null) {
-                                mInterstitialAd?.show(activity)
+                        if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
+                            if (viewModel.mInterstitialAd != null) {
+                                viewModel.mInterstitialAd?.show(activity)
                             } else {
 
                             }
