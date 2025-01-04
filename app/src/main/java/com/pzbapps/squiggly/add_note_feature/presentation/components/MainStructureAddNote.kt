@@ -362,8 +362,6 @@ fun MainStructureAddNote(
 
         var currentTIme = System.currentTimeMillis()
 
-        println("current time is $currentTIme")
-        println("time when app was opened is $timeWhenNewNoteWasStarted")
 
         if (currentTIme - timeWhenNewNoteWasStarted > 10000) {
             if (mInterstitialAd != null) {
@@ -438,6 +436,18 @@ fun MainStructureAddNote(
                 title = { Text(text = "") },
                 navigationIcon = {
                     IconButton(onClick = {
+
+                        var currentTIme = System.currentTimeMillis()
+
+
+                        if (currentTIme - timeWhenNewNoteWasStarted > 10000) {
+                            if (mInterstitialAd != null) {
+                                mInterstitialAd?.show(activity)
+                            } else {
+
+                            }
+                        }
+
                         var value = sharedPreferences.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
                         var newValue = value + 1
 
@@ -537,6 +547,17 @@ fun MainStructureAddNote(
                         )
                     }
                     IconButton(onClick = {
+
+                        var currentTIme = System.currentTimeMillis()
+
+
+                        if (currentTIme - timeWhenNewNoteWasStarted > 10000) {
+                            if (mInterstitialAd != null) {
+                                mInterstitialAd?.show(activity)
+                            } else {
+
+                            }
+                        }
 
                         var value = sharedPreferences.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
                         var newValue = value + 1
