@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -43,7 +44,13 @@ import com.pzbapps.squiggly.main_screen.domain.model.Note
 import com.pzbapps.squiggly.ui.theme.ScribbleTheme
 import com.qonversion.android.sdk.Qonversion
 import com.qonversion.android.sdk.QonversionConfig
+import com.qonversion.android.sdk.dto.QEnvironment
 import com.qonversion.android.sdk.dto.QLaunchMode
+import com.qonversion.android.sdk.dto.QonversionError
+import com.qonversion.android.sdk.dto.entitlements.QEntitlement
+import com.qonversion.android.sdk.dto.entitlements.QEntitlementRenewState
+import com.qonversion.android.sdk.dto.entitlements.QEntitlementsCacheLifetime
+import com.qonversion.android.sdk.listeners.QonversionEntitlementsCallback
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -61,9 +68,47 @@ class MainActivity : ComponentActivity() {
         val qonversionConfig = QonversionConfig.Builder(
             this,
             "xPbOCckgIIHehGB6hBQk1a1WHgfyJE-0",
-            QLaunchMode.Analytics
-        ).build()
+            QLaunchMode.SubscriptionManagement
+        ).setEnvironment(QEnvironment.Sandbox)
+            .setEntitlementsCacheLifetime(QEntitlementsCacheLifetime.Month)
+            .build()
         Qonversion.initialize(qonversionConfig)
+
+        Qonversion.shared.checkEntitlements(object : QonversionEntitlementsCallback {
+            override fun onSuccess(entitlements: Map<String, QEntitlement>) {
+                val premiumEntitlement = entitlements["monhtlypremium"]
+                if (premiumEntitlement != null && premiumEntitlement.isActive) {
+                    viewModel.ifUserIsPremium = true
+                    when (premiumEntitlement.renewState) {
+                        QEntitlementRenewState.NonRenewable -> {
+                            // NonRenewable is the state of a consumable or non-consumable in-app purchase
+                        }
+
+                        QEntitlementRenewState.WillRenew -> {
+                            // WillRenew is the state of an auto-renewable subscription
+                        }
+
+                        QEntitlementRenewState.BillingIssue -> {
+                            // Prompt the user to update the payment method.
+                        }
+
+                        QEntitlementRenewState.Canceled -> {
+                            // The user has turned off auto-renewal for the subscription, but the subscription has not expired yet.
+                            // Prompt the user to resubscribe with a special offer.
+                        }
+
+                        else -> {
+
+                        }
+                    }
+                }
+            }
+
+            override fun onError(error: QonversionError) {
+                // handle error here
+                Toast.makeText(this@MainActivity, "error", Toast.LENGTH_SHORT).show()
+            }
+        })
 
         val backgroundScope = CoroutineScope(Dispatchers.IO)
         backgroundScope.launch {
@@ -222,8 +267,8 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                     val navController = rememberNavController()
-                    val noteId = remember{ mutableIntStateOf(0) }
-                     noteId.value = intent.getIntExtra("noteId", -1)
+                    val noteId = remember { mutableIntStateOf(0) }
+                    noteId.value = intent.getIntExtra("noteId", -1)
                     NavHost(
                         navController = navController,
                         viewModel,

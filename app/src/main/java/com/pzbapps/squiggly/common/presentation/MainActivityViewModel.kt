@@ -174,6 +174,8 @@ class MainActivityViewModel @Inject constructor(
 
     var mInterstitialAd: InterstitialAd? = null
 
+    var ifUserIsPremium = false
+
 
     var listOfLockedNotebooksNote =
         mutableStateListOf<Note>() // THIS IS STORED IN VIEWMODEL BECAUSE AFTER OPENING THE NOTE AND MOVING BACK IT WILL BE EMPTY

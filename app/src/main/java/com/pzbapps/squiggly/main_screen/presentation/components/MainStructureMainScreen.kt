@@ -429,7 +429,11 @@ fun MainStructureMainScreen(
                         }
                         IconButton(
                             onClick = {
-                                showSelectScriptDialogBox.value = true
+                                if (viewModel.ifUserIsPremium) {
+                                    showSelectScriptDialogBox.value = true
+                                }else{
+                                    navHostController.navigate(Screens.PremiumPlanScreen.route)
+                                }
                             }
 
                         ) {

@@ -54,8 +54,10 @@ import com.qonversion.android.sdk.dto.QonversionError
 import com.qonversion.android.sdk.dto.QonversionErrorCode
 import com.qonversion.android.sdk.dto.entitlements.QEntitlement
 import com.qonversion.android.sdk.dto.offerings.QOfferings
+import com.qonversion.android.sdk.dto.products.QProduct
 import com.qonversion.android.sdk.listeners.QonversionEntitlementsCallback
 import com.qonversion.android.sdk.listeners.QonversionOfferingsCallback
+import com.qonversion.android.sdk.listeners.QonversionProductsCallback
 
 @Composable
 fun PremiumPlan(activity: MainActivity, navHostController: NavHostController) {
@@ -114,7 +116,7 @@ fun PremiumPlan(activity: MainActivity, navHostController: NavHostController) {
         Feature("Share notes as PDF", painterResource(R.drawable.ic_share))
         Feature("Share notes as DOCX", painterResource(R.drawable.ic_share))
         Feature("Cloud Backup every 24 hours", painterResource(R.drawable.ic_cloud_backup))
-        Feature("Voice to text feature", painterResource(R.drawable.ic_voice))
+        Feature("Premium fonts", painterResource(R.drawable.ic_font))
         Feature("Exclusive premium batch", painterResource(R.drawable.ic_batch))
         Feature("Support my 6 months of development", painterResource(R.drawable.ic_support))
 
@@ -158,18 +160,17 @@ fun PremiumPlan(activity: MainActivity, navHostController: NavHostController) {
 
         Button(
             onClick = {
-                Qonversion.shared.offerings(object : QonversionOfferingsCallback {
-                    override fun onSuccess(offerings: QOfferings) {
-                        val mainOffering = offerings.main
-                        println(mainOffering?.products)
-                        if (mainOffering != null && mainOffering.products.isNotEmpty()) {
-                            // Display products for sale
-                            val product = mainOffering.products[0]
-                            println(product.prettyPrice)
+                Qonversion.shared.products(callback = object : QonversionProductsCallback {
+                    override fun onSuccess(products: Map<String, QProduct>) {
+                        // handle available products here
+                        var product = products["1_month_premium"]
+                        if (product != null) {
                             Qonversion.shared.purchase(activity, product, callback = object :
                                 QonversionEntitlementsCallback {
                                 override fun onSuccess(entitlements: Map<String, QEntitlement>) {
-                                    val premiumEntitlement = entitlements["premium"]
+                                    println(entitlements.keys)
+                                    val premiumEntitlement = entitlements["monhtlypremium"]
+                                    println(premiumEntitlement?.isActive)
                                     if (premiumEntitlement != null && premiumEntitlement.isActive) {
                                         // Handle active entitlement here
                                         Toast.makeText(
@@ -184,6 +185,12 @@ fun PremiumPlan(activity: MainActivity, navHostController: NavHostController) {
                                     // Handle error here
                                     if (error.code === QonversionErrorCode.PurchaseCanceled) {
                                         // Purchase canceled by the user
+                                        Toast.makeText(
+                                            activity,
+                                            "Purchase canceled",
+                                            Toast.LENGTH_SHORT
+                                        )
+                                            .show()
                                     }
                                 }
                             })
@@ -192,6 +199,25 @@ fun PremiumPlan(activity: MainActivity, navHostController: NavHostController) {
 
                     override fun onError(error: QonversionError) {
                         // handle error here
+                    }
+                })
+
+                Qonversion.shared.offerings(object : QonversionOfferingsCallback {
+                    override fun onSuccess(offerings: QOfferings) {
+                        val mainOffering = offerings.main
+                        println(mainOffering?.products)
+                        if (mainOffering != null && mainOffering.products.isNotEmpty()) {
+                            // Display products for sale
+                            val product = mainOffering.products[0]
+                            println(product.trialPeriod)
+                            println(product.prettyPrice)
+
+                        }
+                    }
+
+                    override fun onError(error: QonversionError) {
+                        // handle error here
+                        Toast.makeText(activity, "error", Toast.LENGTH_SHORT).show()
                     }
                 })
 
