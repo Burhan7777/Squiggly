@@ -174,7 +174,7 @@ class MainActivityViewModel @Inject constructor(
 
     var mInterstitialAd: InterstitialAd? = null
 
-    var ifUserIsPremium = false
+    var ifUserIsPremium = mutableStateOf(false)
 
 
     var listOfLockedNotebooksNote =

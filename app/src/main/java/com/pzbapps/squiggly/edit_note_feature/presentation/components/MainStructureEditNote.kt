@@ -1349,7 +1349,9 @@ fun MainStructureEditNote(
             mutableListOfCheckboxTexts,
             converted,
             mutableListOfBulletPoints,
-            convertedBulletPoints
+            convertedBulletPoints,
+            viewModel,
+            navController
         ) {
             showShareDialogBox.value = false
         }

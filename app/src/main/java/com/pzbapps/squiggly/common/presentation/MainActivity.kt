@@ -39,6 +39,7 @@ import com.pzbapps.squiggly.common.domain.usecase.ShowFIrebaseMaintenanceAlertBo
 import com.pzbapps.squiggly.common.domain.usecase.ShowFirebaseOtherPurposesAlertBox
 import com.pzbapps.squiggly.common.domain.usecase.ShowFirebaseUpdateAlertBox
 import com.pzbapps.squiggly.common.domain.utils.Constant
+import com.pzbapps.squiggly.common.domain.utils.checkIfUserIsPremium
 import com.pzbapps.squiggly.common.presentation.alertboxes.ShowFirebaseDialogBox
 import com.pzbapps.squiggly.main_screen.domain.model.Note
 import com.pzbapps.squiggly.ui.theme.ScribbleTheme
@@ -74,41 +75,6 @@ class MainActivity : ComponentActivity() {
             .build()
         Qonversion.initialize(qonversionConfig)
 
-        Qonversion.shared.checkEntitlements(object : QonversionEntitlementsCallback {
-            override fun onSuccess(entitlements: Map<String, QEntitlement>) {
-                val premiumEntitlement = entitlements["monhtlypremium"]
-                if (premiumEntitlement != null && premiumEntitlement.isActive) {
-                    viewModel.ifUserIsPremium = true
-                    when (premiumEntitlement.renewState) {
-                        QEntitlementRenewState.NonRenewable -> {
-                            // NonRenewable is the state of a consumable or non-consumable in-app purchase
-                        }
-
-                        QEntitlementRenewState.WillRenew -> {
-                            // WillRenew is the state of an auto-renewable subscription
-                        }
-
-                        QEntitlementRenewState.BillingIssue -> {
-                            // Prompt the user to update the payment method.
-                        }
-
-                        QEntitlementRenewState.Canceled -> {
-                            // The user has turned off auto-renewal for the subscription, but the subscription has not expired yet.
-                            // Prompt the user to resubscribe with a special offer.
-                        }
-
-                        else -> {
-
-                        }
-                    }
-                }
-            }
-
-            override fun onError(error: QonversionError) {
-                // handle error here
-                Toast.makeText(this@MainActivity, "error", Toast.LENGTH_SHORT).show()
-            }
-        })
 
         val backgroundScope = CoroutineScope(Dispatchers.IO)
         backgroundScope.launch {
@@ -117,6 +83,9 @@ class MainActivity : ComponentActivity() {
         }
 
         viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
+
+        checkIfUserIsPremium(viewModel)
+
         viewModel.getAllNotebooks() // WE LOAD THE NOTEBOOKS IN THE START ONLY SO THAT TO SHOW THEM EVERYWHERE NEEDED.
         val sharedPreferences = getSharedPreferences("rememberUser", Context.MODE_PRIVATE)
         result = sharedPreferences.getString("LoggedInUser", "nothing")!!
