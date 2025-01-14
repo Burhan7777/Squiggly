@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
@@ -30,6 +31,8 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -48,6 +51,7 @@ import com.pzbapps.squiggly.R
 import com.pzbapps.squiggly.common.domain.utils.Constant
 import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.common.presentation.MainActivity
+import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.ui.theme.premiumColor
 import com.qonversion.android.sdk.Qonversion
 import com.qonversion.android.sdk.dto.QonversionError
@@ -60,13 +64,32 @@ import com.qonversion.android.sdk.listeners.QonversionOfferingsCallback
 import com.qonversion.android.sdk.listeners.QonversionProductsCallback
 
 @Composable
-fun PremiumPlan(activity: MainActivity, navHostController: NavHostController) {
+fun PremiumPlan(
+    activity: MainActivity,
+    navHostController: NavHostController,
+    viewModel: MainActivityViewModel
+) {
+
+    var productPrice = remember { mutableStateOf("") }
+    Qonversion.shared.products(callback = object : QonversionProductsCallback {
+        override fun onSuccess(products: Map<String, QProduct>) {
+            // handle available products here
+            var product = products["1_month_premium"]
+            productPrice.value = product?.prettyPrice ?: ""
+        }
+
+        override fun onError(error: QonversionError) {
+            TODO("Not yet implemented")
+        }
+    })
+
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(20.dp)
     ) {
+
         Row(modifier = Modifier.fillMaxWidth()) {
             var string = buildAnnotatedString {
                 withStyle(
@@ -148,7 +171,7 @@ fun PremiumPlan(activity: MainActivity, navHostController: NavHostController) {
                     fontSize = 25.sp
                 )
                 Text(
-                    "₹ 19.00",
+                    productPrice.value,
                     color = MaterialTheme.colors.onPrimary,
                     fontFamily = FontFamily.fontFamilyLight,
                     fontSize = 20.sp
@@ -168,9 +191,7 @@ fun PremiumPlan(activity: MainActivity, navHostController: NavHostController) {
                             Qonversion.shared.purchase(activity, product, callback = object :
                                 QonversionEntitlementsCallback {
                                 override fun onSuccess(entitlements: Map<String, QEntitlement>) {
-                                    println(entitlements.keys)
                                     val premiumEntitlement = entitlements["monhtlypremium"]
-                                    println(premiumEntitlement?.isActive)
                                     if (premiumEntitlement != null && premiumEntitlement.isActive) {
                                         // Handle active entitlement here
                                         Toast.makeText(
@@ -178,6 +199,8 @@ fun PremiumPlan(activity: MainActivity, navHostController: NavHostController) {
                                             "Subscription successful",
                                             Toast.LENGTH_SHORT
                                         ).show()
+                                        viewModel.ifUserIsPremium.value = true
+
                                     }
                                 }
 
@@ -247,7 +270,7 @@ fun PremiumPlan(activity: MainActivity, navHostController: NavHostController) {
         Spacer(modifier = Modifier.height(10.dp))
 
         Text(
-            "You will be charged ₹ 19.00 every month ",
+            "You will be charged ${productPrice.value} every month ",
             color = MaterialTheme.colors.onPrimary,
             fontFamily = FontFamily.fontFamilyRegular,
             textAlign = TextAlign.Center,
@@ -268,6 +291,8 @@ fun PremiumPlan(activity: MainActivity, navHostController: NavHostController) {
                 fontSize = 18.sp
             )
         }
+
+
     }
 }
 
