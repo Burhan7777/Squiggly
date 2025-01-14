@@ -61,6 +61,20 @@ fun SingleItemArchiveNoteList(
             FontFamily.lobsterString -> fontFamily.value = FontFamily.lobster
             FontFamily.playfairString -> fontFamily.value = FontFamily.playfair
             FontFamily.poppinsString -> fontFamily.value = FontFamily.poppins
+            FontFamily.playWriteAustraliaString -> fontFamily.value =
+                FontFamily.playWriteAustralia
+            FontFamily.playWriteVietnamString -> fontFamily.value = FontFamily.playWriteVietnam
+            FontFamily.juraLightString -> fontFamily.value = FontFamily.juraLight
+            FontFamily.majorMonoDisplayString -> fontFamily.value = FontFamily.majorMonoDisplay
+            FontFamily.overpassMonoString -> fontFamily.value = FontFamily.overpassmono
+            FontFamily.rugeString -> fontFamily.value = FontFamily.ruge
+            FontFamily.permanentMarkerString -> fontFamily.value = FontFamily.permanentMarker
+            FontFamily.playWriteGuideString -> fontFamily.value = FontFamily.playWriteGuide
+            FontFamily.indieFlowersString -> fontFamily.value = FontFamily.indieFlowers
+            FontFamily.spicyRiceString -> fontFamily.value = FontFamily.spicyRice
+            FontFamily.meriendaString -> fontFamily.value = FontFamily.merienda
+            FontFamily.pressStartString -> fontFamily.value = FontFamily.pressStart
+
             else -> FontFamily.fontFamilyRegular
         }
 

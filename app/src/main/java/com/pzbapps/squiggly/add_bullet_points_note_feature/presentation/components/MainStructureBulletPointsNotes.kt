@@ -45,6 +45,7 @@ import com.google.firebase.ktx.Firebase
 import com.pzbapps.squiggly.add_note_feature.presentation.components.BottomSheet.AddNoteBottomSheet
 import com.pzbapps.squiggly.add_note_feature.presentation.components.DiscardNoteAlertBox
 import com.pzbapps.squiggly.common.domain.utils.Constant
+import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.common.presentation.alertboxes.AlertDialogBoxTrialEnded
@@ -141,6 +142,21 @@ fun MainStructureBulletPointsNotes(
 
         com.pzbapps.squiggly.common.presentation.FontFamily.poppins -> fontFamilyString.value =
             com.pzbapps.squiggly.common.presentation.FontFamily.poppinsString
+
+        FontFamily.playWriteAustralia -> fontFamilyString.value =
+            FontFamily.playWriteAustraliaString
+
+        FontFamily.playWriteVietnam -> fontFamilyString.value = FontFamily.playWriteVietnamString
+        FontFamily.juraLight -> fontFamilyString.value = FontFamily.juraLightString
+        FontFamily.majorMonoDisplay -> fontFamilyString.value = FontFamily.majorMonoDisplayString
+        FontFamily.overpassmono -> fontFamilyString.value = FontFamily.overpassMonoString
+        FontFamily.ruge -> fontFamilyString.value = FontFamily.rugeString
+        FontFamily.permanentMarker -> fontFamilyString.value = FontFamily.permanentMarkerString
+        FontFamily.playWriteGuide -> fontFamilyString.value = FontFamily.playWriteGuideString
+        FontFamily.indieFlowers -> fontFamilyString.value = FontFamily.indieFlowersString
+        FontFamily.spicyRice -> fontFamilyString.value = FontFamily.spicyRiceString
+        FontFamily.merienda -> fontFamilyString.value = FontFamily.meriendaString
+        FontFamily.pressStart -> fontFamilyString.value = FontFamily.pressStartString
 
         else -> com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyRegular
     }
@@ -530,7 +546,7 @@ fun MainStructureBulletPointsNotes(
                 AddNoteBottomSheet(showBottomSheet, backgroundColor, activity = activity)
             }
             if (showFontBottomSheet.value) {
-                FontBottomSheet(showFontBottomSheet, fontFamily, viewModel,navController)
+                FontBottomSheet(showFontBottomSheet, fontFamily, viewModel, navController)
             }
             BulletPointNote(
                 viewModel,

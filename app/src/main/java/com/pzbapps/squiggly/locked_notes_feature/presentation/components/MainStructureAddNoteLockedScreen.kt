@@ -137,6 +137,18 @@ fun MainStructureAddNoteLockedScreen(
         FontFamily.lobster -> fontFamilyString.value = FontFamily.lobsterString
         FontFamily.playfair -> fontFamilyString.value = FontFamily.playfairString
         FontFamily.poppins -> fontFamilyString.value = FontFamily.poppinsString
+        FontFamily.playWriteAustralia -> fontFamilyString.value = FontFamily.playWriteAustraliaString
+        FontFamily.playWriteVietnam -> fontFamilyString.value = FontFamily.playWriteVietnamString
+        FontFamily.juraLight -> fontFamilyString.value = FontFamily.juraLightString
+        FontFamily.majorMonoDisplay -> fontFamilyString.value = FontFamily.majorMonoDisplayString
+        FontFamily.overpassmono -> fontFamilyString.value = FontFamily.overpassMonoString
+        FontFamily.ruge -> fontFamilyString.value = FontFamily.rugeString
+        FontFamily.permanentMarker -> fontFamilyString.value = FontFamily.permanentMarkerString
+        FontFamily.playWriteGuide -> fontFamilyString.value = FontFamily.playWriteGuideString
+        FontFamily.indieFlowers -> fontFamilyString.value = FontFamily.indieFlowersString
+        FontFamily.spicyRice -> fontFamilyString.value = FontFamily.spicyRiceString
+        FontFamily.merienda -> fontFamilyString.value = FontFamily.meriendaString
+        FontFamily.pressStart -> fontFamilyString.value = FontFamily.pressStartString
         else -> FontFamily.fontFamilyRegular
     }
 

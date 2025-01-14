@@ -118,6 +118,42 @@ fun MainStructureCheckBoxNote(
         com.pzbapps.squiggly.common.presentation.FontFamily.poppins -> fontFamilyString.value =
             com.pzbapps.squiggly.common.presentation.FontFamily.poppinsString
 
+        com.pzbapps.squiggly.common.presentation.FontFamily.playWriteAustralia -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.playWriteAustraliaString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.playWriteVietnam -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.playWriteVietnamString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.juraLight -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.juraLightString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.majorMonoDisplay -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.majorMonoDisplayString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.overpassmono -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.overpassMonoString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.ruge -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.rugeString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.permanentMarker -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.permanentMarkerString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.playWriteGuide -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.playWriteGuideString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.indieFlowers -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.indieFlowersString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.spicyRice -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.spicyRiceString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.merienda -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.meriendaString
+
+        com.pzbapps.squiggly.common.presentation.FontFamily.pressStart -> fontFamilyString.value =
+            com.pzbapps.squiggly.common.presentation.FontFamily.pressStartString
+
         else -> com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyRegular
     }
 
@@ -125,7 +161,6 @@ fun MainStructureCheckBoxNote(
         Constant.SHOW_RATING_DIALOG_BOX,
         Context.MODE_PRIVATE
     )
-
 
 
 //    var mutableListOfCheckboxTexts = remember {
@@ -539,7 +574,7 @@ fun MainStructureCheckBoxNote(
                 AddNoteBottomSheet(showBottomSheet, backgroundColor, activity = activity)
             }
             if (showFontBottomSheet.value) {
-                FontBottomSheet(showFontBottomSheet, fontFamily,viewModel,navController)
+                FontBottomSheet(showFontBottomSheet, fontFamily, viewModel, navController)
             }
             CheckboxNote(
                 viewModel,

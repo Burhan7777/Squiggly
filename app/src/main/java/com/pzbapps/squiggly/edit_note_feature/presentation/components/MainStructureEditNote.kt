@@ -26,6 +26,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -238,6 +239,18 @@ fun MainStructureEditNote(
         FontFamily.playWriteAustralia -> fontFamilyString.value =
             FontFamily.playWriteAustraliaString
 
+        FontFamily.playWriteVietnam -> fontFamilyString.value = FontFamily.playWriteVietnamString
+        FontFamily.juraLight -> fontFamilyString.value = FontFamily.juraLightString
+        FontFamily.majorMonoDisplay -> fontFamilyString.value = FontFamily.majorMonoDisplayString
+        FontFamily.overpassmono -> fontFamilyString.value = FontFamily.overpassMonoString
+        FontFamily.ruge -> fontFamilyString.value = FontFamily.rugeString
+        FontFamily.permanentMarker -> fontFamilyString.value = FontFamily.permanentMarkerString
+        FontFamily.playWriteGuide -> fontFamilyString.value = FontFamily.playWriteGuideString
+        FontFamily.indieFlowers -> fontFamilyString.value = FontFamily.indieFlowersString
+        FontFamily.spicyRice -> fontFamilyString.value = FontFamily.spicyRiceString
+        FontFamily.merienda -> fontFamilyString.value = FontFamily.meriendaString
+        FontFamily.pressStart -> fontFamilyString.value = FontFamily.pressStartString
+
         else -> FontFamily.fontFamilyRegular
     }
 
@@ -290,7 +303,19 @@ fun MainStructureEditNote(
             FontFamily.lobsterString -> fontFamily.value = FontFamily.lobster
             FontFamily.playfairString -> fontFamily.value = FontFamily.playfair
             FontFamily.poppinsString -> fontFamily.value = FontFamily.poppins
-            FontFamily.playWriteAustraliaString-> fontFamily.value = FontFamily.playWriteAustralia
+            FontFamily.playWriteAustraliaString -> fontFamily.value = FontFamily.playWriteAustralia
+            FontFamily.playWriteVietnamString -> fontFamily.value = FontFamily.playWriteVietnam
+            FontFamily.juraLightString -> fontFamily.value = FontFamily.juraLight
+            FontFamily.majorMonoDisplayString -> fontFamily.value = FontFamily.majorMonoDisplay
+            FontFamily.overpassMonoString -> fontFamily.value = FontFamily.overpassmono
+            FontFamily.rugeString -> fontFamily.value = FontFamily.ruge
+            FontFamily.permanentMarkerString -> fontFamily.value = FontFamily.permanentMarker
+            FontFamily.playWriteGuideString -> fontFamily.value = FontFamily.playWriteGuide
+            FontFamily.indieFlowersString -> fontFamily.value = FontFamily.indieFlowers
+            FontFamily.spicyRiceString -> fontFamily.value = FontFamily.spicyRice
+            FontFamily.meriendaString -> fontFamily.value = FontFamily.merienda
+            FontFamily.pressStartString -> fontFamily.value = FontFamily.pressStart
+
             else -> FontFamily.fontFamilyRegular
         }
     }

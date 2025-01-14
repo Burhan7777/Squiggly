@@ -21,6 +21,17 @@ object FontFamily {
     val playfair = Font(R.font.playfair).toFontFamily()
     val poppins = Font(R.font.poppins).toFontFamily()
     val playWriteAustralia = Font(R.font.playwriteaustrailia).toFontFamily()
+    val playWriteVietnam = Font(R.font.playwritevietnam).toFontFamily()
+    val juraLight = Font(R.font.juralight).toFontFamily()
+    val majorMonoDisplay = Font(R.font.majormonodisplay).toFontFamily()
+    val overpassmono = Font(R.font.overpassmono).toFontFamily()
+    val ruge = Font(R.font.ruge).toFontFamily()
+    val permanentMarker = Font(R.font.permanentmarker).toFontFamily()
+    val playWriteGuide = Font(R.font.playwriteguide).toFontFamily()
+    val indieFlowers = Font(R.font.indieflowers).toFontFamily()
+    val spicyRice = Font(R.font.spicyrice).toFontFamily()
+    val merienda = Font(R.font.merienda).toFontFamily()
+    val pressStart = Font(R.font.pressstart).toFontFamily()
 
     var lufgaRegular = "Default"
     var lufgaBold = "lufgaBold"
@@ -35,6 +46,17 @@ object FontFamily {
     val playfairString = "playfair"
     val poppinsString = "poppins"
     val playWriteAustraliaString = "playwriteaustralia"
+    val playWriteVietnamString = "playwritevietnam"
+    val juraLightString = "juralight"
+    val majorMonoDisplayString = "majormonodisplay"
+    val overpassMonoString = "overpassmono"
+    val rugeString = "ruge"
+    val permanentMarkerString = "permanentmarker"
+    val playWriteGuideString = "playwriteguide"
+    val indieFlowersString = "indieflowers"
+    val spicyRiceString = "spicyrice"
+    val meriendaString = "merienda"
+    val pressStartString = "pressstart"
 
     val listOfFonts = ArrayList<FontFamily>()
     fun listOfFonts(): ArrayList<FontFamily> {
@@ -82,6 +104,44 @@ object FontFamily {
         if (!listOfPremiumFonts.contains(playWriteAustralia)) {
             listOfPremiumFonts.add(playWriteAustralia)
         }
+
+        if (!listOfPremiumFonts.contains(playWriteVietnam)) {
+            listOfPremiumFonts.add(playWriteVietnam)
+        }
+
+        if (!listOfPremiumFonts.contains(juraLight)) {
+            listOfPremiumFonts.add(juraLight)
+        }
+
+        if (!listOfPremiumFonts.contains(majorMonoDisplay)) {
+            listOfPremiumFonts.add(majorMonoDisplay)
+        }
+
+        if (!listOfPremiumFonts.contains(overpassmono)) {
+            listOfPremiumFonts.add(overpassmono)
+        }
+        if (!listOfPremiumFonts.contains(ruge)) {
+            listOfPremiumFonts.add(ruge)
+        }
+        if (!listOfPremiumFonts.contains(permanentMarker)) {
+            listOfPremiumFonts.add(permanentMarker)
+        }
+        if (!listOfPremiumFonts.contains(playWriteGuide)) {
+            listOfPremiumFonts.add(playWriteGuide)
+        }
+        if (!listOfPremiumFonts.contains(indieFlowers)) {
+            listOfPremiumFonts.add(indieFlowers)
+        }
+        if (!listOfPremiumFonts.contains(spicyRice)) {
+            listOfPremiumFonts.add(spicyRice)
+        }
+        if (!listOfPremiumFonts.contains(merienda)) {
+            listOfPremiumFonts.add(merienda)
+        }
+        if (!listOfPremiumFonts.contains(pressStart)) {
+            listOfPremiumFonts.add(pressStart)
+        }
+
         return listOfPremiumFonts
     }
 }
