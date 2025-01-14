@@ -72,8 +72,8 @@ fun SingleRowFontsBottomSheetPremium(
                 tint = Color.Unspecified,
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .size(18.dp)
-                    .padding(horizontal = 3.dp, vertical = 3.dp)
+                    .size(20.dp)
+                    .padding(horizontal = 5.dp, vertical = 5.dp)
             )
         }
     }

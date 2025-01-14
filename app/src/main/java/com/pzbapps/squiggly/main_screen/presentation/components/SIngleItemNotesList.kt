@@ -67,6 +67,7 @@ fun SingleItemNoteList(note: Note, navHostController: NavHostController, scope: 
         FontFamily.lobsterString -> fontFamily.value = FontFamily.lobster
         FontFamily.playfairString -> fontFamily.value = FontFamily.playfair
         FontFamily.poppinsString -> fontFamily.value = FontFamily.poppins
+        FontFamily.playWriteAustraliaString-> fontFamily.value = FontFamily.playWriteAustralia
         else -> FontFamily.fontFamilyRegular
     }
     //  LaunchedEffect(note.content) {
