@@ -235,6 +235,7 @@ fun MainStructureEditNote(
         FontFamily.lobster -> fontFamilyString.value = FontFamily.lobsterString
         FontFamily.playfair -> fontFamilyString.value = FontFamily.playfairString
         FontFamily.poppins -> fontFamilyString.value = FontFamily.poppinsString
+        FontFamily.playWriteAustralia -> fontFamilyString.value = FontFamily.playWriteAustraliaString
         else -> FontFamily.fontFamilyRegular
     }
 
@@ -1372,7 +1373,7 @@ fun MainStructureEditNote(
         TextColorBottomSheet(showTextColorBottomSheet, richStateText)
     }
     if (showFontBottomSheet.value) {
-        FontBottomSheet(showFontBottomSheet, fontFamily)
+        FontBottomSheet(showFontBottomSheet, fontFamily,viewModel,navController)
     }
 
 

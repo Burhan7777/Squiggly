@@ -468,7 +468,7 @@ fun MainStructureBulletPointsNotebook(
                 AddNoteBottomSheet(showBottomSheet, backgroundColor,activity = activity)
             }
             if(showFontBottomSheet.value) {
-                FontBottomSheet(showFontBottomSheet, fontFamily)
+                FontBottomSheet(showFontBottomSheet, fontFamily,viewModel,navController)
             }
             BulletPointNotebook(
                 viewModel,

@@ -519,7 +519,7 @@ fun MainStructureAddNoteLockedScreen(
                     TextColorBottomSheet(showTextColorBottomSheet, richTextState)
                 }
                 if (showFontBottomSheet.value) {
-                    FontBottomSheet(showFontBottomSheet, fontFamily)
+                    FontBottomSheet(showFontBottomSheet, fontFamily,viewModel,navController)
                 }
                 NoteContentNoteInLockedScreen(
                     title,

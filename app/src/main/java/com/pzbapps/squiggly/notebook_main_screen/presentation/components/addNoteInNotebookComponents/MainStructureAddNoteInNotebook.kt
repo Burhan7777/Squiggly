@@ -523,7 +523,7 @@ fun MainStructureAddNoteInNotebook(
                     TextColorBottomSheet(showTextColorBottomSheet, richTextState)
                 }
                 if (showFontBottomSheet.value) {
-                    FontBottomSheet(showFontBottomSheet, fontFamily)
+                    FontBottomSheet(showFontBottomSheet, fontFamily,viewModel,navController)
                 }
                 NoteContentNoteInNotebook(
                     title,

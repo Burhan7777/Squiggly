@@ -482,8 +482,8 @@ fun MainStructureCheckBoxNotebook(
             if (showBottomSheet.value) {
                 AddNoteBottomSheet(showBottomSheet, backgroundColor, activity = activity)
             }
-            if(showFontBottomSheet.value) {
-                FontBottomSheet(showFontBottomSheet, fontFamily)
+            if (showFontBottomSheet.value) {
+                FontBottomSheet(showFontBottomSheet, fontFamily, viewModel, navController)
             }
             CheckboxNotebook(
                 viewModel,

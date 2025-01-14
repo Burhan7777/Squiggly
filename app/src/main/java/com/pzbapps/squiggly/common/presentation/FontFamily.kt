@@ -20,6 +20,7 @@ object FontFamily {
     val lobster = Font(R.font.lobster).toFontFamily()
     val playfair = Font(R.font.playfair).toFontFamily()
     val poppins = Font(R.font.poppins).toFontFamily()
+    val playWriteAustralia = Font(R.font.playwriteaustrailia).toFontFamily()
 
     var lufgaRegular = "Default"
     var lufgaBold = "lufgaBold"
@@ -33,6 +34,7 @@ object FontFamily {
     val lobsterString = "lobster"
     val playfairString = "playfair"
     val poppinsString = "poppins"
+    val playWriteAustraliaString = "playwriteaustralia"
 
     val listOfFonts = ArrayList<FontFamily>()
     fun listOfFonts(): ArrayList<FontFamily> {
@@ -73,5 +75,13 @@ object FontFamily {
             listOfFonts.add(poppins)
 
         return listOfFonts
+    }
+
+    var listOfPremiumFonts = ArrayList<FontFamily>()
+    fun listOfPremiumFonts(): ArrayList<FontFamily> {
+        if (!listOfPremiumFonts.contains(playWriteAustralia)) {
+            listOfPremiumFonts.add(playWriteAustralia)
+        }
+        return listOfPremiumFonts
     }
 }

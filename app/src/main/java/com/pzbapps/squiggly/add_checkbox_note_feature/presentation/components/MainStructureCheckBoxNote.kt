@@ -539,7 +539,7 @@ fun MainStructureCheckBoxNote(
                 AddNoteBottomSheet(showBottomSheet, backgroundColor, activity = activity)
             }
             if (showFontBottomSheet.value) {
-                FontBottomSheet(showFontBottomSheet, fontFamily)
+                FontBottomSheet(showFontBottomSheet, fontFamily,viewModel,navController)
             }
             CheckboxNote(
                 viewModel,

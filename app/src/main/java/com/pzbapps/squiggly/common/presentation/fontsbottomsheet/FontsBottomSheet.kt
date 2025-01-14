@@ -16,8 +16,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.mohamedrejeb.richeditor.model.RichTextState
 import com.pzbapps.squiggly.common.presentation.FontFamily
+import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.common.presentation.textcolorsbottomsheet.bottomsheetcomponents.ColorsColorSelection
 import kotlinx.coroutines.launch
 
@@ -25,7 +27,9 @@ import kotlinx.coroutines.launch
 @Composable
 fun FontBottomSheet(
     showBottomSheet: MutableState<Boolean>,
-    fontFamily: MutableState<androidx.compose.ui.text.font.FontFamily>
+    fontFamily: MutableState<androidx.compose.ui.text.font.FontFamily>,
+    viewModel: MainActivityViewModel,
+    navHostController: NavHostController
 ) {
     if (showBottomSheet.value) {
 
@@ -41,6 +45,16 @@ fun FontBottomSheet(
             LazyVerticalGrid(columns = GridCells.Fixed(3)) {
                 items(FontFamily.listOfFonts()) { font ->
                     SingleRowFontsBottomSheet(font, fontFamily, showBottomSheet)
+                }
+                items(FontFamily.listOfPremiumFonts()) { font ->
+                    SingleRowFontsBottomSheetPremium(
+                        font,
+                        fontFamily,
+                        showBottomSheet,
+                        viewModel,
+                        navHostController
+                    )
+
                 }
             }
 
