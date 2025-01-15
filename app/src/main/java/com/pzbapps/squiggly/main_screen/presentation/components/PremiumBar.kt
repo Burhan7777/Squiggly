@@ -19,18 +19,34 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.common.presentation.MainActivity
+import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
+import com.pzbapps.squiggly.common.presentation.Screens
 import com.pzbapps.squiggly.main_screen.domain.usecase.getRemainingDaysFromFirebase
+import com.qonversion.android.sdk.Qonversion
+import com.qonversion.android.sdk.dto.QonversionError
+import com.qonversion.android.sdk.dto.products.QProduct
+import com.qonversion.android.sdk.listeners.QonversionProductsCallback
+import kotlin.math.cos
 
 
 @Composable
-fun ShowPremiumBar(activity: MainActivity) {
-    var remainingDays = remember { mutableStateOf("") }
-    var result = getRemainingDaysFromFirebase()
-    result.observe(activity) {
-        remainingDays.value = it
-    }
+fun ShowPremiumBar(activity: MainActivity, navHostController: NavHostController) {
+    var cost = remember { mutableStateOf("") }
+    Qonversion.shared.products(callback = object : QonversionProductsCallback {
+        override fun onError(error: QonversionError) {
+            TODO("Not yet implemented")
+        }
+
+        override fun onSuccess(products: Map<String, QProduct>) {
+            // handle available products here
+            var product = products["1_month_premium"]
+            cost.value = product?.prettyPrice.toString()
+        }
+    })
+
     Box(
         modifier = Modifier
             .background(
@@ -45,7 +61,7 @@ fun ShowPremiumBar(activity: MainActivity) {
     ) {
         Column(modifier = Modifier.align(Alignment.CenterStart)) {
             Text(
-                text = "Buy app forever",
+                text = "Buy premium and \nunlock all features",
                 fontFamily = FontFamily.fontFamilyRegular,
                 fontSize = 15.sp,
                 modifier = Modifier
@@ -53,7 +69,7 @@ fun ShowPremiumBar(activity: MainActivity) {
                 color = MaterialTheme.colors.onSecondary
             )
             Text(
-                text = "${remainingDays.value} days remaining",
+                text = "${cost.value} / month",
                 fontFamily = FontFamily.fontFamilyRegular,
                 fontSize = 15.sp,
                 modifier = Modifier
@@ -62,7 +78,7 @@ fun ShowPremiumBar(activity: MainActivity) {
             )
         }
         OutlinedButton(
-            onClick = { /*TODO*/ },
+            onClick = { navHostController.navigate(Screens.PremiumPlanScreen.route) },
             modifier = Modifier
                 .align(Alignment.CenterEnd)
                 .padding(15.dp),
@@ -73,7 +89,7 @@ fun ShowPremiumBar(activity: MainActivity) {
             )
         ) {
             Text(
-                text = "Buy App",
+                text = "Buy Premium",
                 fontFamily = FontFamily.fontFamilyBold,
                 color = Color.Black
             )

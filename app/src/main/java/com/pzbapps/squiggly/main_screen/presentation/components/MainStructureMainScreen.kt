@@ -520,7 +520,7 @@ fun MainStructureMainScreen(
                     activity,
                     showOrderDialogBox
                 )
-                // ShowPremiumBar(activity)
+
                 if (showDialogToAccessLockedNotes.value) {
                     AlertDialogBoxEnterPasswordToOpenLockedNotes(
                         viewModel = viewModel,
