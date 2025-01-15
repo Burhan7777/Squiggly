@@ -129,6 +129,11 @@ class MainActivity : ComponentActivity() {
         val prefs = getSharedPreferences(Constant.AUTO_SAVE_PREF, MODE_PRIVATE)
         val autoSave = prefs.getBoolean(Constant.AUTO_SAVE_KEY, false)
 
+        val prefsEvery24Hours =
+            getSharedPreferences(Constant.AUTO_SAVE_PREF_EVERY_24_HOURS, MODE_PRIVATE)
+        val autoSaveEvery24Hours =
+            prefsEvery24Hours.getBoolean(Constant.AUTO_SAVE_KEY_EVERY_24_HOURS, false)
+
         var code = Int.MAX_VALUE
         try {
             var versionCode =
@@ -141,6 +146,11 @@ class MainActivity : ComponentActivity() {
         if (autoSave) {
             firebaseBackUp(this)
         }
+
+        if (autoSaveEvery24Hours) {
+            firebaseBackUpEvery24Hours(this)
+        }
+
 
         if (!Python.isStarted()) {
             Python.start(AndroidPlatform(this))
@@ -286,6 +296,24 @@ fun deleteTrashNotes(viewModel: MainActivityViewModel, activity: MainActivity) {
 
 fun firebaseBackUp(context: Context) {
     val backupRequest = PeriodicWorkRequestBuilder<BackupWorker>(72, TimeUnit.HOURS)
+        .setConstraints(
+            Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED) // Only run if connected to the internet
+                .build()
+        )
+        .build()
+
+    WorkManager.getInstance(context)
+        .enqueueUniquePeriodicWork(
+            "firebaseAutoSave",
+            ExistingPeriodicWorkPolicy.KEEP,
+            backupRequest
+        )
+
+}
+
+fun firebaseBackUpEvery24Hours(context: Context) {
+    val backupRequest = PeriodicWorkRequestBuilder<BackupWorker>(24, TimeUnit.HOURS)
         .setConstraints(
             Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED) // Only run if connected to the internet

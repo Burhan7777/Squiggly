@@ -177,7 +177,7 @@ fun NavGraphBuilder.homeGraph(
         }
 
         composable(Screens.BackupAndRestoreScreen.route) {
-            BackupAndRestoreScreen(navController, activity)
+            BackupAndRestoreScreen(navController, activity,viewModel)
         }
         composable(Screens.CheckboxNotebookMainScreen.route, listOf(navArgument("notebook") {
             type = NavType.StringType

@@ -34,7 +34,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,16 +50,23 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ListResult
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
+import com.pzbapps.squiggly.R
 import com.pzbapps.squiggly.common.domain.utils.Constant
 import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.common.presentation.MainActivity
+import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
+import com.pzbapps.squiggly.common.presentation.Screens
 import com.pzbapps.squiggly.settings_feature.screen.presentation.components.DatabaseBackupNameAlertBox
 import com.pzbapps.squiggly.settings_feature.screen.presentation.components.DisplayBackupNamesAlertBox
 import com.pzbapps.squiggly.settings_feature.screen.presentation.components.LoadingDialogBox
 
 
 @Composable
-fun BackupAndRestoreScreen(navHostController: NavHostController, activity: MainActivity) {
+fun BackupAndRestoreScreen(
+    navHostController: NavHostController,
+    activity: MainActivity,
+    viewModel: MainActivityViewModel
+) {
     val context = LocalContext.current
     var backUpFileName = remember { mutableStateOf("") }
     var showBackUpFIleNameAlertBox = remember { mutableStateOf(false) }
@@ -69,7 +78,12 @@ fun BackupAndRestoreScreen(navHostController: NavHostController, activity: MainA
 
     val prefs = context.getSharedPreferences(Constant.AUTO_SAVE_PREF, MODE_PRIVATE)
     val autoSave = prefs.getBoolean(Constant.AUTO_SAVE_KEY, true)
+    val prefsEvery24Hours =
+        context.getSharedPreferences(Constant.AUTO_SAVE_PREF_EVERY_24_HOURS, MODE_PRIVATE)
+    val autoSaveEvery24Hours =
+        prefsEvery24Hours.getBoolean(Constant.AUTO_SAVE_KEY_EVERY_24_HOURS, false)
     var autoSaveCheckedBox = remember { mutableStateOf(autoSave) }
+    var autoSaveCheckedBoxEvery24Hours = remember { mutableStateOf(autoSaveEvery24Hours) }
     Column {
         Row() {
             IconButton(onClick = { navHostController.navigateUp() }) {
@@ -341,7 +355,101 @@ fun BackupAndRestoreScreen(navHostController: NavHostController, activity: MainA
                 Box(modifier = Modifier.fillMaxWidth()) {
                     Checkbox(
                         checked = autoSaveCheckedBox.value,
-                        onCheckedChange = { autoSaveCheckedBox.value = it },
+                        onCheckedChange = {
+                            autoSaveCheckedBox.value = it
+                            autoSaveCheckedBoxEvery24Hours.value = false
+                        },
+                        colors = CheckboxDefaults.colors(
+                            checkmarkColor = MaterialTheme.colors.onSecondary,
+                            uncheckedColor = MaterialTheme.colors.onPrimary,
+                            checkedColor = MaterialTheme.colors.onPrimary
+                        ),
+                        modifier = Modifier.align(Alignment.CenterEnd)
+                    )
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(20.dp))
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp)
+                .padding(10.dp)
+                .border(
+                    BorderStroke(1.dp, MaterialTheme.colors.onPrimary),
+                    MaterialTheme.shapes.medium.copy(
+                        topStart = CornerSize(10.dp),
+                        topEnd = CornerSize(10.dp),
+                        bottomStart = CornerSize(10.dp),
+                        bottomEnd = CornerSize(10.dp),
+                    )
+                )
+                .clickable {
+
+                },
+            shape = androidx.compose.material3.MaterialTheme.shapes.medium.copy(
+                topStart = CornerSize(10.dp),
+                topEnd = CornerSize(10.dp),
+                bottomStart = CornerSize(10.dp),
+                bottomEnd = CornerSize(10.dp),
+            ),
+            elevation = CardDefaults.cardElevation(15.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colors.primary,
+                contentColor = MaterialTheme.colors.onPrimary,
+                disabledContainerColor = MaterialTheme.colors.primary,
+                disabledContentColor = MaterialTheme.colors.onPrimary
+            )
+        ) {
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Save,
+                    contentDescription = "Auto Save",
+                    modifier = Modifier.padding(top = 12.dp, start = 10.dp)
+                )
+                Column() {
+                    Text(
+                        text = "Auto Save notes",
+                        modifier = Modifier.padding(
+                            top = 12.dp,
+                            start = 10.dp
+                        ),
+                        fontSize = 18.sp,
+                        fontFamily = FontFamily.fontFamilyRegular,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Text(
+                        text = "This auto saves notes every 24 hours",
+                        modifier = Modifier.padding(start = 10.dp),
+                        fontSize = 12.sp,
+                        fontFamily = FontFamily.fontFamilyRegular,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        fontStyle = FontStyle.Italic
+                    )
+                }
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_premium),
+                        contentDescription = "premiumFeature",
+                        tint = Color.Unspecified,
+                        modifier = Modifier.align(Alignment.CenterStart)
+                    )
+                    Checkbox(
+                        checked = autoSaveCheckedBoxEvery24Hours.value,
+                        onCheckedChange = {
+                            if (viewModel.ifUserIsPremium.value) {
+                                autoSaveCheckedBoxEvery24Hours.value = it
+                                autoSaveCheckedBox.value = false
+                            } else {
+                                navHostController.navigate(Screens.PremiumPlanScreen.route)
+                            }
+                        },
                         colors = CheckboxDefaults.colors(
                             checkmarkColor = MaterialTheme.colors.onSecondary,
                             uncheckedColor = MaterialTheme.colors.onPrimary,
@@ -417,6 +525,27 @@ fun BackupAndRestoreScreen(navHostController: NavHostController, activity: MainA
                 )
                 .edit()
         editor.putBoolean(Constant.AUTO_SAVE_KEY, false)
+        editor.apply()
+    }
+    if (autoSaveCheckedBoxEvery24Hours.value) {
+        val editor: SharedPreferences.Editor =
+            context
+                .getSharedPreferences(
+                    Constant.AUTO_SAVE_PREF_EVERY_24_HOURS,
+                    MODE_PRIVATE
+                )
+                .edit()
+        editor.putBoolean(Constant.AUTO_SAVE_KEY_EVERY_24_HOURS, true)
+        editor.apply()
+    } else {
+        val editor: SharedPreferences.Editor =
+            context
+                .getSharedPreferences(
+                    Constant.AUTO_SAVE_PREF_EVERY_24_HOURS,
+                    MODE_PRIVATE
+                )
+                .edit()
+        editor.putBoolean(Constant.AUTO_SAVE_KEY_EVERY_24_HOURS, false)
         editor.apply()
     }
 }
