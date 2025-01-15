@@ -81,6 +81,8 @@ fun MainStructureCheckBoxNote(
 
     var fontFamilyString = remember { mutableStateOf("") }
 
+    var timeWhenNewNoteWasStarted = remember { System.currentTimeMillis() }
+
     when (fontFamily.value) {
         com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyRegular -> fontFamilyString.value =
             com.pzbapps.squiggly.common.presentation.FontFamily.lufgaRegular
@@ -161,6 +163,10 @@ fun MainStructureCheckBoxNote(
         Constant.SHOW_RATING_DIALOG_BOX,
         Context.MODE_PRIVATE
     )
+
+    LaunchedEffect(true) {
+        viewModel.loadAndShowAd()
+    }
 
 
 //    var mutableListOfCheckboxTexts = remember {
@@ -300,6 +306,17 @@ fun MainStructureCheckBoxNote(
     BackHandler {
         // keyboardController?.hide()
 
+        var currentTIme = System.currentTimeMillis()
+
+
+        if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
+            if (viewModel.mInterstitialAd != null) {
+                viewModel.mInterstitialAd?.show(activity)
+            } else {
+
+            }
+        }
+
         var value = sharedPreferences.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
         var newValue = value + 1
 
@@ -380,6 +397,16 @@ fun MainStructureCheckBoxNote(
                 title = { Text(text = "") },
                 navigationIcon = {
                     IconButton(onClick = {
+                        var currentTIme = System.currentTimeMillis()
+
+
+                        if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
+                            if (viewModel.mInterstitialAd != null) {
+                                viewModel.mInterstitialAd?.show(activity)
+                            } else {
+
+                            }
+                        }
                         convertMutableStateIntoString(
                             listOfCheckedNotes,
                             mutableListConverted
@@ -478,6 +505,16 @@ fun MainStructureCheckBoxNote(
                         )
                     }
                     IconButton(onClick = {
+                        var currentTIme = System.currentTimeMillis()
+
+
+                        if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
+                            if (viewModel.mInterstitialAd != null) {
+                                viewModel.mInterstitialAd?.show(activity)
+                            } else {
+
+                            }
+                        }
                         convertMutableStateIntoString(
                             listOfCheckedNotes,
                             mutableListConverted

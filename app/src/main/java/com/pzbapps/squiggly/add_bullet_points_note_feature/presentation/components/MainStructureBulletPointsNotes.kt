@@ -105,6 +105,12 @@ fun MainStructureBulletPointsNotes(
 
     val showFontBottomSheet = remember { mutableStateOf(false) }
 
+    var timeWhenNewNoteWasStarted = remember { System.currentTimeMillis() }
+
+    LaunchedEffect(true) {
+        viewModel.loadAndShowAd()
+    }
+
 
     when (fontFamily.value) {
         com.pzbapps.squiggly.common.presentation.FontFamily.fontFamilyRegular -> fontFamilyString.value =
@@ -269,6 +275,16 @@ fun MainStructureBulletPointsNotes(
     var remember = rememberCoroutineScope()
     BackHandler {
         // keyboardController?.hide()
+        var currentTIme = System.currentTimeMillis()
+
+
+        if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
+            if (viewModel.mInterstitialAd != null) {
+                viewModel.mInterstitialAd?.show(activity)
+            } else {
+
+            }
+        }
         var value = sharedPreferences.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
         var newValue = value + 1
 
@@ -351,6 +367,16 @@ fun MainStructureBulletPointsNotes(
                 title = { Text(text = "") },
                 navigationIcon = {
                     IconButton(onClick = {
+                        var currentTIme = System.currentTimeMillis()
+
+
+                        if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
+                            if (viewModel.mInterstitialAd != null) {
+                                viewModel.mInterstitialAd?.show(activity)
+                            } else {
+
+                            }
+                        }
                         var value = sharedPreferences.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
                         var newValue = value + 1
 
@@ -451,6 +477,16 @@ fun MainStructureBulletPointsNotes(
                         )
                     }
                     IconButton(onClick = {
+                        var currentTIme = System.currentTimeMillis()
+
+
+                        if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
+                            if (viewModel.mInterstitialAd != null) {
+                                viewModel.mInterstitialAd?.show(activity)
+                            } else {
+
+                            }
+                        }
                         var value = sharedPreferences.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
                         var newValue = value + 1
 
