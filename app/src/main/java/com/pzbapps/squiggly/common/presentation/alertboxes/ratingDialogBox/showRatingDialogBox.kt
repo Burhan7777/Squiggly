@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.CornerSize
@@ -17,6 +18,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import com.pzbapps.squiggly.common.domain.utils.Constant
 import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.common.presentation.MainActivity
@@ -24,6 +27,10 @@ import com.pzbapps.squiggly.common.presentation.MainActivity
 @Composable
 fun ShowRatingDialogBox(activity: MainActivity, onDismiss: () -> Unit) {
     var scope = rememberCoroutineScope()
+    var analytics = Firebase.analytics
+    var bundle = Bundle()
+    bundle.putString("rating_dialog_box_displayed", "rating_dialog_box_displayed")
+    analytics.logEvent("rating_dialog_box_displayed", bundle)
     androidx.compose.material3.AlertDialog(
         onDismissRequest = {
 
@@ -64,6 +71,11 @@ fun ShowRatingDialogBox(activity: MainActivity, onDismiss: () -> Unit) {
         confirmButton = {
             Button(
                 onClick = {
+                    var analytics = Firebase.analytics
+                    var bundle = Bundle()
+                    bundle.putString("rate_app_pressed", "rate_app_pressed")
+                    analytics.logEvent("rate_app_pressed", bundle)
+
 
                     val createSharedPreferences =
                         activity.getSharedPreferences(Constant.HIDE_RATING_DIALOG_BOX, Context.MODE_PRIVATE)
@@ -103,6 +115,10 @@ fun ShowRatingDialogBox(activity: MainActivity, onDismiss: () -> Unit) {
         dismissButton = {
             OutlinedButton(
                 onClick = {
+                    var analytics = Firebase.analytics
+                    var bundle = Bundle()
+                    bundle.putString("reminder_me_later_pressed", "reminder_me_later_pressed")
+                    analytics.logEvent("reminder_me_later_pressed", bundle)
                     val sharedPreference = activity.getSharedPreferences(
                         Constant.SHOW_RATING_DIALOG_BOX,
                         Context.MODE_PRIVATE

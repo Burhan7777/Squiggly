@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (81/84) // MAIN - (47/47)
+FEATURES THAT NEED TO BE ADDED (84/84) // MAIN - (47/47)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -82,6 +82,6 @@ FEATURES THAT NEED TO BE ADDED (81/84) // MAIN - (47/47)
 79) Delete all option has to be performed twice to make (Main): DELAYED
 80) Saving removes pinned note(Main): DONE
 81) Saving and saved text view(Main): CANCELLED
-82) Add remaining formatting tools in bottom formatting bar:
+82) Add remaining formatting tools in bottom formatting bar: DONE
 83) Unlocking of locked notes in notebooks notes:DONE
-84) Search within the note:
+84) Search within the note: DONE
