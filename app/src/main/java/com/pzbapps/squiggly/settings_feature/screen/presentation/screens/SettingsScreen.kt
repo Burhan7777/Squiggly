@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.Login
 import androidx.compose.material.icons.filled.Looks
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.PrivacyTip
+import androidx.compose.material.icons.filled.Subscriptions
 import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -59,6 +60,10 @@ import com.pzbapps.squiggly.settings_feature.screen.presentation.components.Show
 import com.pzbapps.squiggly.settings_feature.screen.presentation.components.ShowNotebooksAlertBox
 import com.pzbapps.squiggly.settings_feature.screen.presentation.components.VerificationCodeAlertBox
 import com.pzbapps.squiggly.settings_feature.screen.presentation.components.YouNeedToLoginFirst
+import com.qonversion.android.sdk.Qonversion
+import com.qonversion.android.sdk.dto.QonversionError
+import com.qonversion.android.sdk.dto.entitlements.QEntitlement
+import com.qonversion.android.sdk.listeners.QonversionEntitlementsCallback
 
 @Composable
 fun SettingsScreen(
@@ -762,6 +767,100 @@ fun SettingsScreen(
                     )
                 )
                 .clickable {
+                    Qonversion.shared.restore(object : QonversionEntitlementsCallback {
+                        override fun onSuccess(entitlements: Map<String, QEntitlement>) {
+                            val premiumEntitlement = entitlements["monhtlypremium"]
+                            if (premiumEntitlement != null && premiumEntitlement.isActive) {
+                                Toast
+                                    .makeText(
+                                        activity,
+                                        "Subscription restored successfully",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                    .show()
+                                viewModel.ifUserIsPremium.value = true
+                            } else {
+                                Toast
+                                    .makeText(
+                                        activity,
+                                        "No are not subscribed. Please subscribe.",
+                                        Toast.LENGTH_LONG
+                                    )
+                                    .show()
+                            }
+                        }
+
+                        override fun onError(error: QonversionError) {
+                            // handle error here
+                            Toast
+                                .makeText(
+                                    activity,
+                                    "Please try again",
+                                    Toast.LENGTH_SHORT
+                                )
+                                .show()
+                        }
+                    })
+                },
+            shape = MaterialTheme.shapes.medium.copy(
+                topStart = CornerSize(10.dp),
+                topEnd = CornerSize(10.dp),
+                bottomStart = CornerSize(10.dp),
+                bottomEnd = CornerSize(10.dp),
+            ),
+            elevation = CardDefaults.cardElevation(15.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
+                disabledContainerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                disabledContentColor = androidx.compose.material.MaterialTheme.colors.onPrimary
+            )
+        ) {
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Subscriptions,
+                    contentDescription = "Restore Subscription",
+                    modifier = Modifier.padding(top = 12.dp, start = 10.dp)
+                )
+                Text(
+                    text = "Restore Subscription",
+                    modifier = Modifier.padding(top = 12.dp, start = 10.dp),
+                    fontSize = 18.sp,
+                    fontFamily = FontFamily.fontFamilyRegular,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowForwardIos,
+                        contentDescription = "Arrow Forward",
+                        tint = androidx.compose.material.MaterialTheme.colors.onPrimary,
+                        modifier = Modifier
+                            .padding(top = 10.dp, end = 10.dp)
+                            .align(Alignment.CenterEnd)
+                    )
+                }
+            }
+        }
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp)
+                .padding(10.dp)
+                .border(
+                    BorderStroke(1.dp, androidx.compose.material.MaterialTheme.colors.onPrimary),
+                    androidx.compose.material.MaterialTheme.shapes.medium.copy(
+                        topStart = CornerSize(10.dp),
+                        topEnd = CornerSize(10.dp),
+                        bottomStart = CornerSize(10.dp),
+                        bottomEnd = CornerSize(10.dp),
+                    )
+                )
+                .clickable {
                     navHostController.navigate(Screens.PrivacyPolicy.route)
                 },
             shape = MaterialTheme.shapes.medium.copy(
@@ -785,7 +884,7 @@ fun SettingsScreen(
             ) {
                 Icon(
                     imageVector = Icons.Filled.PrivacyTip,
-                    contentDescription = "Change theme",
+                    contentDescription = "Privacy policy",
                     modifier = Modifier.padding(top = 12.dp, start = 10.dp)
                 )
                 Text(
@@ -862,3 +961,5 @@ fun SettingsScreen(
         }
     }
 }
+
+
