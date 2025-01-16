@@ -175,6 +175,9 @@ dependencies {
     //ADMOB
     implementation("com.google.android.gms:play-services-ads:23.6.0")
 
+    //LOTTIE ANIMATION
+    implementation 'com.airbnb.android:lottie-compose:6.6.2'
+
 
     //COLOR PICKER
   //  implementation ('com.godaddy.android.colorpicker:compose-color-picker:0.7.0')

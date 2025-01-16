@@ -1,5 +1,6 @@
 package com.pzbapps.squiggly.premium_feature.presentation.screen
 
+import android.os.Bundle
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -33,6 +35,7 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -49,6 +52,13 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import com.pzbapps.squiggly.R
 import com.pzbapps.squiggly.common.domain.utils.Constant
 import com.pzbapps.squiggly.common.presentation.FontFamily
@@ -71,6 +81,12 @@ fun PremiumPlan(
     navHostController: NavHostController,
     viewModel: MainActivityViewModel
 ) {
+
+    var analytics = Firebase.analytics
+    var bundle = Bundle()
+    bundle.putString("premium_screen_started", "premium_screen_started")
+    analytics.logEvent("premium_screen_started", bundle)
+
 
     var productPrice = remember { mutableStateOf("") }
     Qonversion.shared.products(callback = object : QonversionProductsCallback {
@@ -143,7 +159,7 @@ fun PremiumPlan(
         Feature("Share notes as DOCX", painterResource(R.drawable.ic_share))
         Feature("Cloud Backup every 24 hours", painterResource(R.drawable.ic_cloud_backup))
         Feature("Premium fonts", painterResource(R.drawable.ic_font))
-        Feature("Exclusive premium batch", painterResource(R.drawable.ic_batch))
+        Feature("Exclusive animated premium batch", painterResource(R.drawable.ic_batch))
         Feature("Support my 6 months of development", painterResource(R.drawable.ic_support))
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -186,6 +202,10 @@ fun PremiumPlan(
 
         Button(
             onClick = {
+                var analytics = Firebase.analytics
+                var bundle = Bundle()
+                bundle.putString("subscription_button_pressed", "subscription_button_pressed")
+                analytics.logEvent("subscription_button_pressed", bundle)
                 Qonversion.shared.products(callback = object : QonversionProductsCallback {
                     override fun onSuccess(products: Map<String, QProduct>) {
                         // handle available products here
@@ -301,7 +321,9 @@ fun PremiumPlan(
 
 
 @Composable
-fun Feature(feature: String, icon: Painter) {
+fun Feature(
+    feature: String, icon: Painter
+) {
     Column() {
         Row(
             verticalAlignment = Alignment.CenterVertically,

@@ -34,6 +34,11 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -42,6 +47,7 @@ import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions.RESULT_
 import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions.SCANNER_MODE_FULL
 import com.google.mlkit.vision.documentscanner.GmsDocumentScanning
 import com.google.mlkit.vision.documentscanner.GmsDocumentScanningResult
+import com.pzbapps.squiggly.R
 import com.pzbapps.squiggly.common.domain.utils.CheckInternet
 import com.pzbapps.squiggly.common.domain.utils.Constant
 import com.pzbapps.squiggly.common.domain.utils.NavigationItems
@@ -77,6 +83,8 @@ fun MainStructureMainScreen(
         initialValue =
         DrawerValue.Closed
     )
+
+    val lottiePremium by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.premium))
     var coroutineScope = rememberCoroutineScope()
 
     var showDialogToAccessLockedNotes = remember { mutableStateOf(false) }
@@ -180,17 +188,30 @@ fun MainStructureMainScreen(
                         modifier = Modifier.padding(20.dp),
                         fontSize = 20.sp
                     )
-                    androidx.compose.material3.OutlinedButton(
-                        onClick = {
-                            navHostController.navigate(Screens.PremiumPlanScreen.route)
-                        },
-                        border = BorderStroke(1.dp, MaterialTheme.colors.onPrimary),
-                    ) {
-                        androidx.compose.material3.Text(
-                            "Go Premium",
-                            color = MaterialTheme.colors.onPrimary,
-                            fontFamily = FontFamily.fontFamilyRegular
+                    if (!viewModel.ifUserIsPremium.value) {
+                        androidx.compose.material3.OutlinedButton(
+                            onClick = {
+                                navHostController.navigate(Screens.PremiumPlanScreen.route)
+                            },
+                            border = BorderStroke(1.dp, MaterialTheme.colors.onPrimary),
+                        ) {
+                            androidx.compose.material3.Text(
+                                "Go Premium",
+                                color = MaterialTheme.colors.onPrimary,
+                                fontFamily = FontFamily.fontFamilyRegular
+                            )
+                        }
+                    } else {
+                        val progress by animateLottieCompositionAsState(
+                            lottiePremium,
+                            iterations = LottieConstants.IterateForever
                         )
+                        LottieAnimation(
+                            modifier = Modifier.size(80.dp),
+                            composition = lottiePremium,
+                            progress = { progress },
+
+                            )
                     }
                 }
 //                    androidx.compose.material.OutlinedButton(
@@ -431,7 +452,7 @@ fun MainStructureMainScreen(
                             onClick = {
                                 if (viewModel.ifUserIsPremium.value) {
                                     showSelectScriptDialogBox.value = true
-                                }else{
+                                } else {
                                     navHostController.navigate(Screens.PremiumPlanScreen.route)
                                 }
                             }
