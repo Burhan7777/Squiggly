@@ -144,6 +144,18 @@ fun MainStructureMainScreen(
         createSharedPreferences.apply()
     }
 
+    val sharedPreferencesPremiumPlans  =activity.getSharedPreferences(Constant.SHOW_PREMIUM_PLANS, Context.MODE_PRIVATE)
+
+    val showPremiumPlansKeyExists =sharedPreferencesPremiumPlans.contains(Constant.SHOW_PREMIUM_PLANS_KEY)
+
+    if (!showPremiumPlansKeyExists){
+        val createSharedPreferences =
+            activity.getSharedPreferences(Constant.SHOW_PREMIUM_PLANS, Context.MODE_PRIVATE)
+                .edit()
+        createSharedPreferences.putInt(Constant.SHOW_PREMIUM_PLANS_KEY, 1)
+        createSharedPreferences.apply()
+    }
+
     val options = GmsDocumentScannerOptions.Builder()
         .setScannerMode(SCANNER_MODE_FULL)
         .setResultFormats(RESULT_FORMAT_JPEG)

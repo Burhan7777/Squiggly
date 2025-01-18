@@ -48,6 +48,7 @@ import com.pzbapps.squiggly.common.domain.utils.Constant
 import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
+import com.pzbapps.squiggly.common.presentation.Screens
 import com.pzbapps.squiggly.common.presentation.alertboxes.AlertDialogBoxTrialEnded
 import com.pzbapps.squiggly.common.presentation.fontsbottomsheet.FontBottomSheet
 import com.pzbapps.squiggly.main_screen.domain.model.Note
@@ -171,6 +172,9 @@ fun MainStructureBulletPointsNotes(
         Constant.SHOW_RATING_DIALOG_BOX,
         Context.MODE_PRIVATE
     )
+
+    var sharedPreferencesPremiumPlans =
+        activity.getSharedPreferences(Constant.SHOW_PREMIUM_PLANS, Context.MODE_PRIVATE)
 
     LaunchedEffect(key1 = true) {
         if (mutableListOfBulletPointsNotes.isEmpty()) {
@@ -296,9 +300,26 @@ fun MainStructureBulletPointsNotes(
             newValue
         )
         createSharedPreferences.apply()
+
+        var valuePremium = sharedPreferencesPremiumPlans.getInt(Constant.SHOW_PREMIUM_PLANS_KEY, 0)
+        var newValuePremium = valuePremium + 1
+
+        val createSharedPreferencesPremium =
+            sharedPreferencesPremiumPlans.edit()
+
+        createSharedPreferencesPremium.putInt(
+            Constant.SHOW_PREMIUM_PLANS_KEY,
+            newValuePremium
+        )
+        createSharedPreferencesPremium.apply()
         remember.launch(Dispatchers.Main) {
             count.value++
-            navController.popBackStack()
+            if(newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
+                navController.navigateUp()
+                navController.navigate(Screens.PremiumPlanScreen.route)
+            }else{
+                navController.navigateUp()
+            }
         }
     }
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -388,6 +409,18 @@ fun MainStructureBulletPointsNotes(
                             newValue
                         )
                         createSharedPreferences.apply()
+
+                        var valuePremium = sharedPreferencesPremiumPlans.getInt(Constant.SHOW_PREMIUM_PLANS_KEY, 0)
+                        var newValuePremium = valuePremium + 1
+
+                        val createSharedPreferencesPremium =
+                            sharedPreferencesPremiumPlans.edit()
+
+                        createSharedPreferencesPremium.putInt(
+                            Constant.SHOW_PREMIUM_PLANS_KEY,
+                            newValuePremium
+                        )
+                        createSharedPreferencesPremium.apply()
                         convertMutableStateIntoString(
                             mutableListOfBulletPointsNotes,
                             mutableListConverted
@@ -424,13 +457,23 @@ fun MainStructureBulletPointsNotes(
                                 .show()
                             scope.launch {
                                 delay(200)
-                                navController.navigateUp()
+                                if(newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
+                                    navController.navigateUp()
+                                    navController.navigate(Screens.PremiumPlanScreen.route)
+                                }else{
+                                    navController.navigateUp()
+                                }
                             }
                         } else {
                             viewModel.deleteNoteById(generatedNoteId.value.toInt())
                             Toast.makeText(context, "Empty note discarded", Toast.LENGTH_SHORT)
                                 .show()
-                            navController.navigateUp()
+                            if(newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
+                                navController.navigateUp()
+                                navController.navigate(Screens.PremiumPlanScreen.route)
+                            }else{
+                                navController.navigateUp()
+                            }
                         }
 
                     }) {
@@ -477,16 +520,7 @@ fun MainStructureBulletPointsNotes(
                         )
                     }
                     IconButton(onClick = {
-                        var currentTIme = System.currentTimeMillis()
 
-
-                        if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
-                            if (viewModel.mInterstitialAd != null) {
-                                viewModel.mInterstitialAd?.show(activity)
-                            } else {
-
-                            }
-                        }
                         var value = sharedPreferences.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
                         var newValue = value + 1
 
@@ -498,6 +532,18 @@ fun MainStructureBulletPointsNotes(
                             newValue
                         )
                         createSharedPreferences.apply()
+
+                        var valuePremium = sharedPreferencesPremiumPlans.getInt(Constant.SHOW_PREMIUM_PLANS_KEY, 0)
+                        var newValuePremium = valuePremium + 1
+
+                        val createSharedPreferencesPremium =
+                            sharedPreferencesPremiumPlans.edit()
+
+                        createSharedPreferencesPremium.putInt(
+                            Constant.SHOW_PREMIUM_PLANS_KEY,
+                            newValuePremium
+                        )
+                        createSharedPreferencesPremium.apply()
                         convertMutableStateIntoString(
                             mutableListOfBulletPointsNotes,
                             mutableListConverted
@@ -534,13 +580,23 @@ fun MainStructureBulletPointsNotes(
                                 .show()
                             scope.launch {
                                 delay(200)
-                                navController.navigateUp()
+                                if(newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
+                                    navController.navigateUp()
+                                    navController.navigate(Screens.PremiumPlanScreen.route)
+                                }else{
+                                    navController.navigateUp()
+                                }
                             }
                         } else {
                             viewModel.deleteNoteById(generatedNoteId.value.toInt())
                             Toast.makeText(context, "Empty note discarded", Toast.LENGTH_SHORT)
                                 .show()
-                            navController.navigateUp()
+                            if(newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
+                                navController.navigateUp()
+                                navController.navigate(Screens.PremiumPlanScreen.route)
+                            }else{
+                                navController.navigateUp()
+                            }
                         }
 
 

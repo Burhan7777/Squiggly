@@ -34,5 +34,7 @@ object Constant {
     const val SHOW_RATING_DIALOG_BOX_KEY = "show_rating_dialog_box_key"
     const val HIDE_RATING_DIALOG_BOX = "hide_rating_dialog_box"
     const val HIDE_RATING_DIALOG_BOX_KEY = "hide_rating_dialog_box_key"
+    const val  SHOW_PREMIUM_PLANS = "show_premium_plans"
+    const val SHOW_PREMIUM_PLANS_KEY  = "show_premium_plans_key"
 
 }

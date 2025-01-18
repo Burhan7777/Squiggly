@@ -46,6 +46,7 @@ import com.pzbapps.squiggly.add_note_feature.presentation.components.DiscardNote
 import com.pzbapps.squiggly.common.domain.utils.Constant
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
+import com.pzbapps.squiggly.common.presentation.Screens
 import com.pzbapps.squiggly.common.presentation.alertboxes.AlertDialogBoxTrialEnded
 import com.pzbapps.squiggly.common.presentation.fontsbottomsheet.FontBottomSheet
 import com.pzbapps.squiggly.main_screen.domain.model.Note
@@ -163,6 +164,9 @@ fun MainStructureCheckBoxNote(
         Constant.SHOW_RATING_DIALOG_BOX,
         Context.MODE_PRIVATE
     )
+
+    var sharedPreferencesPremiumPlans =
+        activity.getSharedPreferences(Constant.SHOW_PREMIUM_PLANS, Context.MODE_PRIVATE)
 
     LaunchedEffect(true) {
         viewModel.loadAndShowAd()
@@ -328,9 +332,26 @@ fun MainStructureCheckBoxNote(
             newValue
         )
         createSharedPreferences.apply()
+
+        var valuePremium = sharedPreferencesPremiumPlans.getInt(Constant.SHOW_PREMIUM_PLANS_KEY, 0)
+        var newValuePremium = valuePremium + 1
+
+        val createSharedPreferencesPremium =
+            sharedPreferencesPremiumPlans.edit()
+
+        createSharedPreferencesPremium.putInt(
+            Constant.SHOW_PREMIUM_PLANS_KEY,
+            newValuePremium
+        )
+        createSharedPreferencesPremium.apply()
         remember.launch(Dispatchers.Main) {
             count.value++
-            navController.navigateUp()
+            if(newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
+                navController.navigateUp()
+                navController.navigate(Screens.PremiumPlanScreen.route)
+            }else{
+                navController.navigateUp()
+            }
         }
     }
 
@@ -424,6 +445,18 @@ fun MainStructureCheckBoxNote(
                         )
                         createSharedPreferences.apply()
 
+                        var valuePremium = sharedPreferencesPremiumPlans.getInt(Constant.SHOW_PREMIUM_PLANS_KEY, 0)
+                        var newValuePremium = valuePremium + 1
+
+                        val createSharedPreferencesPremium =
+                            sharedPreferencesPremiumPlans.edit()
+
+                        createSharedPreferencesPremium.putInt(
+                            Constant.SHOW_PREMIUM_PLANS_KEY,
+                            newValuePremium
+                        )
+                        createSharedPreferencesPremium.apply()
+
                         if (title.value.isNotEmpty() || (mutableListConverted.size != 1 || mutableListConverted[0].isNotEmpty())) {
                             if (backgroundColor.value != backgroundColor1) {
                                 val note = Note(
@@ -454,12 +487,22 @@ fun MainStructureCheckBoxNote(
                                 )
                                 viewModel.updateNote(note)
                             }
-                            navController.navigateUp()
+                            if(newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
+                                navController.navigateUp()
+                                navController.navigate(Screens.PremiumPlanScreen.route)
+                            }else{
+                                navController.navigateUp()
+                            }
                         } else {
                             viewModel.deleteNoteById(generatedNoteId.value.toInt())
                             Toast.makeText(context, "Empty note discarded", Toast.LENGTH_SHORT)
                                 .show()
-                            navController.navigateUp()
+                            if(newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
+                                navController.navigateUp()
+                                navController.navigate(Screens.PremiumPlanScreen.route)
+                            }else{
+                                navController.navigateUp()
+                            }
                         }
                     }) {
                         Icon(
@@ -532,6 +575,18 @@ fun MainStructureCheckBoxNote(
                         )
                         createSharedPreferences.apply()
 
+                        var valuePremium = sharedPreferencesPremiumPlans.getInt(Constant.SHOW_PREMIUM_PLANS_KEY, 0)
+                        var newValuePremium = valuePremium + 1
+
+                        val createSharedPreferencesPremium =
+                            sharedPreferencesPremiumPlans.edit()
+
+                        createSharedPreferencesPremium.putInt(
+                            Constant.SHOW_PREMIUM_PLANS_KEY,
+                            newValuePremium
+                        )
+                        createSharedPreferencesPremium.apply()
+
 
 
 
@@ -565,12 +620,22 @@ fun MainStructureCheckBoxNote(
                                 )
                                 viewModel.updateNote(note)
                             }
-                            navController.navigateUp()
+                            if(newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
+                                navController.navigateUp()
+                                navController.navigate(Screens.PremiumPlanScreen.route)
+                            }else{
+                                navController.navigateUp()
+                            }
                         } else {
                             viewModel.deleteNoteById(generatedNoteId.value.toInt())
                             Toast.makeText(context, "Empty note discarded", Toast.LENGTH_SHORT)
                                 .show()
-                            navController.navigateUp()
+                            if(newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
+                                navController.navigateUp()
+                                navController.navigate(Screens.PremiumPlanScreen.route)
+                            }else{
+                                navController.navigateUp()
+                            }
                         }
 
                     }) {

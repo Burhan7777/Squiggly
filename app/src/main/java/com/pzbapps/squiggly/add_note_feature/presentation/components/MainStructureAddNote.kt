@@ -48,6 +48,7 @@ import com.pzbapps.squiggly.common.domain.utils.Constant
 import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
+import com.pzbapps.squiggly.common.presentation.Screens
 import com.pzbapps.squiggly.common.presentation.alertboxes.AlertDialogBoxTrialEnded
 import com.pzbapps.squiggly.common.presentation.fontsbottomsheet.FontBottomSheet
 import com.pzbapps.squiggly.common.presentation.textcolorsbottomsheet.TextColorBottomSheet
@@ -154,7 +155,9 @@ fun MainStructureAddNote(
         FontFamily.lobster -> fontFamilyString.value = FontFamily.lobsterString
         FontFamily.playfair -> fontFamilyString.value = FontFamily.playfairString
         FontFamily.poppins -> fontFamilyString.value = FontFamily.poppinsString
-        FontFamily.playWriteAustralia -> fontFamilyString.value = FontFamily.playWriteAustraliaString
+        FontFamily.playWriteAustralia -> fontFamilyString.value =
+            FontFamily.playWriteAustraliaString
+
         FontFamily.playWriteVietnam -> fontFamilyString.value = FontFamily.playWriteVietnamString
         FontFamily.juraLight -> fontFamilyString.value = FontFamily.juraLightString
         FontFamily.majorMonoDisplay -> fontFamilyString.value = FontFamily.majorMonoDisplayString
@@ -173,6 +176,9 @@ fun MainStructureAddNote(
         Constant.SHOW_RATING_DIALOG_BOX,
         Context.MODE_PRIVATE
     )
+
+    var sharedPreferencesPremiumPlans =
+        activity.getSharedPreferences(Constant.SHOW_PREMIUM_PLANS, Context.MODE_PRIVATE)
 
     LaunchedEffect(richTextState.value) {
         snapshotFlow { richTextState.value.annotatedString }
@@ -381,6 +387,18 @@ fun MainStructureAddNote(
             newValue
         )
         createSharedPreferences.apply()
+
+        var valuePremium = sharedPreferencesPremiumPlans.getInt(Constant.SHOW_PREMIUM_PLANS_KEY, 0)
+        var newValuePremium = valuePremium + 1
+
+        val createSharedPreferencesPremium =
+            sharedPreferencesPremiumPlans.edit()
+
+        createSharedPreferencesPremium.putInt(
+            Constant.SHOW_PREMIUM_PLANS_KEY,
+            newValuePremium
+        )
+        createSharedPreferencesPremium.apply()
         var analytics = Firebase.analytics
         var bundle = Bundle()
         bundle.putString("back_handler_triggered_add_notes", "back_handler_triggered_add_notes")
@@ -416,11 +434,21 @@ fun MainStructureAddNote(
                 viewModel.updateNote(updatedNote)
             }
 
-            navController.navigateUp()
+            if(newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
+                navController.navigateUp()
+                navController.navigate(Screens.PremiumPlanScreen.route)
+            }else{
+                navController.navigateUp()
+            }
         } else {
             Toast.makeText(context, "Empty note discarded", Toast.LENGTH_SHORT).show()
             viewModel.deleteNoteById(generatedNoteId.value.toInt())
-            navController.navigateUp()
+            if(newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
+                navController.navigateUp()
+                navController.navigate(Screens.PremiumPlanScreen.route)
+            }else{
+                navController.navigateUp()
+            }
         }
     }
     Scaffold(
@@ -457,6 +485,19 @@ fun MainStructureAddNote(
                             newValue
                         )
                         createSharedPreferences.apply()
+
+                        var valuePremium = sharedPreferencesPremiumPlans.getInt(Constant.SHOW_PREMIUM_PLANS_KEY, 0)
+                        var newValuePremium = valuePremium + 1
+
+                        val createSharedPreferencesPremium =
+                            sharedPreferencesPremiumPlans.edit()
+
+                        createSharedPreferencesPremium.putInt(
+                            Constant.SHOW_PREMIUM_PLANS_KEY,
+                            newValuePremium
+                        )
+                        createSharedPreferencesPremium.apply()
+
                         var analytics = Firebase.analytics
                         var bundle = Bundle()
                         bundle.putString(
@@ -502,12 +543,22 @@ fun MainStructureAddNote(
                             }
                             Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT)
                                 .show()
-                            navController.navigateUp()
+                            if(newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
+                                navController.navigateUp()
+                                navController.navigate(Screens.PremiumPlanScreen.route)
+                            }else{
+                                navController.navigateUp()
+                            }
                         } else {
                             viewModel.deleteNoteById(generatedNoteId.value.toInt())
                             Toast.makeText(context, "Empty note discarded", Toast.LENGTH_SHORT)
                                 .show()
-                            navController.navigateUp()
+                            if(newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
+                                navController.navigateUp()
+                                navController.navigate(Screens.PremiumPlanScreen.route)
+                            }else{
+                                navController.navigateUp()
+                            }
                         }
                     }) {
                         Icon(
@@ -568,6 +619,19 @@ fun MainStructureAddNote(
                             newValue
                         )
                         createSharedPreferences.apply()
+
+                        var valuePremium = sharedPreferencesPremiumPlans.getInt(Constant.SHOW_PREMIUM_PLANS_KEY, 0)
+                        var newValuePremium = valuePremium + 1
+
+                        val createSharedPreferencesPremium =
+                            sharedPreferencesPremiumPlans.edit()
+
+                        createSharedPreferencesPremium.putInt(
+                            Constant.SHOW_PREMIUM_PLANS_KEY,
+                            newValuePremium
+                        )
+                        createSharedPreferencesPremium.apply()
+
                         if (title.value.isNotEmpty() || richTextState.value.annotatedString.text.isNotEmpty()) {
                             if (backgroundColor.value != backgroundColor1) {
                                 var note2 = Note(
@@ -606,12 +670,22 @@ fun MainStructureAddNote(
                             }
                             Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT)
                                 .show()
-                            navController.navigateUp()
+                            if(newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
+                                navController.navigateUp()
+                                navController.navigate(Screens.PremiumPlanScreen.route)
+                            }else{
+                                navController.navigateUp()
+                            }
                         } else {
                             viewModel.deleteNoteById(generatedNoteId.value.toInt())
                             Toast.makeText(context, "Empty note discarded", Toast.LENGTH_SHORT)
                                 .show()
-                            navController.navigateUp()
+                            if(newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
+                                navController.navigateUp()
+                                navController.navigate(Screens.PremiumPlanScreen.route)
+                            }else{
+                                navController.navigateUp()
+                            }
                         }
                     }) {
                         Icon(
@@ -717,7 +791,7 @@ fun MainStructureAddNote(
                 TextColorBottomSheet(showTextColorBottomSheet, richTextState)
             }
             if (showFontBottomSheet.value) {
-                FontBottomSheet(showFontBottomSheet, fontFamily,viewModel,navController)
+                FontBottomSheet(showFontBottomSheet, fontFamily, viewModel, navController)
             }
         }
     }

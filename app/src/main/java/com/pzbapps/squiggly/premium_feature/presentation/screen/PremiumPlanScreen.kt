@@ -159,7 +159,7 @@ fun PremiumPlan(
         Feature("Share notes as DOCX", painterResource(R.drawable.ic_share))
         Feature("Cloud Backup every 24 hours", painterResource(R.drawable.ic_cloud_backup))
         Feature("Premium fonts", painterResource(R.drawable.ic_font))
-        Feature("Exclusive animated premium batch", painterResource(R.drawable.ic_batch))
+        Feature("Exclusive animated premium badge", painterResource(R.drawable.ic_batch))
         Feature("Support my 6 months of development", painterResource(R.drawable.ic_support))
 
         Spacer(modifier = Modifier.height(10.dp))
