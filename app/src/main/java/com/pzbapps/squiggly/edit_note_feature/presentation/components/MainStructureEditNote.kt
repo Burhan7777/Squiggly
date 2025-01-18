@@ -326,6 +326,9 @@ fun MainStructureEditNote(
         Context.MODE_PRIVATE
     )
 
+    var sharedPreferencesPremiumPlans =
+        activity.getSharedPreferences(Constant.SHOW_PREMIUM_PLANS, Context.MODE_PRIVATE)
+
     LaunchedEffect(key1 = true) {
         // WindowCompat.setDecorFitsSystemWindows(activity.window, false)
     }
@@ -636,6 +639,18 @@ fun MainStructureEditNote(
         )
         createSharedPreferences.apply()
 
+        var valuePremium = sharedPreferencesPremiumPlans.getInt(Constant.SHOW_PREMIUM_PLANS_KEY, 0)
+        var newValuePremium = valuePremium + 1
+
+        val createSharedPreferencesPremium =
+            sharedPreferencesPremiumPlans.edit()
+
+        createSharedPreferencesPremium.putInt(
+            Constant.SHOW_PREMIUM_PLANS_KEY,
+            newValuePremium
+        )
+        createSharedPreferencesPremium.apply()
+
         var formattedText =
             removeHighlights(richStateText.value.toHtml())
         richStateText.value.setHtml(formattedText)
@@ -667,7 +682,12 @@ fun MainStructureEditNote(
                 )
                 viewModel.updateNote(note)
             }
-            navController.navigateUp()
+            if(newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
+                navController.navigateUp()
+                navController.navigate(Screens.PremiumPlanScreen.route)
+            }else{
+                navController.navigateUp()
+            }
         }
     }
 
@@ -786,6 +806,19 @@ fun MainStructureEditNote(
                             newValue
                         )
                         createSharedPreferences.apply()
+
+                        var valuePremium = sharedPreferencesPremiumPlans.getInt(Constant.SHOW_PREMIUM_PLANS_KEY, 0)
+                        var newValuePremium = valuePremium + 1
+
+                        val createSharedPreferencesPremium =
+                            sharedPreferencesPremiumPlans.edit()
+
+                        createSharedPreferencesPremium.putInt(
+                            Constant.SHOW_PREMIUM_PLANS_KEY,
+                            newValuePremium
+                        )
+                        createSharedPreferencesPremium.apply()
+
                         var formattedText =
                             removeHighlights(richStateText.value.toHtml())
                         richStateText.value.setHtml(formattedText)
@@ -833,7 +866,12 @@ fun MainStructureEditNote(
                             .show()
                         scope.launch {
                             delay(200)
-                            navController.navigateUp()
+                            if(newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
+                                navController.navigateUp()
+                                navController.navigate(Screens.PremiumPlanScreen.route)
+                            }else{
+                                navController.navigateUp()
+                            }
                         }
 
                     }) {
@@ -1030,6 +1068,19 @@ fun MainStructureEditNote(
                             newValue
                         )
                         createSharedPreferences.apply()
+
+                        var valuePremium = sharedPreferencesPremiumPlans.getInt(Constant.SHOW_PREMIUM_PLANS_KEY, 0)
+                        var newValuePremium = valuePremium + 1
+
+                        val createSharedPreferencesPremium =
+                            sharedPreferencesPremiumPlans.edit()
+
+                        createSharedPreferencesPremium.putInt(
+                            Constant.SHOW_PREMIUM_PLANS_KEY,
+                            newValuePremium
+                        )
+                        createSharedPreferencesPremium.apply()
+
                         var formattedText =
                             removeHighlights(richStateText.value.toHtml())
                         richStateText.value.setHtml(formattedText)
@@ -1077,7 +1128,12 @@ fun MainStructureEditNote(
                         viewModel.updateNote(note)
                         scope.launch {
                             delay(200)
-                            navController.navigateUp()
+                            if(newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
+                                navController.navigateUp()
+                                navController.navigate(Screens.PremiumPlanScreen.route)
+                            }else{
+                                navController.navigateUp()
+                            }
                         }
 
                         Toast.makeText(
