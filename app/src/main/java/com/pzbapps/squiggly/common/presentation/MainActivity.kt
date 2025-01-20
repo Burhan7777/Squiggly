@@ -84,7 +84,7 @@ class MainActivity : ComponentActivity() {
 
         viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
 
-        checkIfUserIsPremium(viewModel)
+        checkIfUserIsPremium(viewModel,this)
 
         viewModel.getAllNotebooks() // WE LOAD THE NOTEBOOKS IN THE START ONLY SO THAT TO SHOW THEM EVERYWHERE NEEDED.
         val sharedPreferences = getSharedPreferences("rememberUser", Context.MODE_PRIVATE)

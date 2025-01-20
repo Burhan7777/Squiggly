@@ -1,5 +1,9 @@
 package com.pzbapps.squiggly.premium_feature.presentation.screen
 
+import android.app.Activity.MODE_PRIVATE
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
@@ -224,6 +228,14 @@ fun PremiumPlan(
                                         ).show()
                                         viewModel.ifUserIsPremium.value = true
 
+                                        val prefsEvery24Hours =
+                                            activity.getSharedPreferences(
+                                                Constant.AUTO_SAVE_PREF_EVERY_24_HOURS,
+                                                MODE_PRIVATE
+                                            ).edit()
+                                        prefsEvery24Hours.putBoolean(Constant.AUTO_SAVE_KEY_EVERY_24_HOURS, true)
+                                        prefsEvery24Hours.apply()
+
                                     }
                                 }
 
@@ -293,7 +305,7 @@ fun PremiumPlan(
         Spacer(modifier = Modifier.height(10.dp))
 
         Text(
-            "You will be charged ${productPrice.value} every month ",
+            "You will be charged ${productPrice.value} every month. You can cancel subscription anytime through playstore subscriptions. ",
             color = MaterialTheme.colors.onPrimary,
             fontFamily = FontFamily.fontFamilyRegular,
             textAlign = TextAlign.Center,
@@ -302,10 +314,15 @@ fun PremiumPlan(
         )
 
         TextButton(onClick = {
+            val packageName = "com.pzbapps.squiggly"
+            val sku = "monthly"
+
+            openPlayStoreAccount(activity, packageName, sku)
+
 
         }, modifier = Modifier.fillMaxWidth()) {
             Text(
-                "Cancel Subscription",
+                "Manage Subscription",
                 color = MaterialTheme.colors.onPrimary,
                 fontFamily = FontFamily.fontFamilyExtraLight,
                 textDecoration = TextDecoration.Underline,
@@ -341,5 +358,20 @@ fun Feature(
             )
         }
         Spacer(modifier = Modifier.height(15.dp))
+    }
+}
+
+fun openPlayStoreAccount(activity: MainActivity, packageName: String, sku: String) {
+    try {
+        activity.startActivity(
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://play.google.com/store/account/subscriptions/")
+            )
+        )
+    } catch (e: ActivityNotFoundException) {
+        Toast.makeText(activity, "Could not find playstore on your phone", Toast.LENGTH_SHORT)
+            .show()
+        e.printStackTrace()
     }
 }

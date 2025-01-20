@@ -645,6 +645,67 @@ fun SettingsScreen(
                     )
                 )
                 .clickable {
+                    navHostController.navigate(Screens.PremiumPlanScreen.route)
+                },
+            shape = MaterialTheme.shapes.medium.copy(
+                topStart = CornerSize(10.dp),
+                topEnd = CornerSize(10.dp),
+                bottomStart = CornerSize(10.dp),
+                bottomEnd = CornerSize(10.dp),
+            ),
+            elevation = CardDefaults.cardElevation(15.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
+                disabledContainerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                disabledContentColor = androidx.compose.material.MaterialTheme.colors.onPrimary
+            )
+        ) {
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Subscriptions,
+                    contentDescription = "Premium",
+                    modifier = Modifier.padding(top = 12.dp, start = 10.dp)
+                )
+                Text(
+                    text = "Premium",
+                    modifier = Modifier.padding(top = 12.dp, start = 10.dp),
+                    fontSize = 18.sp,
+                    fontFamily = FontFamily.fontFamilyRegular,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowForwardIos,
+                        contentDescription = "Arrow Forward",
+                        tint = androidx.compose.material.MaterialTheme.colors.onPrimary,
+                        modifier = Modifier
+                            .padding(top = 10.dp, end = 10.dp)
+                            .align(Alignment.CenterEnd)
+                    )
+                }
+            }
+        }
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp)
+                .padding(10.dp)
+                .border(
+                    BorderStroke(1.dp, androidx.compose.material.MaterialTheme.colors.onPrimary),
+                    androidx.compose.material.MaterialTheme.shapes.medium.copy(
+                        topStart = CornerSize(10.dp),
+                        topEnd = CornerSize(10.dp),
+                        bottomStart = CornerSize(10.dp),
+                        bottomEnd = CornerSize(10.dp),
+                    )
+                )
+                .clickable {
                     navHostController.navigate(Screens.FeedbackScreen.route)
                 },
             shape = MaterialTheme.shapes.medium.copy(
