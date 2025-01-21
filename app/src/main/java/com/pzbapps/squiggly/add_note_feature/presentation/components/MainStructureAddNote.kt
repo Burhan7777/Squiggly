@@ -128,7 +128,9 @@ fun MainStructureAddNote(
     val redoStack = remember { Stack<String>() }
 
     LaunchedEffect(true) {
-        viewModel.loadAndShowAd()
+        if (!viewModel.ifUserIsPremium.value) {
+            viewModel.loadAndShowAd()
+        }
     }
 
     // Track the current content as a snapshot
@@ -367,11 +369,13 @@ fun MainStructureAddNote(
         var currentTIme = System.currentTimeMillis()
 
 
-        if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
-            if (viewModel.mInterstitialAd != null) {
-                viewModel.mInterstitialAd?.show(activity)
-            } else {
+        if (!viewModel.ifUserIsPremium.value) {
+            if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
+                if (viewModel.mInterstitialAd != null) {
+                    viewModel.mInterstitialAd?.show(activity)
+                } else {
 
+                }
             }
         }
 
@@ -434,19 +438,19 @@ fun MainStructureAddNote(
                 viewModel.updateNote(updatedNote)
             }
 
-            if(newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
+            if (newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
                 navController.navigateUp()
                 navController.navigate(Screens.PremiumPlanScreen.route)
-            }else{
+            } else {
                 navController.navigateUp()
             }
         } else {
             Toast.makeText(context, "Empty note discarded", Toast.LENGTH_SHORT).show()
             viewModel.deleteNoteById(generatedNoteId.value.toInt())
-            if(newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
+            if (newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
                 navController.navigateUp()
                 navController.navigate(Screens.PremiumPlanScreen.route)
-            }else{
+            } else {
                 navController.navigateUp()
             }
         }
@@ -466,11 +470,13 @@ fun MainStructureAddNote(
                         var currentTIme = System.currentTimeMillis()
 
 
-                        if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
-                            if (viewModel.mInterstitialAd != null) {
-                                viewModel.mInterstitialAd?.show(activity)
-                            } else {
+                        if (!viewModel.ifUserIsPremium.value) {
+                            if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
+                                if (viewModel.mInterstitialAd != null) {
+                                    viewModel.mInterstitialAd?.show(activity)
+                                } else {
 
+                                }
                             }
                         }
 
@@ -486,7 +492,8 @@ fun MainStructureAddNote(
                         )
                         createSharedPreferences.apply()
 
-                        var valuePremium = sharedPreferencesPremiumPlans.getInt(Constant.SHOW_PREMIUM_PLANS_KEY, 0)
+                        var valuePremium =
+                            sharedPreferencesPremiumPlans.getInt(Constant.SHOW_PREMIUM_PLANS_KEY, 0)
                         var newValuePremium = valuePremium + 1
 
                         val createSharedPreferencesPremium =
@@ -543,20 +550,20 @@ fun MainStructureAddNote(
                             }
                             Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT)
                                 .show()
-                            if(newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
+                            if (newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
                                 navController.navigateUp()
                                 navController.navigate(Screens.PremiumPlanScreen.route)
-                            }else{
+                            } else {
                                 navController.navigateUp()
                             }
                         } else {
                             viewModel.deleteNoteById(generatedNoteId.value.toInt())
                             Toast.makeText(context, "Empty note discarded", Toast.LENGTH_SHORT)
                                 .show()
-                            if(newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
+                            if (newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
                                 navController.navigateUp()
                                 navController.navigate(Screens.PremiumPlanScreen.route)
-                            }else{
+                            } else {
                                 navController.navigateUp()
                             }
                         }
@@ -600,11 +607,13 @@ fun MainStructureAddNote(
                         var currentTIme = System.currentTimeMillis()
 
 
-                        if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
-                            if (viewModel.mInterstitialAd != null) {
-                                viewModel.mInterstitialAd?.show(activity)
-                            } else {
+                        if (!viewModel.ifUserIsPremium.value) {
+                            if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
+                                if (viewModel.mInterstitialAd != null) {
+                                    viewModel.mInterstitialAd?.show(activity)
+                                } else {
 
+                                }
                             }
                         }
 
@@ -620,7 +629,8 @@ fun MainStructureAddNote(
                         )
                         createSharedPreferences.apply()
 
-                        var valuePremium = sharedPreferencesPremiumPlans.getInt(Constant.SHOW_PREMIUM_PLANS_KEY, 0)
+                        var valuePremium =
+                            sharedPreferencesPremiumPlans.getInt(Constant.SHOW_PREMIUM_PLANS_KEY, 0)
                         var newValuePremium = valuePremium + 1
 
                         val createSharedPreferencesPremium =
@@ -670,20 +680,20 @@ fun MainStructureAddNote(
                             }
                             Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT)
                                 .show()
-                            if(newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
+                            if (newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
                                 navController.navigateUp()
                                 navController.navigate(Screens.PremiumPlanScreen.route)
-                            }else{
+                            } else {
                                 navController.navigateUp()
                             }
                         } else {
                             viewModel.deleteNoteById(generatedNoteId.value.toInt())
                             Toast.makeText(context, "Empty note discarded", Toast.LENGTH_SHORT)
                                 .show()
-                            if(newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
+                            if (newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
                                 navController.navigateUp()
                                 navController.navigate(Screens.PremiumPlanScreen.route)
-                            }else{
+                            } else {
                                 navController.navigateUp()
                             }
                         }

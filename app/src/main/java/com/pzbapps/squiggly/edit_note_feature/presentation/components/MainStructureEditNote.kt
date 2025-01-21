@@ -217,7 +217,9 @@ fun MainStructureEditNote(
     var timeWhenNewNoteWasStarted = remember { System.currentTimeMillis() }
 
     LaunchedEffect(true) {
-        viewModel.loadAndShowAd()
+        if (!viewModel.ifUserIsPremium.value) {
+            viewModel.loadAndShowAd()
+        }
     }
 
 
@@ -621,10 +623,13 @@ fun MainStructureEditNote(
 
         var currentTIme = System.currentTimeMillis()
 
-        if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
-            if (viewModel.mInterstitialAd != null) {
-                viewModel.mInterstitialAd?.show(activity)
-            } else {
+        if (!viewModel.ifUserIsPremium.value) {
+            if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
+                if (viewModel.mInterstitialAd != null) {
+                    viewModel.mInterstitialAd?.show(activity)
+                } else {
+
+                }
             }
         }
         var value = sharedPreferences.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
@@ -682,10 +687,10 @@ fun MainStructureEditNote(
                 )
                 viewModel.updateNote(note)
             }
-            if(newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
+            if (newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
                 navController.navigateUp()
                 navController.navigate(Screens.PremiumPlanScreen.route)
-            }else{
+            } else {
                 navController.navigateUp()
             }
         }
@@ -788,10 +793,13 @@ fun MainStructureEditNote(
                     IconButton(onClick = {
                         var currentTIme = System.currentTimeMillis()
 
-                        if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
-                            if (viewModel.mInterstitialAd != null) {
-                                viewModel.mInterstitialAd?.show(activity)
-                            } else {
+                        if (!viewModel.ifUserIsPremium.value) {
+                            if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
+                                if (viewModel.mInterstitialAd != null) {
+                                    viewModel.mInterstitialAd?.show(activity)
+                                } else {
+
+                                }
                             }
                         }
 
@@ -807,7 +815,8 @@ fun MainStructureEditNote(
                         )
                         createSharedPreferences.apply()
 
-                        var valuePremium = sharedPreferencesPremiumPlans.getInt(Constant.SHOW_PREMIUM_PLANS_KEY, 0)
+                        var valuePremium =
+                            sharedPreferencesPremiumPlans.getInt(Constant.SHOW_PREMIUM_PLANS_KEY, 0)
                         var newValuePremium = valuePremium + 1
 
                         val createSharedPreferencesPremium =
@@ -866,10 +875,10 @@ fun MainStructureEditNote(
                             .show()
                         scope.launch {
                             delay(200)
-                            if(newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
+                            if (newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
                                 navController.navigateUp()
                                 navController.navigate(Screens.PremiumPlanScreen.route)
-                            }else{
+                            } else {
                                 navController.navigateUp()
                             }
                         }
@@ -1050,10 +1059,13 @@ fun MainStructureEditNote(
                     IconButton(onClick = {
                         var currentTIme = System.currentTimeMillis()
 
-                        if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
-                            if (viewModel.mInterstitialAd != null) {
-                                viewModel.mInterstitialAd?.show(activity)
-                            } else {
+                        if (!viewModel.ifUserIsPremium.value) {
+                            if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
+                                if (viewModel.mInterstitialAd != null) {
+                                    viewModel.mInterstitialAd?.show(activity)
+                                } else {
+
+                                }
                             }
                         }
 
@@ -1069,7 +1081,8 @@ fun MainStructureEditNote(
                         )
                         createSharedPreferences.apply()
 
-                        var valuePremium = sharedPreferencesPremiumPlans.getInt(Constant.SHOW_PREMIUM_PLANS_KEY, 0)
+                        var valuePremium =
+                            sharedPreferencesPremiumPlans.getInt(Constant.SHOW_PREMIUM_PLANS_KEY, 0)
                         var newValuePremium = valuePremium + 1
 
                         val createSharedPreferencesPremium =
@@ -1128,10 +1141,10 @@ fun MainStructureEditNote(
                         viewModel.updateNote(note)
                         scope.launch {
                             delay(200)
-                            if(newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
+                            if (newValuePremium % 5 == 0 && !viewModel.ifUserIsPremium.value) {
                                 navController.navigateUp()
                                 navController.navigate(Screens.PremiumPlanScreen.route)
-                            }else{
+                            } else {
                                 navController.navigateUp()
                             }
                         }

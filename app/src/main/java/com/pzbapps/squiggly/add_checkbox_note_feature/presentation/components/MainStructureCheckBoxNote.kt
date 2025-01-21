@@ -169,7 +169,9 @@ fun MainStructureCheckBoxNote(
         activity.getSharedPreferences(Constant.SHOW_PREMIUM_PLANS, Context.MODE_PRIVATE)
 
     LaunchedEffect(true) {
-        viewModel.loadAndShowAd()
+        if(!viewModel.ifUserIsPremium.value) {
+            viewModel.loadAndShowAd()
+        }
     }
 
 
@@ -313,11 +315,13 @@ fun MainStructureCheckBoxNote(
         var currentTIme = System.currentTimeMillis()
 
 
-        if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
-            if (viewModel.mInterstitialAd != null) {
-                viewModel.mInterstitialAd?.show(activity)
-            } else {
+        if (!viewModel.ifUserIsPremium.value) {
+            if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
+                if (viewModel.mInterstitialAd != null) {
+                    viewModel.mInterstitialAd?.show(activity)
+                } else {
 
+                }
             }
         }
 
@@ -421,11 +425,13 @@ fun MainStructureCheckBoxNote(
                         var currentTIme = System.currentTimeMillis()
 
 
-                        if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
-                            if (viewModel.mInterstitialAd != null) {
-                                viewModel.mInterstitialAd?.show(activity)
-                            } else {
+                        if (!viewModel.ifUserIsPremium.value) {
+                            if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
+                                if (viewModel.mInterstitialAd != null) {
+                                    viewModel.mInterstitialAd?.show(activity)
+                                } else {
 
+                                }
                             }
                         }
                         convertMutableStateIntoString(
@@ -551,11 +557,13 @@ fun MainStructureCheckBoxNote(
                         var currentTIme = System.currentTimeMillis()
 
 
-                        if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
-                            if (viewModel.mInterstitialAd != null) {
-                                viewModel.mInterstitialAd?.show(activity)
-                            } else {
+                        if (!viewModel.ifUserIsPremium.value) {
+                            if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
+                                if (viewModel.mInterstitialAd != null) {
+                                    viewModel.mInterstitialAd?.show(activity)
+                                } else {
 
+                                }
                             }
                         }
                         convertMutableStateIntoString(

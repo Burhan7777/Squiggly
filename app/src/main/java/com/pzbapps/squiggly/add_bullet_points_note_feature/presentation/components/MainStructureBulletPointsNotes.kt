@@ -109,7 +109,9 @@ fun MainStructureBulletPointsNotes(
     var timeWhenNewNoteWasStarted = remember { System.currentTimeMillis() }
 
     LaunchedEffect(true) {
-        viewModel.loadAndShowAd()
+        if(!viewModel.ifUserIsPremium.value) {
+            viewModel.loadAndShowAd()
+        }
     }
 
 
@@ -282,11 +284,13 @@ fun MainStructureBulletPointsNotes(
         var currentTIme = System.currentTimeMillis()
 
 
-        if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
-            if (viewModel.mInterstitialAd != null) {
-                viewModel.mInterstitialAd?.show(activity)
-            } else {
+        if (!viewModel.ifUserIsPremium.value) {
+            if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
+                if (viewModel.mInterstitialAd != null) {
+                    viewModel.mInterstitialAd?.show(activity)
+                } else {
 
+                }
             }
         }
         var value = sharedPreferences.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
@@ -391,11 +395,13 @@ fun MainStructureBulletPointsNotes(
                         var currentTIme = System.currentTimeMillis()
 
 
-                        if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
-                            if (viewModel.mInterstitialAd != null) {
-                                viewModel.mInterstitialAd?.show(activity)
-                            } else {
+                        if (!viewModel.ifUserIsPremium.value) {
+                            if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
+                                if (viewModel.mInterstitialAd != null) {
+                                    viewModel.mInterstitialAd?.show(activity)
+                                } else {
 
+                                }
                             }
                         }
                         var value = sharedPreferences.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
@@ -520,6 +526,18 @@ fun MainStructureBulletPointsNotes(
                         )
                     }
                     IconButton(onClick = {
+
+                        var currentTIme = System.currentTimeMillis()
+
+                        if (!viewModel.ifUserIsPremium.value) {
+                            if (currentTIme - timeWhenNewNoteWasStarted > 20000) {
+                                if (viewModel.mInterstitialAd != null) {
+                                    viewModel.mInterstitialAd?.show(activity)
+                                } else {
+
+                                }
+                            }
+                        }
 
                         var value = sharedPreferences.getInt(Constant.SHOW_RATING_DIALOG_BOX_KEY, 0)
                         var newValue = value + 1

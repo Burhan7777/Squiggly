@@ -193,7 +193,7 @@ fun PremiumPlan(
                     fontSize = 25.sp
                 )
                 Text(
-                    productPrice.value,
+                    "${productPrice.value}/month  ( 3 days trial then charged automatically)",
                     color = MaterialTheme.colors.onPrimary,
                     fontFamily = FontFamily.fontFamilyLight,
                     fontSize = 20.sp
@@ -234,6 +234,14 @@ fun PremiumPlan(
                                             ).edit()
                                         prefsEvery24Hours.putBoolean(Constant.AUTO_SAVE_KEY_EVERY_24_HOURS, true)
                                         prefsEvery24Hours.apply()
+
+                                        val prefsEvery72Hours =
+                                            activity.getSharedPreferences(
+                                                Constant.AUTO_SAVE_PREF,
+                                                MODE_PRIVATE
+                                            ).edit()
+                                        prefsEvery72Hours.putBoolean(Constant.AUTO_SAVE_KEY, false)
+                                        prefsEvery72Hours.apply()
 
                                     }
                                 }
