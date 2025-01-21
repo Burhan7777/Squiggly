@@ -101,7 +101,6 @@ fun PremiumPlan(
         }
 
         override fun onError(error: QonversionError) {
-            TODO("Not yet implemented")
         }
     })
 

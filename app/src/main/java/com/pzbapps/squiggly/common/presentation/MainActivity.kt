@@ -70,7 +70,7 @@ class MainActivity : ComponentActivity() {
             this,
             "xPbOCckgIIHehGB6hBQk1a1WHgfyJE-0",
             QLaunchMode.SubscriptionManagement
-        ).setEnvironment(QEnvironment.Sandbox)
+        ).setEnvironment(QEnvironment.Production)
             .setEntitlementsCacheLifetime(QEntitlementsCacheLifetime.Month)
             .build()
         Qonversion.initialize(qonversionConfig)

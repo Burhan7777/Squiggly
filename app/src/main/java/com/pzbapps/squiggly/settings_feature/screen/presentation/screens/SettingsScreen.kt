@@ -844,7 +844,7 @@ fun SettingsScreen(
                                 Toast
                                     .makeText(
                                         activity,
-                                        "No are not subscribed. Please subscribe.",
+                                        "You are not subscribed. Please subscribe first.",
                                         Toast.LENGTH_LONG
                                     )
                                     .show()
