@@ -178,6 +178,9 @@ dependencies {
     //LOTTIE ANIMATION
     implementation 'com.airbnb.android:lottie-compose:6.6.2'
 
+    //APP WIDGET
+    implementation "androidx.glance:glance-appwidget:1.1.1"
+
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
 
 

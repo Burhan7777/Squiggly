@@ -203,7 +203,7 @@ class MainActivityViewModel @Inject constructor(
 
         InterstitialAd.load(
             application,
-            "ca-app-pub-3940256099942544/1033173712",
+            "ca-app-pub-1841372340473388/3272062029",
             adRequest,
             object : InterstitialAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
