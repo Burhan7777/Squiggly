@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Squiggly</string>
-<string name="default_web_client_id_1">48757666456-63i4qh1an2vcn2pbu3i56i2dkgejq6vs.apps.googleusercontent.com</string>
+    <string name="default_web_client_id_1">48757666456-63i4qh1an2vcn2pbu3i56i2dkgejq6vs.apps.googleusercontent.com</string>
     <string name="privacyPolicy">
         <b>Privacy Policy</b> \n \n
 Peerzada Burhan built the Squiggly app as an Ad Supported app. This SERVICE is provided by Peerzada Burhan at no cost and is intended for use as is.

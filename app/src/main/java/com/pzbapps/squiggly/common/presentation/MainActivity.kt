@@ -75,6 +75,10 @@ class MainActivity : ComponentActivity() {
             .build()
         Qonversion.initialize(qonversionConfig)
 
+        val destination = intent.extras?.getString("squiggly://addNote") ?: ""
+
+        print("PRINT_DESTINATION:${destination}")
+
 
         val backgroundScope = CoroutineScope(Dispatchers.IO)
         backgroundScope.launch {
@@ -84,7 +88,7 @@ class MainActivity : ComponentActivity() {
 
         viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
 
-        checkIfUserIsPremium(viewModel,this)
+        checkIfUserIsPremium(viewModel, this)
 
         viewModel.getAllNotebooks() // WE LOAD THE NOTEBOOKS IN THE START ONLY SO THAT TO SHOW THEM EVERYWHERE NEEDED.
         val sharedPreferences = getSharedPreferences("rememberUser", Context.MODE_PRIVATE)
@@ -255,7 +259,8 @@ class MainActivity : ComponentActivity() {
                         result,
                         selectedIItem,
                         selectedNote,
-                        noteId
+                        noteId,
+                        destination
                     )
 
 

@@ -21,7 +21,8 @@ fun NotesScreen(
     activity: MainActivity,
     selectedItem: MutableState<Int>,
     selectedNote: MutableState<Int>,
-    notesId: MutableIntState
+    notesId: MutableIntState,
+    destination: String
 ) {
 
     WindowCompat.setDecorFitsSystemWindows(activity.window, true)
@@ -50,6 +51,12 @@ fun NotesScreen(
                     Constant.HOME
                 )
             )
+        }
+    }
+
+    LaunchedEffect(true) {
+        if (destination.isNotEmpty()) {
+            navHostController.navigate(Screens.AddNoteScreen.route)
         }
     }
 

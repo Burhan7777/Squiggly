@@ -28,6 +28,7 @@ import com.pzbapps.squiggly.notebook_main_screen.presentation.screen.checkboxscr
 import com.pzbapps.squiggly.premium_feature.presentation.screen.PremiumPlan
 import com.pzbapps.squiggly.settings_feature.screen.presentation.screens.BackupAndRestoreScreen
 import com.pzbapps.squiggly.search_main_screen_feature.presentation.screens.SearchScreen
+import com.pzbapps.squiggly.settings_feature.screen.presentation.screens.BubbleNoteScreen
 import com.pzbapps.squiggly.settings_feature.screen.presentation.screens.FeedbackScreen
 import com.pzbapps.squiggly.settings_feature.screen.presentation.screens.PrivacyPolicy
 import com.pzbapps.squiggly.settings_feature.screen.presentation.screens.ReportBugScreen
@@ -43,7 +44,8 @@ fun NavGraphBuilder.homeGraph(
     result: String,
     selectedItem: MutableState<Int>,
     selectedNote: MutableState<Int>,
-    noteId: MutableIntState
+    noteId: MutableIntState,
+    destination: String
 ) {
     navigation(
         startDestination = Screens.HomeScreen.route,
@@ -55,10 +57,21 @@ fun NavGraphBuilder.homeGraph(
             }
         }
         composable(Screens.HomeScreen.route) {
-            NotesScreen(navController, viewModel, activity, selectedItem, selectedNote, noteId)
+            NotesScreen(
+                navController,
+                viewModel,
+                activity,
+                selectedItem,
+                selectedNote,
+                noteId,
+                destination
+            )
         }
         composable(
-            Screens.AddNoteScreen.route
+            Screens.AddNoteScreen.route,
+            deepLinks = listOf(navDeepLink {
+                uriPattern = "squiggly://addNote"
+            })
         ) {
             AddNoteScreen(navController, viewModel, activity)
 
@@ -177,7 +190,7 @@ fun NavGraphBuilder.homeGraph(
         }
 
         composable(Screens.BackupAndRestoreScreen.route) {
-            BackupAndRestoreScreen(navController, activity,viewModel)
+            BackupAndRestoreScreen(navController, activity, viewModel)
         }
         composable(Screens.CheckboxNotebookMainScreen.route, listOf(navArgument("notebook") {
             type = NavType.StringType
@@ -224,7 +237,10 @@ fun NavGraphBuilder.homeGraph(
         }
 
         composable(Screens.PremiumPlanScreen.route) {
-            PremiumPlan(activity, navController,viewModel)
+            PremiumPlan(activity, navController, viewModel)
+        }
+        composable(Screens.BubbleScreen.route) {
+            BubbleNoteScreen(activity)
         }
 
     }

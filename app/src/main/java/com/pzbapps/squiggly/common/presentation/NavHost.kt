@@ -14,7 +14,8 @@ fun NavHost(
     result: String,
     selectedItem: MutableState<Int>,
     selectedNote: MutableState<Int>,
-    noteId: MutableIntState
+    noteId: MutableIntState,
+    destination: String
 ) {
     androidx.navigation.compose.NavHost(
         navController = navController,
@@ -29,7 +30,8 @@ fun NavHost(
             result,
             selectedItem,
             selectedNote,
-            noteId
+            noteId,
+            destination
         )
     }
 }

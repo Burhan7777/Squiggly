@@ -78,4 +78,6 @@ sealed class Screens(val route: String) {
     object ReportBugScreen : Screens("report_bug_screen")
 
     object PremiumPlanScreen : Screens("premium_plan_screen")
+
+    object BubbleScreen : Screens("bubble_screen")
 }

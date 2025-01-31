@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.pzbapps.squiggly">
 
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:name=".AppApplication"
@@ -21,9 +21,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Scribble"
         tools:targetApi="31">
+        <activity
+            android:name=".bubble_note_feature.presentation.BubbleActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat"/>
+
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-1841372340473388~7831018470"/>
+            android:value="ca-app-pub-1841372340473388~7831018470" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -33,15 +39,19 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-        <receiver android:name=".widgetfeature.presentation.MyAppWidgetReceiver"
+
+        <receiver
+            android:name=".widgetfeature.presentation.MyAppWidgetReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
+
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/my_app_widget_info" />
         </receiver>
+
         <activity
             android:name=".common.presentation.MainActivity"
             android:exported="true"
@@ -59,11 +69,10 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <service android:name=".bubble_note_feature.presentation.BubbleService" />
         <receiver
             android:name=".reminder_feature.ReminderReceiver"
             android:exported="false" />
-
     </application>
-
 
 </manifest>
