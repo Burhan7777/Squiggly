@@ -120,9 +120,17 @@ class MainActivity : ComponentActivity() {
             val channel = NotificationChannel("reminder_channel", name, importance).apply {
                 description = descriptionText
             }
+            val nameBubble = "Bubble note notification"
+            val descriptionTextBubble = "Channel for bubble note notifications"
+            val importanceBubble = NotificationManager.IMPORTANCE_HIGH
+            val channelBubble =
+                NotificationChannel("bubble_note", nameBubble, importanceBubble).apply {
+                    description = descriptionTextBubble
+                }
             val notificationManager: NotificationManager =
                 this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
+            notificationManager.createNotificationChannel(channelBubble)
         }
 
 

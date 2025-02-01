@@ -1,7 +1,11 @@
 package com.pzbapps.squiggly.bubble_note_feature.presentation
 
+import android.app.NotificationManager
 import android.app.Service
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import android.graphics.PixelFormat
 import android.os.Build
 import android.os.IBinder
@@ -22,6 +26,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.app.NotificationCompat
+import androidx.core.app.ServiceCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
@@ -40,6 +46,7 @@ class BubbleService : Service(), LifecycleOwner, SavedStateRegistryOwner {
 
     override fun onCreate() {
         super.onCreate()
+        startForeground()
         Toast.makeText(this, "Service created", Toast.LENGTH_SHORT).show()
         windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
         savedStateRegistryController.performRestore(null)
@@ -47,6 +54,42 @@ class BubbleService : Service(), LifecycleOwner, SavedStateRegistryOwner {
 
         addFloatingBubble()
     }
+
+    private fun startForeground() {
+        val notificationManager =
+            this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        val notification = NotificationCompat.Builder(this, "bubble_note")
+            .setSmallIcon(R.drawable.ic_launcher)
+            .setContentTitle("Bubble note")
+            .setContentText("Press to close the bubble note.")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setAutoCancel(true)
+            .build()
+
+        notificationManager.notify(10, notification)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            ServiceCompat.startForeground(
+                this,
+                10,
+                notification,
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
+            )
+        } else {
+            ServiceCompat.startForeground(
+                this,
+                10,
+                notification,
+                0
+            )
+        }
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+
+        return START_NOT_STICKY
+    }
+
 
     override val lifecycle: Lifecycle
         get() = lifecycleRegistry

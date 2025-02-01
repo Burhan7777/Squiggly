@@ -9,6 +9,8 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
 
     <application
         android:name=".AppApplication"
@@ -24,7 +26,7 @@
         <activity
             android:name=".bubble_note_feature.presentation.BubbleActivity"
             android:exported="false"
-            android:theme="@style/Theme.AppCompat"/>
+            android:theme="@style/Theme.AppCompat" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
@@ -69,7 +71,13 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <service android:name=".bubble_note_feature.presentation.BubbleService" />
+        <service
+            android:name=".bubble_note_feature.presentation.BubbleService"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="For showing a small note bubble(with interface) where user can quickly write notes"/>
+        </service>
         <receiver
             android:name=".reminder_feature.ReminderReceiver"
             android:exported="false" />
