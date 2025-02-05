@@ -36,6 +36,15 @@ import androidx.compose.ui.unit.dp
 class BubbleActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val window = window
+        window.setLayout(
+            (resources.displayMetrics.widthPixels * 0.85).toInt(), // 85% of screen width
+            (resources.displayMetrics.heightPixels * 0.6).toInt()  // 60% of screen height
+        )
+        window.setBackgroundDrawableResource(android.R.color.transparent) // Make background transparent
+
+
         setContent {
             Toast.makeText(this, "Created", Toast.LENGTH_SHORT).show()
             QuickNoteScreen { finish() }
