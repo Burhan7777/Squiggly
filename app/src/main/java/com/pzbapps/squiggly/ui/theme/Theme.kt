@@ -77,3 +77,40 @@ fun ScribbleTheme(content: @Composable () -> Unit) {
         content = content
     )
 }
+
+@Composable
+fun BubbleTheme(content: @Composable () -> Unit) {
+    val context = LocalContext.current
+    val prefs: SharedPreferences = context.getSharedPreferences(Constant.CHANGE_THEME, MODE_PRIVATE)
+
+    // Create a mutable state to hold the current theme
+    var theme by remember { mutableStateOf(prefs.getString(Constant.THEME_KEY, Constant.SYSTEM_DEFAULT)) }
+
+    // Listen for changes to SharedPreferences
+    DisposableEffect(prefs) {
+        val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+            if (key == Constant.THEME_KEY) {
+                // Update the theme when the preference changes
+                theme = prefs.getString(Constant.THEME_KEY, Constant.SYSTEM_DEFAULT)
+            }
+        }
+        prefs.registerOnSharedPreferenceChangeListener(listener)
+        onDispose {
+            prefs.unregisterOnSharedPreferenceChangeListener(listener)
+        }
+    }
+
+    // Set the color palette based on the current theme
+    val colors = when (theme) {
+        Constant.DARK_THEME -> DarkColorPalette
+        Constant.LIGHT_THEME -> LightColorPalette
+        else -> if (isSystemInDarkTheme()) DarkColorPalette else LightColorPalette
+    }
+
+    MaterialTheme(
+        colors = colors,
+        typography = Typography,
+        shapes = Shapes,
+        content = content
+    )
+}

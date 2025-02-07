@@ -14,13 +14,16 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -30,12 +33,28 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModelProvider
+import com.pzbapps.squiggly.common.presentation.BubbleNoteViewModel
+import com.pzbapps.squiggly.common.presentation.FontFamily
+import com.pzbapps.squiggly.main_screen.domain.model.Note
+import com.pzbapps.squiggly.ui.theme.BubbleTheme
+import dagger.hilt.EntryPoint
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class BubbleActivity : AppCompatActivity() {
+    private lateinit var bubbleViewModel: BubbleNoteViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        bubbleViewModel = ViewModelProvider(this)[BubbleNoteViewModel::class.java]
 
         val window = window
         window.setLayout(
@@ -46,13 +65,14 @@ class BubbleActivity : AppCompatActivity() {
 
 
         setContent {
-            Toast.makeText(this, "Created", Toast.LENGTH_SHORT).show()
-            QuickNoteScreen { finish() }
+            BubbleTheme {
+                QuickNoteScreen(bubbleViewModel) { finish() }
+            }
         }
     }
 
     @Composable
-    fun QuickNoteScreen(onClose: () -> Unit) {
+    fun QuickNoteScreen(viewModel: BubbleNoteViewModel, onClose: () -> Unit) {
         var title by remember { mutableStateOf("") }
         var content by remember { mutableStateOf("") }
 
@@ -64,25 +84,81 @@ class BubbleActivity : AppCompatActivity() {
         ) {
             Card(
                 modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth(0.9f),
+                    .padding(8.dp)
+                    .fillMaxWidth(0.9f)
+                    .fillMaxHeight(0.8f),
                 shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colors.primary,
+                    contentColor = MaterialTheme.colors.onPrimary
+                )
             ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    TextField(
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxSize()
+                ) {
+                    androidx.compose.material.TextField(
                         value = title,
                         onValueChange = { title = it },
-                        placeholder = { Text("Title") }
+                        placeholder = {
+                            Text(
+                                text = "Title",
+                                fontSize = 20.sp,
+                                fontFamily = FontFamily.fontFamilyBold,
+                                color = MaterialTheme.colors.onPrimary,
+                                modifier = Modifier.alpha(0.5f)
+                            )
+                        },
+                        colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
+                            backgroundColor = MaterialTheme.colors.primary,
+                            focusedIndicatorColor = MaterialTheme.colors.primary,
+                            cursorColor = MaterialTheme.colors.onPrimary,
+                            textColor = MaterialTheme.colors.onPrimary
+                        ),
+                        textStyle = TextStyle(
+                            fontFamily = FontFamily.fontFamilyRegular,
+                            fontSize = 20.sp
+                        ),
+//                        modifier = Modifier
+//                            .focusRequester(focusRequester)
+//                            .onFocusChanged {
+//                                hideFormattingTextBar.value = it.isFocused
+//                            }
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    TextField(
+                    androidx.compose.material.TextField(
                         value = content,
                         onValueChange = { content = it },
-                        placeholder = { Text("Write your note...") }
+                        placeholder = {
+                            Text(
+                                text = "Note",
+                                fontSize = 20.sp,
+                                fontFamily = FontFamily.fontFamilyBold,
+                                color = MaterialTheme.colors.onPrimary,
+                                modifier = Modifier.alpha(0.5f)
+                            )
+                        },
+                        colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
+                            backgroundColor = MaterialTheme.colors.primary,
+                            focusedIndicatorColor = MaterialTheme.colors.primary,
+                            cursorColor = MaterialTheme.colors.onPrimary,
+                            textColor = MaterialTheme.colors.onPrimary
+                        ),
+                        textStyle = TextStyle(
+                            fontFamily = FontFamily.fontFamilyRegular,
+                            fontSize = 20.sp
+                        ),
+                        modifier = Modifier.fillMaxHeight(0.7f)
+//                        modifier = Modifier
+//                            .focusRequester(focusRequester)
+//                            .onFocusChanged {
+//                                hideFormattingTextBar.value = it.isFocused
+//                            }
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(onClick = {
-                        saveNote(title, content)
+                        saveNote(title, content, viewModel)
                         onClose()
                     }) {
                         Text("Save")
@@ -92,11 +168,9 @@ class BubbleActivity : AppCompatActivity() {
         }
     }
 
-    fun saveNote(title: String, content: String) {
-//    val note = Note(title = title, content = content, timestamp = System.currentTimeMillis())
-//    CoroutineScope(Dispatchers.IO).launch {
-//        NotesDatabase.getInstance().noteDao().insertNote(note)
-//    }
+    private fun saveNote(title: String, content: String, viewModel: BubbleNoteViewModel) {
+        val note = Note(title = title, content = content, timeStamp = System.currentTimeMillis())
+        viewModel.insertNote(note)
     }
 }
 
