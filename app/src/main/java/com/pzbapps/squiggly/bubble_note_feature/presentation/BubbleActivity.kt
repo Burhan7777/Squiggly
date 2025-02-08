@@ -13,14 +13,23 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckBox
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -82,86 +91,118 @@ class BubbleActivity : AppCompatActivity() {
                 .background(Color.Black.copy(alpha = 0.5f))
                 .clickable { onClose() }, contentAlignment = Alignment.Center
         ) {
-            Card(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth(0.9f)
-                    .fillMaxHeight(0.8f),
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colors.primary,
-                    contentColor = MaterialTheme.colors.onPrimary
-                )
-            ) {
-                Column(
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxSize()
-                ) {
-                    androidx.compose.material.TextField(
-                        value = title,
-                        onValueChange = { title = it },
-                        placeholder = {
-                            Text(
-                                text = "Title",
-                                fontSize = 20.sp,
-                                fontFamily = FontFamily.fontFamilyBold,
-                                color = MaterialTheme.colors.onPrimary,
-                                modifier = Modifier.alpha(0.5f)
-                            )
-                        },
-                        colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
-                            backgroundColor = MaterialTheme.colors.primary,
-                            focusedIndicatorColor = MaterialTheme.colors.primary,
-                            cursorColor = MaterialTheme.colors.onPrimary,
-                            textColor = MaterialTheme.colors.onPrimary
-                        ),
-                        textStyle = TextStyle(
-                            fontFamily = FontFamily.fontFamilyRegular,
-                            fontSize = 20.sp
-                        ),
-//                        modifier = Modifier
-//                            .focusRequester(focusRequester)
-//                            .onFocusChanged {
-//                                hideFormattingTextBar.value = it.isFocused
-//                            }
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    androidx.compose.material.TextField(
-                        value = content,
-                        onValueChange = { content = it },
-                        placeholder = {
-                            Text(
-                                text = "Note",
-                                fontSize = 20.sp,
-                                fontFamily = FontFamily.fontFamilyBold,
-                                color = MaterialTheme.colors.onPrimary,
-                                modifier = Modifier.alpha(0.5f)
-                            )
-                        },
-                        colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
-                            backgroundColor = MaterialTheme.colors.primary,
-                            focusedIndicatorColor = MaterialTheme.colors.primary,
-                            cursorColor = MaterialTheme.colors.onPrimary,
-                            textColor = MaterialTheme.colors.onPrimary
-                        ),
-                        textStyle = TextStyle(
-                            fontFamily = FontFamily.fontFamilyRegular,
-                            fontSize = 20.sp
-                        ),
-                        modifier = Modifier.fillMaxHeight(0.7f)
-//                        modifier = Modifier
-//                            .focusRequester(focusRequester)
-//                            .onFocusChanged {
-//                                hideFormattingTextBar.value = it.isFocused
-//                            }
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Button(onClick = {
-                        saveNote(title, content, viewModel)
-                        onClose()
+            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxSize().padding(vertical = 5.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    IconButton(onClick = {
+
                     }) {
-                        Text("Save")
+                        Icon(
+                            imageVector = Icons.Default.CheckBox,
+                            contentDescription = "switch to checkbox",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    }
+                    Spacer(modifier = Modifier.weight(0.5f))
+                    IconButton(
+                        modifier = Modifier
+                            .padding(end = 15.dp)
+                            .size(30.dp)
+                            .background(
+                                color = MaterialTheme.colors.onPrimary,
+                                shape = CircleShape
+                            ),
+                        onClick = {
+                            onClose()
+                        }) {
+                        Icon(
+                            imageVector = Icons.Outlined.Clear,
+                            contentDescription = "Close the activity",
+                            tint = MaterialTheme.colors.onSecondary,
+
+                            )
+                    }
+                }
+                Card(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(0.9f)
+                        .fillMaxHeight(0.8f),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colors.primary,
+                        contentColor = MaterialTheme.colors.onPrimary
+                    )
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxSize()
+                    ) {
+                        androidx.compose.material.TextField(
+                            value = title,
+                            onValueChange = { title = it },
+                            placeholder = {
+                                Text(
+                                    text = "Title",
+                                    fontSize = 20.sp,
+                                    fontFamily = FontFamily.fontFamilyBold,
+                                    color = MaterialTheme.colors.onPrimary,
+                                    modifier = Modifier.alpha(0.5f)
+                                )
+                            },
+                            colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
+                                backgroundColor = MaterialTheme.colors.primary,
+                                focusedIndicatorColor = MaterialTheme.colors.primary,
+                                cursorColor = MaterialTheme.colors.onPrimary,
+                                textColor = MaterialTheme.colors.onPrimary
+                            ),
+                            textStyle = TextStyle(
+                                fontFamily = FontFamily.fontFamilyRegular,
+                                fontSize = 20.sp
+                            ),
+//                        modifier = Modifier
+//                            .focusRequester(focusRequester)
+//                            .onFocusChanged {
+//                                hideFormattingTextBar.value = it.isFocused
+//                            }
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        androidx.compose.material.TextField(
+                            value = content,
+                            onValueChange = { content = it },
+                            placeholder = {
+                                Text(
+                                    text = "Note",
+                                    fontSize = 20.sp,
+                                    fontFamily = FontFamily.fontFamilyBold,
+                                    color = MaterialTheme.colors.onPrimary,
+                                    modifier = Modifier.alpha(0.5f)
+                                )
+                            },
+                            colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
+                                backgroundColor = MaterialTheme.colors.primary,
+                                focusedIndicatorColor = MaterialTheme.colors.primary,
+                                cursorColor = MaterialTheme.colors.onPrimary,
+                                textColor = MaterialTheme.colors.onPrimary
+                            ),
+                            textStyle = TextStyle(
+                                fontFamily = FontFamily.fontFamilyRegular,
+                                fontSize = 20.sp
+                            ),
+                            modifier = Modifier.fillMaxHeight(0.7f)
+//                        modifier = Modifier
+//                            .focusRequester(focusRequester)
+//                            .onFocusChanged {
+//                                hideFormattingTextBar.value = it.isFocused
+//                            }
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Button(onClick = {
+                            saveNote(title, content, viewModel)
+                            onClose()
+                        }) {
+                            Text("Save")
+                        }
                     }
                 }
             }
