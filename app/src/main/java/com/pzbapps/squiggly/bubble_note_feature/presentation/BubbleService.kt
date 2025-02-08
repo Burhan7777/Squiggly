@@ -1,6 +1,7 @@
 package com.pzbapps.squiggly.bubble_note_feature.presentation
 
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
 import android.content.ComponentName
 import android.content.Context
@@ -57,6 +58,15 @@ class BubbleService : Service(), LifecycleOwner, SavedStateRegistryOwner {
         addFloatingBubble()
     }
 
+    fun closeService(): PendingIntent {
+        var intent = Intent(this,BubbleService::class.java).apply {
+            action = "STOP_SERVICE"
+        }
+        var pending = PendingIntent.getService(this, 10, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        return pending
+    }
+
+
     private fun startForeground() {
         val notificationManager =
             this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -67,7 +77,9 @@ class BubbleService : Service(), LifecycleOwner, SavedStateRegistryOwner {
             .setContentText("Press to close the bubble note.")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
+            .setContentIntent(closeService())
             .build()
+
 
         notificationManager.notify(10, notification)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
@@ -88,8 +100,12 @@ class BubbleService : Service(), LifecycleOwner, SavedStateRegistryOwner {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-
-        return START_NOT_STICKY
+        if (intent?.action == "STOP_SERVICE") {
+            stopForeground(true) // Remove the notification
+            stopSelf() // Stop the service
+            return START_NOT_STICKY
+        }
+        return START_STICKY
     }
 
 
@@ -142,6 +158,7 @@ class BubbleService : Service(), LifecycleOwner, SavedStateRegistryOwner {
                     isMoved = false
                     true
                 }
+
                 MotionEvent.ACTION_MOVE -> {
                     val dx = (event.rawX - initialTouchX).toInt()
                     val dy = (event.rawY - initialTouchY).toInt()
@@ -154,12 +171,14 @@ class BubbleService : Service(), LifecycleOwner, SavedStateRegistryOwner {
                     }
                     true
                 }
+
                 MotionEvent.ACTION_UP -> {
                     if (!isMoved) {
                         openQuickNote()
                     }
                     true
                 }
+
                 else -> false
             }
         }
