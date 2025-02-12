@@ -712,6 +712,5 @@ fun convertMutableStateIntoString(
             mutableListConverted.add(i.value)
         }
     }
-
 }
 

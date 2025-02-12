@@ -13,17 +13,23 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Checkbox
@@ -60,6 +66,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -91,7 +98,7 @@ class BubbleActivity : AppCompatActivity() {
         val window = window
         window.setLayout(
             (resources.displayMetrics.widthPixels * 0.85).toInt(), // 85% of screen width
-            (resources.displayMetrics.heightPixels * 0.6).toInt()  // 60% of screen height
+            (resources.displayMetrics.heightPixels * 0.6).toInt(), // 60% of screen height
         )
         window.setBackgroundDrawableResource(android.R.color.transparent) // Make background transparent
 
@@ -103,6 +110,7 @@ class BubbleActivity : AppCompatActivity() {
         }
     }
 
+    @OptIn(ExperimentalLayoutApi::class)
     @Composable
     fun QuickNoteScreen(viewModel: BubbleNoteViewModel, onClose: () -> Unit) {
         var title = remember { mutableStateOf("") }
@@ -110,6 +118,9 @@ class BubbleActivity : AppCompatActivity() {
         var typeOfNote = remember { mutableStateOf(selectTypeOfNote.NOTES) }
         var listOfCheckboxTexts = RememberSaveableSnapshotStateList()
         var mutableListOfCheckBoxes = rememberSaveable { ArrayList<Boolean>() }
+
+
+
 
         Box(
             Modifier
@@ -187,23 +198,22 @@ class BubbleActivity : AppCompatActivity() {
                     ) {
                         when (typeOfNote.value) {
                             selectTypeOfNote.NOTES -> {
-                                NotesScreen(title, content)
+                                NotesScreen(title, content, viewModel, onClose)
                             }
 
                             selectTypeOfNote.CHECKBOX -> {
-                                CheckBoxScreen(title, listOfCheckboxTexts, mutableListOfCheckBoxes)
+                                CheckBoxScreen(
+                                    title,
+                                    listOfCheckboxTexts,
+                                    mutableListOfCheckBoxes,
+                                    viewModel,
+                                    onClose
+                                )
                             }
 
                             selectTypeOfNote.BULLETPOINT -> {
 
                             }
-                        }
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Button(onClick = {
-                            saveNote(title.value, content.value, viewModel)
-                            onClose()
-                        }) {
-                            Text("Save")
                         }
                     }
                 }
@@ -211,14 +221,52 @@ class BubbleActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveNote(title: String, content: String, viewModel: BubbleNoteViewModel) {
-        val note = Note(title = title, content = content, timeStamp = System.currentTimeMillis())
-        viewModel.insertNote(note)
+}
+
+private fun saveNote(title: String, content: String, viewModel: BubbleNoteViewModel) {
+    val note = Note(title = title, content = content, timeStamp = System.currentTimeMillis())
+    viewModel.insertNote(note)
+}
+
+fun convertMutableStateIntoString(
+    mutableList: SnapshotStateList<MutableState<String>>,
+    mutableListConverted: ArrayList<String>
+): ArrayList<String> {
+    for (i in mutableList) {
+        if (!mutableListConverted.contains(i.value)) {
+            mutableListConverted.add(i.value)
+        }
     }
+    return mutableListConverted
+}
+
+private fun saveCheckbox(
+    title: String,
+    listOfCheckboxTexts: SnapshotStateList<MutableState<String>>,
+    mutableListOfCheckBoxes: ArrayList<Boolean>,
+    mutableListConverted: ArrayList<String>,
+    viewModel: BubbleNoteViewModel
+) {
+    var convertedList = convertMutableStateIntoString(
+        listOfCheckboxTexts,
+        mutableListConverted
+    )
+    var note = Note(
+        title = title,
+        listOfCheckedNotes = convertedList,
+        listOfCheckedBoxes = mutableListOfCheckBoxes,
+        timeStamp = System.currentTimeMillis(),
+    )
+    viewModel.insertNote(note)
 }
 
 @Composable
-fun NotesScreen(title: MutableState<String>, content: MutableState<String>) {
+fun NotesScreen(
+    title: MutableState<String>,
+    content: MutableState<String>,
+    viewModel: BubbleNoteViewModel,
+    onClose: () -> Unit
+) {
 
     androidx.compose.material.TextField(
         value = title.value,
@@ -278,15 +326,34 @@ fun NotesScreen(title: MutableState<String>, content: MutableState<String>) {
 //                                hideFormattingTextBar.value = it.isFocused
 //                            }
     )
+    Button(onClick = {
+        saveNote(title.value, content.value, viewModel)
+        onClose()
+    }) {
+        Text("Save")
+    }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CheckBoxScreen(
     title: MutableState<String>,
     listOfCheckboxTexts: SnapshotStateList<MutableState<String>>,
-    mutabListOfCheckBoxes: ArrayList<Boolean>
+    mutableListOfCheckBoxes: ArrayList<Boolean>,
+    viewModel: BubbleNoteViewModel,
+    onClose: () -> Unit
 ) {
     val focusRequesters = remember { mutableStateListOf(FocusRequester()) }
+    var count = remember { mutableStateOf(0) }
+
+    val lazyListState = rememberLazyListState()
+
+    var mutableListConverted = rememberSaveable {
+        ArrayList<String>()
+    }
+
+
+
     LaunchedEffect(key1 = true) {
         if (listOfCheckboxTexts.isEmpty()) {
             listOfCheckboxTexts.add(mutableStateOf(""))
@@ -295,9 +362,9 @@ fun CheckBoxScreen(
     }
 
     LaunchedEffect(key1 = listOfCheckboxTexts.size) {
-        mutabListOfCheckBoxes.add(false)
+        mutableListOfCheckBoxes.add(false)
     }
-    Column {
+    Column() {
         androidx.compose.material.TextField(
             value = title.value,
             onValueChange = { title.value = it },
@@ -322,8 +389,13 @@ fun CheckBoxScreen(
             )
         )
 
-        var count = remember { mutableStateOf(0) }
-        LazyColumn {
+        val imeVisible = WindowInsets.isImeVisible
+        val imeHeight = WindowInsets.ime.getBottom(LocalDensity.current)
+
+        LazyColumn(
+            state = lazyListState,
+            modifier = Modifier.imePadding()
+        ) {
             itemsIndexed(listOfCheckboxTexts) { index, item ->
                 if (index >= focusRequesters.size) {
                     focusRequesters.add(FocusRequester())
@@ -332,7 +404,7 @@ fun CheckBoxScreen(
                 SingleRowCheckBox(
                     text = item,
                     mutableList = listOfCheckboxTexts,
-                    mutableListOfCheckBoxes = mutabListOfCheckBoxes,
+                    mutableListOfCheckBoxes = mutableListOfCheckBoxes,
                     index = index,
                     count = count,
                     focusRequester = focusRequester,
@@ -347,6 +419,41 @@ fun CheckBoxScreen(
 
                     }
                 }
+            }
+            items(1) {
+                Spacer(modifier = Modifier.height(imeHeight.dp))
+            }
+            item {
+                Spacer(modifier = Modifier.height(5.dp))
+                Button(onClick = {
+                    saveCheckbox(
+                        title.value,
+                        listOfCheckboxTexts,
+                        mutableListOfCheckBoxes,
+                        mutableListConverted,
+                        viewModel
+                    )
+                    onClose()
+                }) {
+                    Text("Save")
+                }
+            }
+        }
+    }
+    LaunchedEffect(count.value) {
+        if (listOfCheckboxTexts.size > 1) {
+            lazyListState.animateScrollToItem(listOfCheckboxTexts.lastIndex)
+            focusRequesters.lastOrNull()
+                ?.requestFocus()  // Move focus to the last added checkbox
+        }
+    }
+    LaunchedEffect(focusRequesters, listOfCheckboxTexts) {
+        if (listOfCheckboxTexts.isNotEmpty()) {
+            // Delay focus request to ensure the UI is composed
+            focusRequesters.firstOrNull()?.let { firstFocusRequester ->
+                // Add a small delay to ensure everything is composed
+                kotlinx.coroutines.delay(100)
+                firstFocusRequester.requestFocus()
             }
         }
     }
