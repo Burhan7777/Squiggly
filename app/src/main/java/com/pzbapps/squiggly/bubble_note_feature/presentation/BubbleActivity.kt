@@ -21,14 +21,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Checkbox
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.RadioButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckBox
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.FormatListBulleted
+import androidx.compose.material.icons.filled.Note
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -36,26 +43,42 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.glance.appwidget.CheckBox
 import androidx.lifecycle.ViewModelProvider
+import com.pzbapps.squiggly.bubble_note_feature.screens.SingleRowCheckBox
 import com.pzbapps.squiggly.common.presentation.BubbleNoteViewModel
 import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.main_screen.domain.model.Note
 import com.pzbapps.squiggly.ui.theme.BubbleTheme
 import dagger.hilt.EntryPoint
 import dagger.hilt.android.AndroidEntryPoint
+
+enum class selectTypeOfNote {
+    NOTES,
+    CHECKBOX,
+    BULLETPOINT
+}
+
 
 @AndroidEntryPoint
 class BubbleActivity : AppCompatActivity() {
@@ -82,8 +105,11 @@ class BubbleActivity : AppCompatActivity() {
 
     @Composable
     fun QuickNoteScreen(viewModel: BubbleNoteViewModel, onClose: () -> Unit) {
-        var title by remember { mutableStateOf("") }
-        var content by remember { mutableStateOf("") }
+        var title = remember { mutableStateOf("") }
+        var content = remember { mutableStateOf("") }
+        var typeOfNote = remember { mutableStateOf(selectTypeOfNote.NOTES) }
+        var listOfCheckboxTexts = RememberSaveableSnapshotStateList()
+        var mutableListOfCheckBoxes = rememberSaveable { ArrayList<Boolean>() }
 
         Box(
             Modifier
@@ -91,22 +117,43 @@ class BubbleActivity : AppCompatActivity() {
                 .background(Color.Black.copy(alpha = 0.5f))
                 .clickable { onClose() }, contentAlignment = Alignment.Center
         ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxSize().padding(vertical = 5.dp)) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(vertical = 5.dp)
+            ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    IconButton(onClick = {
+                    RadioButton(
+                        selected = typeOfNote.value == selectTypeOfNote.NOTES,
+                        onClick = { typeOfNote.value = selectTypeOfNote.NOTES })
+                    Icon(
+                        imageVector = Icons.Default.Note,
+                        contentDescription = "Select checkbox",
+                        tint = MaterialTheme.colors.onPrimary
+                    )
+                    RadioButton(
+                        selected = typeOfNote.value == selectTypeOfNote.CHECKBOX,
+                        onClick = { typeOfNote.value = selectTypeOfNote.CHECKBOX })
+                    Icon(
+                        imageVector = Icons.Default.CheckBox,
+                        contentDescription = "Select checkbox",
+                        tint = MaterialTheme.colors.onPrimary
+                    )
+                    RadioButton(
+                        selected = typeOfNote.value == selectTypeOfNote.BULLETPOINT,
+                        onClick = { typeOfNote.value = selectTypeOfNote.BULLETPOINT })
+                    Icon(
+                        imageVector = Icons.Default.FormatListBulleted,
+                        contentDescription = "Select checkbox",
+                        tint = MaterialTheme.colors.onPrimary
+                    )
 
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.CheckBox,
-                            contentDescription = "switch to checkbox",
-                            tint = MaterialTheme.colors.onPrimary
-                        )
-                    }
                     Spacer(modifier = Modifier.weight(0.5f))
                     IconButton(
                         modifier = Modifier
                             .padding(end = 15.dp)
-                            .size(30.dp)
+                            .size(25.dp)
                             .background(
                                 color = MaterialTheme.colors.onPrimary,
                                 shape = CircleShape
@@ -138,67 +185,22 @@ class BubbleActivity : AppCompatActivity() {
                             .padding(16.dp)
                             .fillMaxSize()
                     ) {
-                        androidx.compose.material.TextField(
-                            value = title,
-                            onValueChange = { title = it },
-                            placeholder = {
-                                Text(
-                                    text = "Title",
-                                    fontSize = 20.sp,
-                                    fontFamily = FontFamily.fontFamilyBold,
-                                    color = MaterialTheme.colors.onPrimary,
-                                    modifier = Modifier.alpha(0.5f)
-                                )
-                            },
-                            colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
-                                backgroundColor = MaterialTheme.colors.primary,
-                                focusedIndicatorColor = MaterialTheme.colors.primary,
-                                cursorColor = MaterialTheme.colors.onPrimary,
-                                textColor = MaterialTheme.colors.onPrimary
-                            ),
-                            textStyle = TextStyle(
-                                fontFamily = FontFamily.fontFamilyRegular,
-                                fontSize = 20.sp
-                            ),
-//                        modifier = Modifier
-//                            .focusRequester(focusRequester)
-//                            .onFocusChanged {
-//                                hideFormattingTextBar.value = it.isFocused
-//                            }
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        androidx.compose.material.TextField(
-                            value = content,
-                            onValueChange = { content = it },
-                            placeholder = {
-                                Text(
-                                    text = "Note",
-                                    fontSize = 20.sp,
-                                    fontFamily = FontFamily.fontFamilyBold,
-                                    color = MaterialTheme.colors.onPrimary,
-                                    modifier = Modifier.alpha(0.5f)
-                                )
-                            },
-                            colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
-                                backgroundColor = MaterialTheme.colors.primary,
-                                focusedIndicatorColor = MaterialTheme.colors.primary,
-                                cursorColor = MaterialTheme.colors.onPrimary,
-                                textColor = MaterialTheme.colors.onPrimary
-                            ),
-                            textStyle = TextStyle(
-                                fontFamily = FontFamily.fontFamilyRegular,
-                                fontSize = 20.sp
-                            ),
-                            modifier = Modifier.fillMaxHeight(0.7f)
-//                        modifier = Modifier
-//                            .focusRequester(focusRequester)
-//                            .onFocusChanged {
-//                                hideFormattingTextBar.value = it.isFocused
-//                            }
-                        )
+                        when (typeOfNote.value) {
+                            selectTypeOfNote.NOTES -> {
+                                NotesScreen(title, content)
+                            }
+
+                            selectTypeOfNote.CHECKBOX -> {
+                                CheckBoxScreen(title, listOfCheckboxTexts, mutableListOfCheckBoxes)
+                            }
+
+                            selectTypeOfNote.BULLETPOINT -> {
+
+                            }
+                        }
                         Spacer(modifier = Modifier.height(16.dp))
                         Button(onClick = {
-                            saveNote(title, content, viewModel)
+                            saveNote(title.value, content.value, viewModel)
                             onClose()
                         }) {
                             Text("Save")
@@ -212,6 +214,162 @@ class BubbleActivity : AppCompatActivity() {
     private fun saveNote(title: String, content: String, viewModel: BubbleNoteViewModel) {
         val note = Note(title = title, content = content, timeStamp = System.currentTimeMillis())
         viewModel.insertNote(note)
+    }
+}
+
+@Composable
+fun NotesScreen(title: MutableState<String>, content: MutableState<String>) {
+
+    androidx.compose.material.TextField(
+        value = title.value,
+        onValueChange = { title.value = it },
+        placeholder = {
+            Text(
+                text = "Title",
+                fontSize = 20.sp,
+                fontFamily = FontFamily.fontFamilyBold,
+                color = MaterialTheme.colors.onPrimary,
+                modifier = Modifier.alpha(0.5f)
+            )
+        },
+        colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
+            backgroundColor = MaterialTheme.colors.primary,
+            focusedIndicatorColor = MaterialTheme.colors.primary,
+            cursorColor = MaterialTheme.colors.onPrimary,
+            textColor = MaterialTheme.colors.onPrimary
+        ),
+        textStyle = TextStyle(
+            fontFamily = FontFamily.fontFamilyRegular,
+            fontSize = 20.sp
+        ),
+//                        modifier = Modifier
+//                            .focusRequester(focusRequester)
+//                            .onFocusChanged {
+//                                hideFormattingTextBar.value = it.isFocused
+//                            }
+    )
+    Spacer(modifier = Modifier.height(8.dp))
+    androidx.compose.material.TextField(
+        value = content.value,
+        onValueChange = { content.value = it },
+        placeholder = {
+            Text(
+                text = "Note",
+                fontSize = 20.sp,
+                fontFamily = FontFamily.fontFamilyBold,
+                color = MaterialTheme.colors.onPrimary,
+                modifier = Modifier.alpha(0.5f)
+            )
+        },
+        colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
+            backgroundColor = MaterialTheme.colors.primary,
+            focusedIndicatorColor = MaterialTheme.colors.primary,
+            cursorColor = MaterialTheme.colors.onPrimary,
+            textColor = MaterialTheme.colors.onPrimary
+        ),
+        textStyle = TextStyle(
+            fontFamily = FontFamily.fontFamilyRegular,
+            fontSize = 20.sp
+        ),
+        modifier = Modifier.fillMaxHeight(0.7f)
+//                        modifier = Modifier
+//                            .focusRequester(focusRequester)
+//                            .onFocusChanged {
+//                                hideFormattingTextBar.value = it.isFocused
+//                            }
+    )
+}
+
+@Composable
+fun CheckBoxScreen(
+    title: MutableState<String>,
+    listOfCheckboxTexts: SnapshotStateList<MutableState<String>>,
+    mutabListOfCheckBoxes: ArrayList<Boolean>
+) {
+    val focusRequesters = remember { mutableStateListOf(FocusRequester()) }
+    LaunchedEffect(key1 = true) {
+        if (listOfCheckboxTexts.isEmpty()) {
+            listOfCheckboxTexts.add(mutableStateOf(""))
+        }
+
+    }
+
+    LaunchedEffect(key1 = listOfCheckboxTexts.size) {
+        mutabListOfCheckBoxes.add(false)
+    }
+    Column {
+        androidx.compose.material.TextField(
+            value = title.value,
+            onValueChange = { title.value = it },
+            placeholder = {
+                Text(
+                    text = "Title",
+                    fontSize = 20.sp,
+                    fontFamily = FontFamily.fontFamilyBold,
+                    color = MaterialTheme.colors.onPrimary,
+                    modifier = Modifier.alpha(0.5f)
+                )
+            },
+            colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
+                backgroundColor = MaterialTheme.colors.primary,
+                focusedIndicatorColor = MaterialTheme.colors.primary,
+                cursorColor = MaterialTheme.colors.onPrimary,
+                textColor = MaterialTheme.colors.onPrimary
+            ),
+            textStyle = TextStyle(
+                fontFamily = FontFamily.fontFamilyRegular,
+                fontSize = 20.sp
+            )
+        )
+
+        var count = remember { mutableStateOf(0) }
+        LazyColumn {
+            itemsIndexed(listOfCheckboxTexts) { index, item ->
+                if (index >= focusRequesters.size) {
+                    focusRequesters.add(FocusRequester())
+                }
+                val focusRequester = focusRequesters[index]
+                SingleRowCheckBox(
+                    text = item,
+                    mutableList = listOfCheckboxTexts,
+                    mutableListOfCheckBoxes = mutabListOfCheckBoxes,
+                    index = index,
+                    count = count,
+                    focusRequester = focusRequester,
+                    backgroundColor = mutableStateOf(MaterialTheme.colors.primary),
+                    fontFamily = remember { mutableStateOf(FontFamily.fontFamilyRegular) },
+                ) {
+                    try {
+                        focusRequesters.removeAt(index)
+                        listOfCheckboxTexts.removeAt(index)
+                        //mutableListConverted.removeAt(indexed)
+                    } catch (exception: IndexOutOfBoundsException) {
+
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+@Composable
+fun RememberSaveableSnapshotStateList(): SnapshotStateList<MutableState<String>> {
+    // Create a custom saver for SnapshotStateList<Mutable<String>>
+    val listSaver = Saver<SnapshotStateList<MutableState<String>>, List<List<String>>>(
+        save = { snapshotStateList ->
+            // Convert SnapshotStateList<Mutable<String>> to List<List<String>> for saving
+            snapshotStateList.map { state -> listOf(state.value) }
+        },
+        restore = { savedList ->
+            // Convert List<List<String>> back to SnapshotStateList<Mutable<String>> on restore
+            val restoredList = savedList.map { mutableStateOf(it.first()) }
+            SnapshotStateList<MutableState<String>>().apply {
+                addAll(restoredList)
+            }
+        })
+    return rememberSaveable(saver = listSaver) {
+        mutableStateListOf<MutableState<String>>() // Initial state
     }
 }
 
