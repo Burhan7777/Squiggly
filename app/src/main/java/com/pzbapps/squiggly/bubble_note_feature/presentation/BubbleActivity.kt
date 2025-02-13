@@ -72,6 +72,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.appwidget.CheckBox
 import androidx.lifecycle.ViewModelProvider
+import com.pzbapps.squiggly.bubble_note_feature.screens.CheckBoxScreen
 import com.pzbapps.squiggly.bubble_note_feature.screens.SingleRowCheckBox
 import com.pzbapps.squiggly.common.presentation.BubbleNoteViewModel
 import com.pzbapps.squiggly.common.presentation.FontFamily
@@ -240,25 +241,7 @@ fun convertMutableStateIntoString(
     return mutableListConverted
 }
 
-private fun saveCheckbox(
-    title: String,
-    listOfCheckboxTexts: SnapshotStateList<MutableState<String>>,
-    mutableListOfCheckBoxes: ArrayList<Boolean>,
-    mutableListConverted: ArrayList<String>,
-    viewModel: BubbleNoteViewModel
-) {
-    var convertedList = convertMutableStateIntoString(
-        listOfCheckboxTexts,
-        mutableListConverted
-    )
-    var note = Note(
-        title = title,
-        listOfCheckedNotes = convertedList,
-        listOfCheckedBoxes = mutableListOfCheckBoxes,
-        timeStamp = System.currentTimeMillis(),
-    )
-    viewModel.insertNote(note)
-}
+
 
 @Composable
 fun NotesScreen(
@@ -334,131 +317,7 @@ fun NotesScreen(
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-fun CheckBoxScreen(
-    title: MutableState<String>,
-    listOfCheckboxTexts: SnapshotStateList<MutableState<String>>,
-    mutableListOfCheckBoxes: ArrayList<Boolean>,
-    viewModel: BubbleNoteViewModel,
-    onClose: () -> Unit
-) {
-    val focusRequesters = remember { mutableStateListOf(FocusRequester()) }
-    var count = remember { mutableStateOf(0) }
 
-    val lazyListState = rememberLazyListState()
-
-    var mutableListConverted = rememberSaveable {
-        ArrayList<String>()
-    }
-
-
-
-    LaunchedEffect(key1 = true) {
-        if (listOfCheckboxTexts.isEmpty()) {
-            listOfCheckboxTexts.add(mutableStateOf(""))
-        }
-
-    }
-
-    LaunchedEffect(key1 = listOfCheckboxTexts.size) {
-        mutableListOfCheckBoxes.add(false)
-    }
-    Column() {
-        androidx.compose.material.TextField(
-            value = title.value,
-            onValueChange = { title.value = it },
-            placeholder = {
-                Text(
-                    text = "Title",
-                    fontSize = 20.sp,
-                    fontFamily = FontFamily.fontFamilyBold,
-                    color = MaterialTheme.colors.onPrimary,
-                    modifier = Modifier.alpha(0.5f)
-                )
-            },
-            colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
-                backgroundColor = MaterialTheme.colors.primary,
-                focusedIndicatorColor = MaterialTheme.colors.primary,
-                cursorColor = MaterialTheme.colors.onPrimary,
-                textColor = MaterialTheme.colors.onPrimary
-            ),
-            textStyle = TextStyle(
-                fontFamily = FontFamily.fontFamilyRegular,
-                fontSize = 20.sp
-            )
-        )
-
-        val imeVisible = WindowInsets.isImeVisible
-        val imeHeight = WindowInsets.ime.getBottom(LocalDensity.current)
-
-        LazyColumn(
-            state = lazyListState,
-            modifier = Modifier.imePadding()
-        ) {
-            itemsIndexed(listOfCheckboxTexts) { index, item ->
-                if (index >= focusRequesters.size) {
-                    focusRequesters.add(FocusRequester())
-                }
-                val focusRequester = focusRequesters[index]
-                SingleRowCheckBox(
-                    text = item,
-                    mutableList = listOfCheckboxTexts,
-                    mutableListOfCheckBoxes = mutableListOfCheckBoxes,
-                    index = index,
-                    count = count,
-                    focusRequester = focusRequester,
-                    backgroundColor = mutableStateOf(MaterialTheme.colors.primary),
-                    fontFamily = remember { mutableStateOf(FontFamily.fontFamilyRegular) },
-                ) {
-                    try {
-                        focusRequesters.removeAt(index)
-                        listOfCheckboxTexts.removeAt(index)
-                        //mutableListConverted.removeAt(indexed)
-                    } catch (exception: IndexOutOfBoundsException) {
-
-                    }
-                }
-            }
-            items(1) {
-                Spacer(modifier = Modifier.height(imeHeight.dp))
-            }
-            item {
-                Spacer(modifier = Modifier.height(5.dp))
-                Button(onClick = {
-                    saveCheckbox(
-                        title.value,
-                        listOfCheckboxTexts,
-                        mutableListOfCheckBoxes,
-                        mutableListConverted,
-                        viewModel
-                    )
-                    onClose()
-                }) {
-                    Text("Save")
-                }
-            }
-        }
-    }
-    LaunchedEffect(count.value) {
-        if (listOfCheckboxTexts.size > 1) {
-            lazyListState.animateScrollToItem(listOfCheckboxTexts.lastIndex)
-            focusRequesters.lastOrNull()
-                ?.requestFocus()  // Move focus to the last added checkbox
-        }
-    }
-    LaunchedEffect(focusRequesters, listOfCheckboxTexts) {
-        if (listOfCheckboxTexts.isNotEmpty()) {
-            // Delay focus request to ensure the UI is composed
-            focusRequesters.firstOrNull()?.let { firstFocusRequester ->
-                // Add a small delay to ensure everything is composed
-                kotlinx.coroutines.delay(100)
-                firstFocusRequester.requestFocus()
-            }
-        }
-    }
-
-}
 
 @Composable
 fun RememberSaveableSnapshotStateList(): SnapshotStateList<MutableState<String>> {
@@ -479,6 +338,7 @@ fun RememberSaveableSnapshotStateList(): SnapshotStateList<MutableState<String>>
         mutableStateListOf<MutableState<String>>() // Initial state
     }
 }
+
 
 
 
