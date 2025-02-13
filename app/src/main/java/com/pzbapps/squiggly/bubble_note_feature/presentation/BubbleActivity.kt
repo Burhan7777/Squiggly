@@ -120,6 +120,8 @@ class BubbleActivity : AppCompatActivity() {
         var typeOfNote = remember { mutableStateOf(selectTypeOfNote.NOTES) }
         var listOfCheckboxTexts = RememberSaveableSnapshotStateList()
         var mutableListOfCheckBoxes = rememberSaveable { ArrayList<Boolean>() }
+        var mutableListOfBulletPointsNotes =
+            RememberSaveableSnapshotStateList()
 
 
 
@@ -128,7 +130,7 @@ class BubbleActivity : AppCompatActivity() {
             Modifier
                 .fillMaxSize()
                 .background(Color.Black.copy(alpha = 0.5f))
-                .clickable { onClose() }, contentAlignment = Alignment.Center
+                .clickable { }, contentAlignment = Alignment.Center
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -214,7 +216,11 @@ class BubbleActivity : AppCompatActivity() {
                             }
 
                             selectTypeOfNote.BULLETPOINT -> {
-                                    BulletPointScreen()
+                                BulletPointScreen(
+                                    mutableListOfBulletPointsNotes,
+                                    viewModel,
+                                    onClose
+                                )
                             }
                         }
                     }
@@ -241,7 +247,6 @@ fun convertMutableStateIntoString(
     }
     return mutableListConverted
 }
-
 
 
 @Composable
@@ -317,7 +322,6 @@ fun NotesScreen(
         Text("Save")
     }
 }
-
 
 
 @Composable

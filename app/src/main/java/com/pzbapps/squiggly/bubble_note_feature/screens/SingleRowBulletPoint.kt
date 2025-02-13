@@ -3,6 +3,7 @@ package com.pzbapps.squiggly.bubble_note_feature.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.TextSelectionColors
@@ -29,8 +30,11 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.unit.dp
 import com.pzbapps.squiggly.R
+import com.pzbapps.squiggly.common.presentation.BubbleNoteViewModel
 import com.pzbapps.squiggly.common.presentation.FontFamily
+import com.pzbapps.squiggly.main_screen.domain.model.Note
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -53,13 +57,14 @@ fun SingleRowBulletPoint(
 //        focusRequester.requestFocus()
 //    }
     Row(
-        horizontalArrangement = Arrangement.Center,
+        horizontalArrangement = Arrangement.spacedBy(0.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
             painterResource(id = R.drawable.bullet_point),
             contentDescription = "Bullet Point",
-            colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary)
+            colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
+            modifier = Modifier.size(20.dp)
         )
         OutlinedTextField(
             value = text.value, onValueChange = { text.value = it },
@@ -108,6 +113,6 @@ fun SingleRowBulletPoint(
                 }
             }
         )
-
     }
 }
+
