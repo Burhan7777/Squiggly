@@ -72,6 +72,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.appwidget.CheckBox
 import androidx.lifecycle.ViewModelProvider
+import com.pzbapps.squiggly.bubble_note_feature.screens.BulletPointScreen
 import com.pzbapps.squiggly.bubble_note_feature.screens.CheckBoxScreen
 import com.pzbapps.squiggly.bubble_note_feature.screens.SingleRowCheckBox
 import com.pzbapps.squiggly.common.presentation.BubbleNoteViewModel
@@ -213,7 +214,7 @@ class BubbleActivity : AppCompatActivity() {
                             }
 
                             selectTypeOfNote.BULLETPOINT -> {
-
+                                    BulletPointScreen()
                             }
                         }
                     }

@@ -20,6 +20,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
@@ -89,7 +90,6 @@ fun CheckBoxScreen(
             )
         )
 
-        val imeVisible = WindowInsets.isImeVisible
         val imeHeight = WindowInsets.ime.getBottom(LocalDensity.current)
 
         LazyColumn(
@@ -146,16 +146,16 @@ fun CheckBoxScreen(
             focusRequesters.lastOrNull()
                 ?.requestFocus()  // Move focus to the last added checkbox
         }
-    }
+   }
     LaunchedEffect(focusRequesters, listOfCheckboxTexts) {
-        if (listOfCheckboxTexts.isNotEmpty()) {
-            // Delay focus request to ensure the UI is composed
-            focusRequesters.firstOrNull()?.let { firstFocusRequester ->
-                // Add a small delay to ensure everything is composed
-                kotlinx.coroutines.delay(100)
-                firstFocusRequester.requestFocus()
-            }
-        }
+//        if (listOfCheckboxTexts.isNotEmpty()) {
+//            // Delay focus request to ensure the UI is composed
+//            focusRequesters.firstOrNull()?.let { firstFocusRequester ->
+//                // Add a small delay to ensure everything is composed
+//                kotlinx.coroutines.delay(100)
+//                firstFocusRequester.requestFocus()
+//            }
+//        }
     }
 
 }
@@ -178,4 +178,24 @@ fun saveCheckbox(
         timeStamp = System.currentTimeMillis(),
     )
     viewModel.insertNote(note)
+}
+
+@Composable
+fun RememberSaveableSnapshotStateList(): SnapshotStateList<MutableState<String>> {
+    // Create a custom saver for SnapshotStateList<Mutable<String>>
+    val listSaver = Saver<SnapshotStateList<MutableState<String>>, List<List<String>>>(
+        save = { snapshotStateList ->
+            // Convert SnapshotStateList<Mutable<String>> to List<List<String>> for saving
+            snapshotStateList.map { state -> listOf(state.value) }
+        },
+        restore = { savedList ->
+            // Convert List<List<String>> back to SnapshotStateList<Mutable<String>> on restore
+            val restoredList = savedList.map { mutableStateOf(it.first()) }
+            SnapshotStateList<MutableState<String>>().apply {
+                addAll(restoredList)
+            }
+        })
+    return rememberSaveable(saver = listSaver) {
+        mutableStateListOf<MutableState<String>>() // Initial state
+    }
 }
