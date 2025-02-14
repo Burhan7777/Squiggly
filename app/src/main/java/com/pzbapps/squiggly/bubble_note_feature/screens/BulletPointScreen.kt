@@ -101,12 +101,19 @@ fun BulletPointScreen(
                         mutableListOfBulletPointsNotes,
                         mutableListConverted
                     )
-                    saveBulletPointNote(title.value,finalBulletNotes,viewModel)
+                    saveBulletPointNote(title.value, finalBulletNotes, viewModel)
                     onClose()
                 }) {
                     Text("Save")
                 }
             }
+        }
+    }
+    LaunchedEffect(count.value) {
+        if (mutableListOfBulletPointsNotes.size > 1) {
+            lazyListState.animateScrollToItem(mutableListOfBulletPointsNotes.lastIndex)
+            focusRequesters.lastOrNull()
+                ?.requestFocus()  // Move focus to the last added checkbox
         }
     }
 }
