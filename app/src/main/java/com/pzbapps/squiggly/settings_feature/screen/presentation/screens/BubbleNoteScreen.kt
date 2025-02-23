@@ -10,42 +10,33 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Save
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.app.ActivityCompat.startActivityForResult
 import com.pzbapps.squiggly.bubble_note_feature.presentation.BubbleService
 import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.common.presentation.MainActivity
 
+enum class BubbleSize {
+    SMALL, MEDIUM, LARGE
+}
 
 @Composable
 fun BubbleNoteScreen(activity: MainActivity) {
@@ -55,6 +46,27 @@ fun BubbleNoteScreen(activity: MainActivity) {
 
     var intent = Intent(activity, BubbleService::class.java).apply {
         action = "STOP_SERVICE"
+    }
+
+    // Preferences
+    val prefs = context.getSharedPreferences("bubble_prefs", Context.MODE_PRIVATE)
+    var bubbleSize by remember { mutableStateOf(BubbleSize.valueOf(prefs.getString("size", BubbleSize.MEDIUM.name)!!)) }
+    var selectedIcon by remember { mutableStateOf(prefs.getInt("icon", 0)) }
+
+    // Beautiful light colors
+    val availableColors = listOf(
+        Color(0xFF94B9F4),  // Soft Sky Blue
+        Color(0xFFF4B9C8),  // Light Rose Pink
+        Color(0xFFB9F4D6),  // Mint Green
+        Color(0xFFE2B9F4),  // Soft Lavender
+        Color(0xFFF4DAB9),  // Peach
+        Color(0xFFB9E6F4)   // Light Aqua
+    )
+
+    // Store and retrieve color as a single integer
+    var bubbleColor by remember {
+        val colorInt = prefs.getInt("bubble_color", availableColors[0].toArgb())
+        mutableStateOf(Color(colorInt))
     }
 
     val overlayPermissionLauncher = rememberLauncherForActivityResult(
@@ -73,11 +85,12 @@ fun BubbleNoteScreen(activity: MainActivity) {
         }
     }
 
-
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
         var checked = remember { mutableStateOf(isServiceOn.value) }
+
+        // Service Toggle Card
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -91,10 +104,7 @@ fun BubbleNoteScreen(activity: MainActivity) {
                         bottomStart = CornerSize(10.dp),
                         bottomEnd = CornerSize(10.dp),
                     )
-                )
-                .clickable {
-
-                },
+                ),
             shape = androidx.compose.material3.MaterialTheme.shapes.medium.copy(
                 topStart = CornerSize(10.dp),
                 topEnd = CornerSize(10.dp),
@@ -109,7 +119,6 @@ fun BubbleNoteScreen(activity: MainActivity) {
                 disabledContentColor = MaterialTheme.colors.onPrimary
             )
         ) {
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
@@ -119,13 +128,10 @@ fun BubbleNoteScreen(activity: MainActivity) {
                     contentDescription = "Auto Save",
                     modifier = Modifier.padding(top = 12.dp, start = 10.dp)
                 )
-                Column() {
+                Column {
                     Text(
                         text = "Start Bubble Note",
-                        modifier = Modifier.padding(
-                            top = 12.dp,
-                            start = 10.dp
-                        ),
+                        modifier = Modifier.padding(top = 12.dp, start = 10.dp),
                         fontSize = 18.sp,
                         fontFamily = FontFamily.fontFamilyRegular,
                         maxLines = 2,
@@ -157,6 +163,145 @@ fun BubbleNoteScreen(activity: MainActivity) {
                 }
             }
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Bubble Size Selection
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colors.primary)
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    "Bubble Size",
+                    color = MaterialTheme.colors.onPrimary,
+                    style = MaterialTheme.typography.h6
+                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround
+                ) {
+                    BubbleSize.values().forEach { size ->
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            RadioButton(
+                                selected = bubbleSize == size,
+                                onClick = {
+                                    bubbleSize = size
+                                    prefs.edit().putString("size", size.name).apply()
+                                },
+                                colors = RadioButtonDefaults.colors(
+                                    selectedColor = MaterialTheme.colors.onPrimary
+                                )
+                            )
+                            Text(
+                                size.name,
+                                color = MaterialTheme.colors.onPrimary
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        // Color Selection
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colors.primary)
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    "Bubble Color",
+                    color = MaterialTheme.colors.onPrimary,
+                    style = MaterialTheme.typography.h6
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceAround
+                ) {
+                    availableColors.forEach { color ->
+                        Box(
+                            modifier = Modifier
+                                .size(45.dp)
+                                .background(color, CircleShape)
+                                .border(
+                                    width = if (bubbleColor.toArgb() == color.toArgb()) 2.dp else 0.dp,
+                                    color = MaterialTheme.colors.onPrimary,
+                                    shape = CircleShape
+                                )
+                                .clickable {
+                                    bubbleColor = color
+                                    prefs.edit()
+                                        .putInt("bubble_color", color.toArgb())
+                                        .apply()
+                                }
+                        )
+                    }
+                }
+            }
+        }
+
+        // Icon Selection
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colors.primary)
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    "Bubble Icon",
+                    color = MaterialTheme.colors.onPrimary,
+                    style = MaterialTheme.typography.h6
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceAround
+                ) {
+                    val icons = listOf(
+                        Icons.Default.Note to "Note",
+                        Icons.Default.Edit to "Edit",
+                        Icons.Default.Create to "Create",
+                        Icons.Default.AddCircle to "Add"
+                    )
+
+                    icons.forEachIndexed { index, (icon, description) ->
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            IconButton(
+                                onClick = {
+                                    selectedIcon = index
+                                    prefs.edit().putInt("icon", index).apply()
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = icon,
+                                    contentDescription = description,
+                                    tint = if (selectedIcon == index)
+                                        MaterialTheme.colors.onPrimary
+                                    else
+                                        MaterialTheme.colors.onPrimary.copy(alpha = 0.5f),
+                                    modifier = Modifier.size(24.dp)
+                                )
+                            }
+                            Text(
+                                description,
+                                color = MaterialTheme.colors.onPrimary,
+                                style = MaterialTheme.typography.caption
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        // Handle service state
         if (checked.value) {
             if (!Settings.canDrawOverlays(context)) {
                 val intent = Intent(
@@ -175,7 +320,6 @@ fun BubbleNoteScreen(activity: MainActivity) {
         } else {
             activity.stopService(intent)
         }
-
     }
 }
 

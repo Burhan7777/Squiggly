@@ -30,7 +30,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.pzbapps.squiggly.bubble_note_feature.presentation.convertMutableStateIntoString
 import com.pzbapps.squiggly.common.presentation.BubbleNoteViewModel
 import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.main_screen.domain.model.Note

@@ -21,12 +21,19 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Note
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationCompat
@@ -41,6 +48,7 @@ import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.pzbapps.squiggly.R
 import com.pzbapps.squiggly.bubble_note_feature.presentation.BubbleActivity
+import com.pzbapps.squiggly.settings_feature.screen.presentation.screens.BubbleSize
 
 class BubbleService : Service(), LifecycleOwner, SavedStateRegistryOwner {
     private lateinit var windowManager: WindowManager
@@ -59,10 +67,15 @@ class BubbleService : Service(), LifecycleOwner, SavedStateRegistryOwner {
     }
 
     fun closeService(): PendingIntent {
-        var intent = Intent(this,BubbleService::class.java).apply {
+        var intent = Intent(this, BubbleService::class.java).apply {
             action = "STOP_SERVICE"
         }
-        var pending = PendingIntent.getService(this, 10, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        var pending = PendingIntent.getService(
+            this,
+            10,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
         return pending
     }
 
@@ -186,24 +199,68 @@ class BubbleService : Service(), LifecycleOwner, SavedStateRegistryOwner {
         windowManager.addView(composeView, params)
     }
 
+
     @Composable
     fun FloatingBubbleUI(onClick: () -> Unit) {
+        val context = LocalContext.current
+        val prefs = context.getSharedPreferences("bubble_prefs", Context.MODE_PRIVATE)
+
+        // Get saved preferences
+        val size = BubbleSize.valueOf(prefs.getString("size", BubbleSize.MEDIUM.name)!!)
+        val selectedIcon = prefs.getInt("icon", 0)
+
+        // Get color as a single integer and convert to Color
+        val colorInt = prefs.getInt("bubble_color", Color.Blue.toArgb())
+        val color = Color(colorInt)
+
+        // Convert size enum to dp
+        val bubbleSize = when (size) {
+            BubbleSize.SMALL -> 40.dp
+            BubbleSize.MEDIUM -> 60.dp
+            BubbleSize.LARGE -> 80.dp
+        }
+
+        // List of available icons
+        val icons = listOf(
+            Icons.Default.Note,
+            Icons.Default.Edit,
+            Icons.Default.Create,
+            Icons.Default.AddCircle
+        )
+
         Box(
             modifier = Modifier
-                .size(60.dp)
+                .size(bubbleSize)
                 .clip(CircleShape)
-                .background(Color.Blue)
-            // Remove the clickable modifier here
-            ,
+                .background(color),
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_premium),
+                imageVector = icons[selectedIcon],
                 contentDescription = "Floating Note",
-                tint = Color.White
+                tint = Color.White,
+                modifier = Modifier.size(bubbleSize * 0.6f)
             )
         }
     }
+    //   @Composable
+//    fun FloatingBubbleUI(onClick: () -> Unit) {
+//        Box(
+//            modifier = Modifier
+//                .size(60.dp)
+//                .clip(CircleShape)
+//                .background(Color.Blue)
+//            // Remove the clickable modifier here
+//            ,
+//            contentAlignment = Alignment.Center
+//        ) {
+//            Icon(
+//                painter = painterResource(id = R.drawable.ic_premium),
+//                contentDescription = "Floating Note",
+//                tint = Color.White
+//            )
+//        }
+//    }
 
     private fun openQuickNote() {
         val intent = Intent(this, BubbleActivity::class.java)
