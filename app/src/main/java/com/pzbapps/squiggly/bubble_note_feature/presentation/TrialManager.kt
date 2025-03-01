@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 import android.util.Base64
+import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 
 
 /**
@@ -19,7 +20,7 @@ import android.util.Base64
  */
 
 
-class SimpleTrialManager(private val context: Context) {
+class SimpleTrialManager(private val context: Context, private val viewModel: MainActivityViewModel) {
     private val prefs = context.getSharedPreferences("trial_prefs", Context.MODE_PRIVATE)
     private val TRIAL_DATA_KEY = "trial_data"
     private val TRIAL_DURATION_DAYS = 30L
@@ -125,8 +126,8 @@ class SimpleTrialManager(private val context: Context) {
 
     fun isPremiumOrTrialActive(): Boolean {
         // First check if user has premium via Qonversion
-        //val isPremium = QonversionManager.isPremiumActive()
-       // if (isPremium) return true
+        val isPremium = viewModel.ifUserIsPremium.value
+        if (isPremium) return true
 
         // If not premium, check trial status
         val trialStatus = checkTrialStatus()

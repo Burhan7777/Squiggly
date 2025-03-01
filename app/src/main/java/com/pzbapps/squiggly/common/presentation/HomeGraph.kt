@@ -240,7 +240,7 @@ fun NavGraphBuilder.homeGraph(
             PremiumPlan(activity, navController, viewModel)
         }
         composable(Screens.BubbleScreen.route) {
-            BubbleNoteScreen(activity)
+            BubbleNoteScreen(activity, viewModel, navController)
         }
 
     }

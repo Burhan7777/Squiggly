@@ -27,22 +27,41 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.pzbapps.squiggly.bubble_note_feature.presentation.BubbleService
+import com.pzbapps.squiggly.bubble_note_feature.presentation.SimpleTrialManager
 import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.common.presentation.MainActivity
+import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
+import com.pzbapps.squiggly.settings_feature.screen.presentation.components.LoginToAccessBubbleNote
 
 enum class BubbleSize {
     SMALL, MEDIUM, LARGE
 }
 
 @Composable
-fun BubbleNoteScreen(activity: MainActivity) {
+fun BubbleNoteScreen(
+    activity: MainActivity,
+    viewModel: MainActivityViewModel,
+    navHostController: NavHostController
+) {
     var context = LocalContext.current
     var isServiceOn = remember { mutableStateOf(false) }
     isServiceOn.value = isForegroundServiceRunning(activity, 10)
+    var trialStatus = remember { mutableStateOf<SimpleTrialManager.TrialStatus?>(null) }
+    var isFeatureAvailable = remember { mutableStateOf(false) }
+    var showLoginDialogToAccessBubbleNote = remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        val trialManager = SimpleTrialManager(context, viewModel)
+        val status = trialManager.checkTrialStatus()
+        trialStatus.value = status
+        isFeatureAvailable.value = trialManager.isPremiumOrTrialActive()
+    }
 
     var intent = Intent(activity, BubbleService::class.java).apply {
         action = "STOP_SERVICE"
@@ -50,7 +69,16 @@ fun BubbleNoteScreen(activity: MainActivity) {
 
     // Preferences
     val prefs = context.getSharedPreferences("bubble_prefs", Context.MODE_PRIVATE)
-    var bubbleSize by remember { mutableStateOf(BubbleSize.valueOf(prefs.getString("size", BubbleSize.MEDIUM.name)!!)) }
+    var bubbleSize by remember {
+        mutableStateOf(
+            BubbleSize.valueOf(
+                prefs.getString(
+                    "size",
+                    BubbleSize.MEDIUM.name
+                )!!
+            )
+        )
+    }
     var selectedIcon by remember { mutableStateOf(prefs.getInt("icon", 0)) }
 
     // Beautiful light colors
@@ -89,6 +117,59 @@ fun BubbleNoteScreen(activity: MainActivity) {
         modifier = Modifier.fillMaxSize()
     ) {
         var checked = remember { mutableStateOf(isServiceOn.value) }
+
+        when {
+            // Show login requirement
+            trialStatus.value?.requiresLogin == true -> {
+                showLoginDialogToAccessBubbleNote.value = true
+
+            }
+
+            // Show trial expired message
+            !isFeatureAvailable.value -> {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Trial period has ended. Upgrade to Premium to continue using Bubble Notes!",
+                        style = MaterialTheme.typography.h6,
+                        textAlign = TextAlign.Center
+                    )
+                    Button(
+                        onClick = { /* Launch Qonversion purchase flow */ },
+                        modifier = Modifier.padding(top = 16.dp)
+                    ) {
+                        Text("Upgrade to Premium")
+                    }
+                }
+            }
+
+            // Show active trial banner and feature
+            else -> {
+                // Show trial banner if trial is active
+                if (trialStatus.value?.isActive == true) {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colors.secondary
+                        )
+                    ) {
+                        Text(
+                            text = "Trial Period: ${trialStatus.value?.daysRemaining} days remaining",
+                            modifier = Modifier.padding(16.dp),
+                            color = MaterialTheme.colors.onSecondary
+                        )
+                    }
+                }
+            }
+        }
+
 
         // Service Toggle Card
         Card(
@@ -236,7 +317,8 @@ fun BubbleNoteScreen(activity: MainActivity) {
                                 )
                                 .clickable {
                                     bubbleColor = color
-                                    prefs.edit()
+                                    prefs
+                                        .edit()
                                         .putInt("bubble_color", color.toArgb())
                                         .apply()
                                 }
@@ -319,6 +401,12 @@ fun BubbleNoteScreen(activity: MainActivity) {
             }
         } else {
             activity.stopService(intent)
+        }
+    }
+
+    if (showLoginDialogToAccessBubbleNote.value) {
+        LoginToAccessBubbleNote(navHostController = navHostController) {
+            showLoginDialogToAccessBubbleNote.value = false
         }
     }
 }
