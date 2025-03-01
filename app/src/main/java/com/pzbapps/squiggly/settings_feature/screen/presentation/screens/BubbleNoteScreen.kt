@@ -38,6 +38,7 @@ import com.pzbapps.squiggly.common.presentation.FontFamily
 import com.pzbapps.squiggly.common.presentation.MainActivity
 import com.pzbapps.squiggly.common.presentation.MainActivityViewModel
 import com.pzbapps.squiggly.settings_feature.screen.presentation.components.LoginToAccessBubbleNote
+import com.pzbapps.squiggly.settings_feature.screen.presentation.components.ShowPremiumScreenWhenTrialEnds
 
 enum class BubbleSize {
     SMALL, MEDIUM, LARGE
@@ -55,6 +56,8 @@ fun BubbleNoteScreen(
     var trialStatus = remember { mutableStateOf<SimpleTrialManager.TrialStatus?>(null) }
     var isFeatureAvailable = remember { mutableStateOf(false) }
     var showLoginDialogToAccessBubbleNote = remember { mutableStateOf(false) }
+    val showPremiumScreenWhenTrialEnds = remember { mutableStateOf(false) }
+    var checked = remember { mutableStateOf(isServiceOn.value) }
 
     LaunchedEffect(Unit) {
         val trialManager = SimpleTrialManager(context, viewModel)
@@ -116,59 +119,7 @@ fun BubbleNoteScreen(
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        var checked = remember { mutableStateOf(isServiceOn.value) }
 
-        when {
-            // Show login requirement
-            trialStatus.value?.requiresLogin == true -> {
-                showLoginDialogToAccessBubbleNote.value = true
-
-            }
-
-            // Show trial expired message
-            !isFeatureAvailable.value -> {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = "Trial period has ended. Upgrade to Premium to continue using Bubble Notes!",
-                        style = MaterialTheme.typography.h6,
-                        textAlign = TextAlign.Center
-                    )
-                    Button(
-                        onClick = { /* Launch Qonversion purchase flow */ },
-                        modifier = Modifier.padding(top = 16.dp)
-                    ) {
-                        Text("Upgrade to Premium")
-                    }
-                }
-            }
-
-            // Show active trial banner and feature
-            else -> {
-                // Show trial banner if trial is active
-                if (trialStatus.value?.isActive == true) {
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colors.secondary
-                        )
-                    ) {
-                        Text(
-                            text = "Trial Period: ${trialStatus.value?.daysRemaining} days remaining",
-                            modifier = Modifier.padding(16.dp),
-                            color = MaterialTheme.colors.onSecondary
-                        )
-                    }
-                }
-            }
-        }
 
 
         // Service Toggle Card
@@ -409,10 +360,65 @@ fun BubbleNoteScreen(
             showLoginDialogToAccessBubbleNote.value = false
         }
     }
+    if (showPremiumScreenWhenTrialEnds.value) {
+        ShowPremiumScreenWhenTrialEnds(navHostController) {
+            showPremiumScreenWhenTrialEnds.value = false
+        }
+    }
+    if(checked.value) {
+        StartOrResumeTrialPeriod(
+            trialStatus = trialStatus,
+            isFeatureAvailable = isFeatureAvailable,
+            showLoginDialogToAccessBubbleNote = showLoginDialogToAccessBubbleNote,
+            showPremiumScreenWhenTrialEnds = showPremiumScreenWhenTrialEnds
+        )
+    }
 }
 
 fun isForegroundServiceRunning(context: Context, notificationId: Int): Boolean {
     val notificationManager =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     return notificationManager.activeNotifications.any { it.id == notificationId }
+}
+
+@Composable
+fun StartOrResumeTrialPeriod(
+    trialStatus: MutableState<SimpleTrialManager.TrialStatus?>,
+    isFeatureAvailable: MutableState<Boolean>,
+    showLoginDialogToAccessBubbleNote: MutableState<Boolean>,
+    showPremiumScreenWhenTrialEnds: MutableState<Boolean>
+) {
+    when {
+        // Show login requirement
+        trialStatus.value?.requiresLogin == true -> {
+            showLoginDialogToAccessBubbleNote.value = true
+
+        }
+
+        // Show trial expired message
+        !isFeatureAvailable.value -> {
+            showPremiumScreenWhenTrialEnds.value = true
+        }
+
+        // Show active trial banner and feature
+        else -> {
+            // Show trial banner if trial is active
+            if (trialStatus.value?.isActive == true) {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colors.secondary
+                    )
+                ) {
+                    Text(
+                        text = "Trial Period: ${trialStatus.value?.daysRemaining} days remaining",
+                        modifier = Modifier.padding(16.dp),
+                        color = MaterialTheme.colors.onSecondary
+                    )
+                }
+            }
+        }
+    }
 }
